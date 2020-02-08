@@ -76,7 +76,7 @@ public class DFS{
                 System.out.println("El camino tiene: " + mapa.vertice + " vertices");
 
             }else{
-                System.out.print("No se encontro un camino Hamiltoniano");  
+                System.out.println("No se encontro un camino Hamiltoniano");  
             }
     }
 
