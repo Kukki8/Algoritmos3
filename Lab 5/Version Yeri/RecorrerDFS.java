@@ -1,29 +1,27 @@
-   
 import java.util.*;
-
 public class RecorrerDFS{
-
-    public Grafo mapa;
+    
+    public GrafoD mapa;
     public int[] camino;
     public boolean[] visitados;
     public Stack<Integer> abiertos;
 
 
-    DFS(Grafo g){
+    RecorrerDFS(GrafoD g){
         mapa = g;
         camino = new int[g.vertice];
         visitados = new boolean[g.vertice];  
         abiertos = new Stack<Integer>(); 
+        for(int i = 0; i<g.vertice;i++){
+            camino[i] = -1;
+        }
         
     }
 
     public boolean eliminar(int vertice){
         if(visitados[vertice] == true){
-            System.out.print("CONSEGUIMOS UN CICLO!")
-            //Llamada a build
-            //return true;
-            return false;
-        }else if(abiertos.contains(vertice)== true ){
+            return chequearCiclo(vertice);          
+        }else if(abiertos.contains(vertice)== true){
             return true;
         }else{
             return false;
@@ -31,29 +29,53 @@ public class RecorrerDFS{
 
     }
 
+    public boolean chequearCiclo(int vertice){
+
+        for(int i =0; i< mapa.vertice;i++){
+            if(camino[i] == vertice){
+                resizeGrafo(i, vertice);
+                return false;
+            }else{
+                return true;
+            }
+        }
+        return true;
+    }
+
+    public void resizeGrafo(int i, int vertice){
+        int k = i;
+        i= i+1;
+        while(camino[i]!= vertice){
+            for(int j = 0; j<mapa.vertice;j++){
+                if(mapa.matrizAdyacencia[i][j]==1){
+                    mapa.add(k,j);
+                    mapa.delete(i,j);
+                }
+            }
+        }
+
+    }
+
     public void hacerDFS(int vertIni){
         abiertos.push(vertIni);
         visitados[vertIni] = true;
-        camino[0] = vertIni;
-        int i = 1;
+        int i = 0;
+        System.out.println("Recorrido desde: " + vertIni);
 
             while(!abiertos.empty()){
                 int p= abiertos.pop();
                 visitados[p] = true;
-                System.out.print("Actual" + p);
-
                 for(int j=0;j< mapa.vertice;j++){
-                    if(mapa.matrizAdyacencia[vertIni][j]==1){
-
+                    if(mapa.matrizAdyacencia[p][j]==1){
+                        camino[i] = p;
                         if(!eliminar(j)){
                             abiertos.push(j);
-                            visitados[i]=true;
-                            camino[i] = j;
                             i = i+1;
-                            //System.out.print("Eliminamos falso");
+                            System.out.println("["+ p + "-" + j+ "]");
+                            j = mapa.vertice;
 
                         }else{
-                           // System.out.print(vertIni "-" + j + "ya esta visitado");
+                            System.out.println(j + " ya esta visitado");
                         }
 
                     }
@@ -63,8 +85,29 @@ public class RecorrerDFS{
             }
 
 
+            int b = 1;
+            for(int j=0 ; j< mapa.vertice - 1; j++){
+                if(camino[j] != -1){
+                    b = b+1;
+                }
+                
+            }
 
-            
-        }
+            System.out.println("Existen " + b + " mega edificios");
+
+            // if(b == mapa.vertice ){
+            //     System.out.print("[");
+            //     for(int k=0 ; k< mapa.vertice - 1; k++){
+            //         System.out.print(camino[k] + "-");
+            //     }
+            //     System.out.print(camino[mapa.vertice-1] + "]" + " ");
+            //     System.out.println("Es un camino Hamiltoniano");
+            //     System.out.println("El camino tiene: " + mapa.vertice + " vertices");
+
+            // }else{
+            //     System.out.println("No se encontro un camino Hamiltoniano");  
+            // }
+    }
+
        
-    } 
+}

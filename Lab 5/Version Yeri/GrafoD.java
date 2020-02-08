@@ -1,9 +1,9 @@
-public class Grafo{
+public class GrafoD{
 
     public int [][] matrizAdyacencia;
     public int vertice;
      
-        Grafo(int vertice){
+        GrafoD(int vertice){
             this.vertice = vertice;
             this.matrizAdyacencia = new int [this.vertice][this.vertice];
         }
