@@ -48,8 +48,8 @@ public class BFS{
             }
         }
 
-        int b = 1;
-        for(int j=0 ; j< mapa.vertice - 1; j++){
+        int b = 0;
+        for(int j=0 ; j< mapa.vertice; j++){
             if(camino[j] != -1){
                 for(int h=0 ; h< mapa.vertice - 1; h++){
                     if(camino[j] != camino[h]){

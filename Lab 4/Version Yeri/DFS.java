@@ -58,8 +58,8 @@ public class DFS{
             }
 
 
-            int b = 1;
-            for(int j=0 ; j< mapa.vertice - 1; j++){
+            int b = 0;
+            for(int j=0 ; j< mapa.vertice; j++){
                 if(camino[j] != -1){
                     b = b+1;
                 }
