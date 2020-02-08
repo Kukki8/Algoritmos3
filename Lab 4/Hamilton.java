@@ -1,15 +1,16 @@
 import java.io.*;
+import java.util.Random;
 
 public class Hamilton{
 
 
-    public static Grafo cargarGrafo(String Archivo){
+    public static Grafo cargarGrafo(String Archivo) throws IOException{
 
         BufferedReader Lector = new BufferedReader(new FileReader(Archivo));
         String linea = Lector.readLine();
         int n = Integer.parseInt(linea);
         linea = Lector.readLine();
-        m = Integer.parseInt(linea);
+        int m = Integer.parseInt(linea);
         
         Grafo mapa = new Grafo(n);
 
@@ -31,9 +32,10 @@ public class Hamilton{
 
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
 
         Grafo mapa = cargarGrafo(args[0]);
+        Random random = new Random();
         int r = random.nextInt(mapa.vertice);
 
         if(args[1].equals("DFS")){
@@ -69,5 +71,3 @@ public class Hamilton{
     // dfs.hacerBFS(0);
     
 }
-
-//probando

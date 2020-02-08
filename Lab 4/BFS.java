@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.LinkedList; 
+import java.util.Queue; 
 
 public class BFS{
     public Grafo mapa;
@@ -10,7 +12,7 @@ public class BFS{
         mapa = g;
         visitados = new boolean [g.vertice];
         camino = new int [g.vertice];
-        abiertos = new Queue<Integer>();
+        abiertos = new LinkedList<>();
     }
 
     public boolean eliminar(int vertice){
@@ -25,9 +27,11 @@ public class BFS{
         abiertos.add(vertIni);
         visitados[vertIni] = true;
         camino[0] = vertIni;
-        int i= 1;
+        int i= 0;
+        System.out.println("Recorrido desde: " + vertIni);
 
-        while(!abiertos.empty()){
+
+        while(abiertos.size() != 0){
             int p = abiertos.remove();
             visitados[p] = true;
             for(int j=0; j< mapa.vertice; j++){
@@ -37,21 +41,37 @@ public class BFS{
                         abiertos.add(j);
                         camino[j]=i;
                         i=i+1;
+                        System.out.println("["+ p + "-" + j+ "]");
+                        j = mapa.vertice;
                     }else{
-                        System.out.print("");
+                        System.out.println(j + " ya esta visitado");
                     }
                 }
             }
         }
 
-        if(camino.length==mapa.vertice){
-            for(int k=0; k< mapa.vertice; k++){
-                System.out.print(camino[k]+ "-");
+        int b = 1;
+        for(int j=0 ; j< mapa.vertice - 1; j++){
+            if(camino[j] != -1){
+                b = b+1;
             }
-            System.out.print("Es un camino Hamiltoniano");
-        }else{
-            System.out.print("No existe un camino Hamiltoniano...");
+            
         }
+
+            if(b == mapa.vertice ){
+                System.out.print("[");
+                for(int k=0 ; k< mapa.vertice - 1; k++){
+                    System.out.print(camino[k] + "-");
+                }
+                System.out.print(camino[mapa.vertice-1] + "]" + " ");
+                System.out.println("Es un camino Hamiltoniano");
+                System.out.println("El camino tiene: " + mapa.vertice + " vertices");
+
+            }else{
+                System.out.print("No se encontro un camino Hamiltoniano");  
+            }   
+
+
     }
 
 }
