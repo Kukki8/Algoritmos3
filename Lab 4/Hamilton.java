@@ -27,6 +27,8 @@ public class Hamilton{
             mapa.add(vert1, vert2);
 
         }
+        
+        Lector.close();
         return mapa;
 
 
@@ -48,8 +50,6 @@ public class Hamilton{
             BFS bfs = new BFS(mapa);
             bfs.hacerBFS(r);
         }
-
-
 
 
 

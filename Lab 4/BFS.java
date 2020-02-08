@@ -26,7 +26,6 @@ public class BFS{
     public void hacerBFS(int vertIni){
         abiertos.add(vertIni);
         visitados[vertIni] = true;
-        camino[0] = vertIni;
         int i= 0;
         System.out.println("Recorrido desde: " + vertIni);
 
@@ -36,10 +35,9 @@ public class BFS{
             visitados[p] = true;
             for(int j=0; j< mapa.vertice; j++){
                 if(mapa.matrizAdyacencia[vertIni][j] == 1){
+                    camino[i]=p;
                     if(!eliminar(j)){
-                        visitados[j]= true;
                         abiertos.add(j);
-                        camino[j]=i;
                         i=i+1;
                         System.out.println("["+ p + "-" + j+ "]");
                         j = mapa.vertice;
@@ -75,5 +73,3 @@ public class BFS{
     }
 
 }
-
-//Probando ando
