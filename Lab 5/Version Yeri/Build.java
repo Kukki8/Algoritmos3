@@ -1,6 +1,9 @@
 import java.io.*;
+import java.util.Random;
 
 public class Build{
+
+    public static int Ini;
 
     public static GrafoD leerMapa(String Archivo) throws IOException {
 
@@ -11,16 +14,19 @@ public class Build{
         int m = Integer.parseInt(linea);
 
         GrafoD ciudad = new GrafoD(n);
+
         int edif1;
         int edif2;
 
         for(int i=0; i<m;i++){
-            linea = Lector.readLine();
-            String[] sinespacio = linea.split(" ");
-            edif1 = Integer.parseInt(sinespacio[0]);
-            edif2 = Integer.parseInt(sinespacio[1]);
-    
-            ciudad.add(edif1,edif2);
+                linea = Lector.readLine();
+                String[] sinespacio = linea.split(" ");
+                edif1 = Integer.parseInt(sinespacio[0]);
+                edif2 = Integer.parseInt(sinespacio[1]);
+
+                ciudad.add(edif1,edif2);
+
+
         }
 
         Lector.close();
@@ -31,8 +37,9 @@ public class Build{
         public static void main( String [] args) throws IOException{
             GrafoD ciudad = leerMapa(args[0]);
             RecorrerDFS dfs = new RecorrerDFS(ciudad);
-            //r = ciudad.vertice;
-            dfs.hacerDFS(0);
+            Random random = new Random();
+            int r = random.nextInt(ciudad.vertice);
+            dfs.hacerDFS(r);
 
 
 
