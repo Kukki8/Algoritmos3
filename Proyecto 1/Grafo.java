@@ -1,10 +1,12 @@
 package proyecto1;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public interface Grafo {
 	//carga el grafo en la clase que impleta Grafo
-	public boolean cargarGrafo(String archivo);
+	public boolean cargarGrafo(String Archivo) throws IOException;
 	
 	public int numeroDeVertices();
 	
@@ -20,17 +22,17 @@ public interface Grafo {
 	
 	public boolean eliminarVertice(int id);
 	
-	public LinkedList<Vértice> vertices();
+	public LinkedList<Integer> vertices();
 	
 	public LinkedList<Lado> lados();
 	
 	public int grado(int id);
 	
-	public LinkedList<Vértice> adyacentes(int id);
+	public LinkedList<Integer> adyacentes(int id);
 	
 	public LinkedList<Lado> incidentes(int id);
 	
-	public Grafo clone(Grafo grafo);
+	public Clonacion clone();
 	
 	public String toString();
 }

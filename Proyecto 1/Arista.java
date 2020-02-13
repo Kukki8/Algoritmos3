@@ -7,8 +7,8 @@ public class Arista extends Lado {
 		// TODO Auto-generated constructor stub
 	}
 	public Arista CrearArista(double peso, int tipo, Vértice u, Vértice v) {
-		Arista Arista=new Arista(peso, tipo, u,v);
-		return Arista;
+		return new Arista(peso, tipo, u,v);
+		
 	}
 	public Vértice getExtremo1() {
 		return this.vi;
@@ -22,5 +22,7 @@ public class Arista extends Lado {
 		return "Extremo 1: " +vi+", Extrremo 2: "+ vf+ ", Peso: "+ peso+
 				", Tipo: "+ tipo;
 	}
-
+	
+	
 }
+

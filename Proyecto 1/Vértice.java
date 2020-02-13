@@ -16,8 +16,8 @@ public class Vértice {
 	    private double coordenadax;
 	    private double coordenaday;
 	    private double peso;
-	    private LinkedList<Arista> ListaAdyacencia;                    //Si el vertice esta en un grafo no dirigido
-	    private LinkedList<Arco> ListaSucesores;                  //Si el vertice esta en un grafo dirigido
+	    LinkedList<Arista> ListaAdyacencia;                    //Si el vertice esta en un grafo no dirigido
+	    LinkedList<Arco> ListaSucesores;                  //Si el vertice esta en un grafo dirigido
 	    
 	    //constructor de la clase vertice//
 	    public Vértice(int identificador, String nombre, double x, double y,double peso) {
@@ -26,11 +26,13 @@ public class Vértice {
 	    	this.coordenadax=x;
 	    	this.coordenaday=y;
 	    	this.peso=peso;
+	    	ListaAdyacencia=new LinkedList<Arista>();
+	    	ListaSucesores=new LinkedList<Arco>();
 	    }
 	    // retorna el Vertice creado
-	    public Vértice CrearVértice(int identificador, String nombre, double x, double y,double peso ) {
-	    	Vértice Vértice=new Vértice(identificador, nombre, x ,y , peso);
-	    	return Vértice;
+	    public static Vértice CrearVértice(int identificador, String nombre, double x, double y,double peso ) {
+	    	return new Vértice(identificador, nombre, x ,y , peso);
+	
 	    }
 	    // retorna el peso del vertice
 	    public double getPeso() {
