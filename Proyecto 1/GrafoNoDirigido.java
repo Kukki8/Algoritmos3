@@ -24,7 +24,7 @@ public class GrafoNoDirigido implements Grafo {
 	//En otro caso devuelve false.
 	public boolean agregarArista(Grafo g,Arista a) {
 		for(Lado e:Aristas) {
-			if(e.getTipo()==a.getTipo()) {
+			if(e.vi.getId()==a.getExtremo1().getId()&&e.vf.getId()==a.getExtremo2().getId( )) {
 				return false;
 			}
 		}	
@@ -62,15 +62,98 @@ public class GrafoNoDirigido implements Grafo {
 		return true;
 	}
 	public boolean agregarArista(String u, String v, int tipo, double peso) {
+		int id1,id2;
+		id1= Integer.parseInt(u);
+		id2=Integer.parseInt(v);
+		Vértice vertice1 = null,vertice2 = null;
+		for(Lado e:Aristas) {
+			if(e.vi.getId()==id1&&e.vf.getId()==id2) {
+				return false;
+			}
 		
+		}
+		for(LinkedList<Vértice> e:Grafo) {
+			if(e.get(0).getId()==id1) {
+				vertice1=e.get(0);
+			}
+			if(e.get(0).getId()==id2) {
+				vertice2=e.get(0);
+			}
+		}
+		Arista nuevaArista=new Arista(peso,tipo,vertice1,vertice2);
+		Aristas.add(nuevaArista);
+		for(int i=0;i<Grafo.size();i++) {
+			if(Grafo.get(i).get(0)==vertice1) {
+				Grafo.get(i).add(vertice2);
+			}
+			if(Grafo.get(i).get(0)==vertice2) {
+				Grafo.get(i).add(vertice1);
+			}
+		}
+		return true;
+	}
+	public boolean eliminarArista(Arista a) {
+		boolean Existe=false;
+		Vértice v1=a.getExtremo1();
+		Vértice v2=a.getExtremo2();
+		for(int i=0;i<Aristas.size();i++) {
+			if(Aristas.get(i)==a) {
+				Aristas.remove(i);
+				Existe=true;
+			}
+		}
+		if(Existe==true) {
+			for(int i=0;i<Grafo.size();i++) {
+				if(Grafo.get(i).get(0).getId()==v1.getId()) {
+					for(int j=0;j<Grafo.get(i).size();j++) {
+						if(Grafo.get(i).get(j).getId()==v2.getId()) {
+							Grafo.get(i).remove(j);
+						}
+					}
+				}
+				if(Grafo.get(i).get(0).getId()==v2.getId()) {
+					for(int j=0;j<Grafo.get(i).size();j++) {
+						if(Grafo.get(i).get(j).getId()==v1.getId()) {
+							Grafo.get(i).remove(j);
+						}
+					}
+				}
+			}
+		}
+		return Existe;
+	}
+	public Lado obtenerArista(Arista a) {
+		for(Lado e:Aristas) {
+			if(e==a) {
+				return e;
+			}
+		}
+		throw new NoSuchElementException("Esta Arsita no existe en el grafo");
+	}
+	public boolean estaArista(String u, String v, int tipo) {
+		int id1,id2;
+		id1=Integer.parseInt(u);
+		id2=Integer.parseInt(v);
+		for(Lado e:Aristas){
+			if(e.vi.getId()==id1 && e.vf.getId()==id2) {
+				return true;
+			}
+			else {
+			
+			}
+		}
+		return false;	
 	}
 	
 	
 	
 	//#############################################################################
 	public boolean cargarGrafo(String Archivo) throws IOException {
+		try {
 		BufferedReader Lector = new BufferedReader(new FileReader(Archivo));
-		int n,m,id;
+		int n,m,id,tipo;
+		boolean Exito=false;
+		String u,v;
 		double x,y,peso;
 		String nombre;
 		String[] lineasinespacio;
@@ -81,22 +164,41 @@ public class GrafoNoDirigido implements Grafo {
 		m=Integer.parseInt(linea);
 		
 		for(int i=0;i<n;i++) {
-			linea=Lector.readLine();//linea 4,5....
+			linea=Lector.readLine();//linea 4,5....n
 			lineasinespacio=linea.split(" ");
-			id=Integer.parseInt(lineasinespacio[0]);
-			nombre=lineasinespacio[1];
-			x=Double.parseDouble(lineasinespacio[2]);
-			y=Double.parseDouble(lineasinespacio[3]);
-			peso=Double.parseDouble(lineasinespacio[4]);
-			agregarVertice(id,nombre,x,y,peso);
-			
+			if(lineasinespacio.length==5) {	
+				id=Integer.parseInt(lineasinespacio[0]);
+				nombre=lineasinespacio[1];
+				x=Double.parseDouble(lineasinespacio[2]);
+				y=Double.parseDouble(lineasinespacio[3]);
+				peso=Double.parseDouble(lineasinespacio[4]);
+				agregarVertice(id,nombre,x,y,peso);
+			}
+			else {
+				throw new IllegalArgumentException(" No es una linea de vertices valida");
+			}
 		}
 		for(int j=0;j<m;j++) {
-			linea=Lector.readLine(); //empieza las lineas de lso arcos
+			linea=Lector.readLine(); //empieza las lineas de las aristas
 			lineasinespacio=linea.split(" ");
+			if(lineasinespacio.length==4) {	
+				u=lineasinespacio[0];
+				v=lineasinespacio[1];
+				tipo=Integer.parseInt(lineasinespacio[2]);
+				peso=Double.parseDouble(lineasinespacio[3]);
+				agregarArista(u,v,tipo,peso);
+				
+			}
+			else {
+				throw new IllegalArgumentException("No es una linea de Aristas valida"); 
+			}
 			
 		}
-		return false;
+		return true;
+		}catch(IOException e) {
+					return false;
+			}
+		
 	
 		
 	}
@@ -218,7 +320,7 @@ public class GrafoNoDirigido implements Grafo {
 		LinkedList<Integer> adyaceentes=new LinkedList<Integer>();
 		for(LinkedList<Vértice> e:Grafo) {
 			if(e.get(0).getId()==id) {
-				for(int i=1;i<e.size();i++) {
+				for(int i=0;i<e.size();i++) {
 					adyaceentes.add(e.get(i).getId());
 					return adyaceentes;
 				}
