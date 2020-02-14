@@ -1,19 +1,18 @@
-package proyecto1;
 
 public class Arista extends Lado {
 
-	public  Arista(double peso, int tipo, Vértice u, Vértice v) {
+	public  Arista(double peso, int tipo, Vertice u, Vertice v) {
 		super(peso, tipo, u, v);
 		// TODO Auto-generated constructor stub
 	}
-	public Arista CrearArista(double peso, int tipo, Vértice u, Vértice v) {
+	public Arista CrearArista(double peso, int tipo, Vertice u, Vertice v) {
 		return new Arista(peso, tipo, u,v);
 		
 	}
-	public Vértice getExtremo1() {
+	public Vertice getExtremo1() {
 		return this.vi;
 	}
-	public Vértice getExtremo2() {
+	public Vertice getExtremo2() {
 		return this.vf;
 	}
 	@Override

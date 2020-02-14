@@ -1,5 +1,4 @@
-package proyecto1;
-import java.util.*;
+
 public abstract class Lado {
 	/* Atributos de la clase lado:
 	 * peso: peso del lado
@@ -9,10 +8,10 @@ public abstract class Lado {
 	 */
 	protected double peso;
 	protected int tipo;
-	 protected Vértice vi;
-	protected Vértice vf;
+	 protected Vertice vi;
+	protected Vertice vf;
 	// constructor de la clase Lado
-	public Lado(double peso,int tipo, Vértice v1, Vértice v2) {
+	public Lado(double peso,int tipo, Vertice v1, Vertice v2) {
 		this.peso=peso;
 		this.tipo=tipo;
 		this.vi=v1;
@@ -24,7 +23,7 @@ public abstract class Lado {
 		return this.peso;
 	}
 	//retorna si el lado incide en el vertice v
-	public boolean incide(Vértice v) {
+	public boolean incide(Vertice v) {
 		boolean incide=true;
 		if(v!=vi && v!=vf) {
 			incide=false;

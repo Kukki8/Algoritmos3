@@ -1,5 +1,3 @@
-package proyecto1;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,12 +7,12 @@ import java.util.NoSuchElementException;
 
 public class GrafoNoDirigido implements Grafo {
 	
-	LinkedList<LinkedList<Vértice>> Grafo;
-	LinkedList<Lado> Aristas;
+	LinkedList<LinkedList<Vertice>> Grafo;
+	LinkedList<Arista> Aristas;
 	
-	public GrafoNoDirigido() {
-		Grafo=new LinkedList<LinkedList<Vértice>>();
-		Aristas=new LinkedList<Lado>();
+	public void CrearGrafoNoDirigido() {
+		Grafo=new LinkedList<LinkedList<Vertice>>();
+		Aristas=new LinkedList<Arista>();
 	}
 	
 	public Grafo crearGrafoNoDirigido(){
@@ -22,17 +20,17 @@ public class GrafoNoDirigido implements Grafo {
 	}
 	// Agrega un Arco a la lista de arcos si el arco no se encuentra y devuelve true,
 	//En otro caso devuelve false.
-	public boolean agregarArista(Grafo g,Arista a) {
-		for(Lado e:Aristas) {
-			if(e.vi.getId()==a.getExtremo1().getId()&&e.vf.getId()==a.getExtremo2().getId( )) {
+	public boolean agregarArista(Arista a) {
+		for(Arista e:Aristas) {
+			if(e.getExtremo1().getId()==a.getExtremo1().getId()&&e.getExtremo2().getId()==a.getExtremo2().getId( )) {
 				return false;
 			}
 		}	
 		Aristas.add(a);
 		boolean Existe1=false;
 		boolean Existe2=false;
-		Vértice vertice1=a.getExtremo1();
-		Vértice vertice2=a.getExtremo2();
+		Vertice vertice1=a.getExtremo1();
+		Vertice vertice2=a.getExtremo2();
 		for(int i=0;i<Grafo.size();i++) {
 			if(Grafo.get(i).get(0)==vertice1) {
 				Grafo.get(i).add(vertice2);
@@ -47,14 +45,14 @@ public class GrafoNoDirigido implements Grafo {
 			}
 		}
 		if(Existe1==false) {
-			LinkedList<Vértice> nuevovertice=new LinkedList<Vértice>();
+			LinkedList<Vertice> nuevovertice=new LinkedList<Vertice>();
 			nuevovertice.add(vertice1);
 			Grafo.add(nuevovertice);
 			Grafo.get(Grafo.size()-1).add(vertice2);
 			
 		}
 		if(Existe2==false) {
-			LinkedList<Vértice> nuevovertice=new LinkedList<Vértice>();
+			LinkedList<Vertice> nuevovertice=new LinkedList<Vertice>();
 			nuevovertice.add(vertice2);
 			Grafo.add(nuevovertice);
 			Grafo.get(Grafo.size()-1).add(vertice1);	
@@ -65,14 +63,14 @@ public class GrafoNoDirigido implements Grafo {
 		int id1,id2;
 		id1= Integer.parseInt(u);
 		id2=Integer.parseInt(v);
-		Vértice vertice1 = null,vertice2 = null;
+		Vertice vertice1 = null,vertice2 = null;
 		for(Lado e:Aristas) {
 			if(e.vi.getId()==id1&&e.vf.getId()==id2) {
 				return false;
 			}
 		
 		}
-		for(LinkedList<Vértice> e:Grafo) {
+		for(LinkedList<Vertice> e:Grafo) {
 			if(e.get(0).getId()==id1) {
 				vertice1=e.get(0);
 			}
@@ -94,10 +92,10 @@ public class GrafoNoDirigido implements Grafo {
 	}
 	public boolean eliminarArista(Arista a) {
 		boolean Existe=false;
-		Vértice v1=a.getExtremo1();
-		Vértice v2=a.getExtremo2();
+		Vertice v1=a.getExtremo1();
+		Vertice v2=a.getExtremo2();
 		for(int i=0;i<Aristas.size();i++) {
-			if(Aristas.get(i)==a) {
+			if(Aristas.get(i).getExtremo1()==a.getExtremo1() && Aristas.get(i).getExtremo2()==a.getExtremo2()) {
 				Aristas.remove(i);
 				Existe=true;
 			}
@@ -134,8 +132,8 @@ public class GrafoNoDirigido implements Grafo {
 		int id1,id2;
 		id1=Integer.parseInt(u);
 		id2=Integer.parseInt(v);
-		for(Lado e:Aristas){
-			if(e.vi.getId()==id1 && e.vf.getId()==id2) {
+		for(Arista e:Aristas){
+			if(e.getExtremo1().getId()==id1 && e.getExtremo2().getId()==id2) {
 				return true;
 			}
 			else {
@@ -166,6 +164,7 @@ public class GrafoNoDirigido implements Grafo {
 		for(int i=0;i<n;i++) {
 			linea=Lector.readLine();//linea 4,5....n
 			lineasinespacio=linea.split(" ");
+			
 			if(lineasinespacio.length==5) {	
 				id=Integer.parseInt(lineasinespacio[0]);
 				nombre=lineasinespacio[1];
@@ -216,14 +215,14 @@ public class GrafoNoDirigido implements Grafo {
 	}
 
 	@Override
-	public boolean agregarVertice(Vértice v) {
-		for(LinkedList<Vértice> e:Grafo) {
+	public boolean agregarVertice(Vertice v) {
+		for(LinkedList<Vertice> e:Grafo) {
 			if(e.get(0).getId()==v.getId()) {
 				return false;
 			}
 		
 		}
-		LinkedList<Vértice> nuevovertice=new LinkedList<Vértice>();
+		LinkedList<Vertice> nuevovertice=new LinkedList<Vertice>();
 		nuevovertice.add(v);
 		Grafo.add(nuevovertice);
 		return true;
@@ -231,15 +230,16 @@ public class GrafoNoDirigido implements Grafo {
 
 	@Override
 	public boolean agregarVertice(int id, String nombre, double x, double y, double p) {
-		Vértice vertice=new Vértice(id,nombre,x,y,p);
-		for(LinkedList<Vértice> e:Grafo) {
-			if(e.get(0).getId()==vertice.getId()) {
+		Vertice v=new Vertice();
+		v.CrearVertice(id,nombre,x,y,p);
+		for(LinkedList<Vertice> e:Grafo) {
+			if(e.get(0).getId()==v.getId()) {
 				return false;
 			}
 		
 		}
-		LinkedList<Vértice> nuevovertice=new LinkedList<Vértice>();
-		nuevovertice.add(vertice);
+		LinkedList<Vertice> nuevovertice=new LinkedList<Vertice>();
+		nuevovertice.add(v);
 		Grafo.add(nuevovertice);
 		return true;
 	}
@@ -247,8 +247,8 @@ public class GrafoNoDirigido implements Grafo {
 	
 
 	@Override
-	public Vértice obtenerVertice(int id) {
-		for(LinkedList<Vértice> e:Grafo) {
+	public Vertice obtenerVertice(int id) {
+		for(LinkedList<Vertice> e:Grafo) {
 			if(e.get(0).getId()==id) {
 				return e.get(0);
 			}
@@ -259,7 +259,7 @@ public class GrafoNoDirigido implements Grafo {
 
 	@Override
 	public boolean estaVertice(int id) {
-		for(LinkedList<Vértice> e:Grafo) {
+		for(LinkedList<Vertice> e:Grafo) {
 			if(e.get(0).getId()==id) {
 				return true;
 			}
@@ -276,11 +276,16 @@ public class GrafoNoDirigido implements Grafo {
 					Grafo.remove(i);
 				}
 			}
-			for(LinkedList<Vértice> e:Grafo) {
-				for(int j=0;j<e.size();j++) {
+			for(LinkedList<Vertice> e:Grafo) {
+				for(int j=1;j<e.size();j++) {
 					if(e.get(j).getId()==id) {
 						e.remove(j);
 					}
+				}
+			}
+			for(int i=0;i<Aristas.size();i++) {
+				if(Aristas.get(i).getExtremo1().getId()==id || Aristas.get(i).getExtremo2().getId()==id) {
+					Aristas.remove(i);
 				}
 			}
 			return true;
@@ -293,7 +298,7 @@ public class GrafoNoDirigido implements Grafo {
 	@Override
 	public LinkedList<Integer> vertices() {
 		LinkedList<Integer> listadevertices=new LinkedList<Integer>();
-		for(LinkedList<Vértice> e:Grafo) {
+		for(LinkedList<Vertice> e:Grafo) {
 			listadevertices.add(e.get(0).getId());
 		}
 		return listadevertices;
@@ -301,12 +306,16 @@ public class GrafoNoDirigido implements Grafo {
 
 	@Override
 	public LinkedList<Lado> lados() {
-		return Aristas;
+		LinkedList<Lado> Lados=new LinkedList<Lado>();
+		for (Arista e:Aristas) {
+			Lados.add(e);
+		}
+		return Lados;
 	}
 
 	@Override
 	public int grado(int id) {
-		for(LinkedList<Vértice> e:Grafo) {
+		for(LinkedList<Vertice> e:Grafo) {
 			if(e.get(0).getId()==id) {
 				return e.size()-1;
 			}
@@ -318,7 +327,7 @@ public class GrafoNoDirigido implements Grafo {
 	@Override
 	public LinkedList<Integer> adyacentes(int id) {
 		LinkedList<Integer> adyaceentes=new LinkedList<Integer>();
-		for(LinkedList<Vértice> e:Grafo) {
+		for(LinkedList<Vertice> e:Grafo) {
 			if(e.get(0).getId()==id) {
 				for(int i=0;i<e.size();i++) {
 					adyaceentes.add(e.get(i).getId());
@@ -332,22 +341,23 @@ public class GrafoNoDirigido implements Grafo {
 	@Override
 	public LinkedList<Lado> incidentes(int id) {
 		LinkedList<Lado> ladosincidentes=new LinkedList<Lado>();
-		Vértice vertice1;
+		Vertice vertice1=null;
 		boolean Existe=estaVertice(id);
 		if(Existe==true) {
-			for(LinkedList<Vértice> j:Grafo) {
+			for(LinkedList<Vertice> j:Grafo) {
 				if(j.get(0).getId()==id) {
 					vertice1=j.get(0);
-					for(Lado e:Aristas) {
-						if(e.incide(vertice1)) {
-							ladosincidentes.add(e);
-			
-						}
-					}
-				
-		
+					break;
 				}
 			}
+			for(Arista e:Aristas) {
+				if(e.incide(vertice1)) {
+					ladosincidentes.add(e);
+			
+				}
+			}
+				
+		
 		}
 		else {
 			throw new NoSuchElementException("Este Vertice no existe en el grafo");
@@ -362,14 +372,38 @@ public class GrafoNoDirigido implements Grafo {
 		Clonacion grafoclonado=new Clonacion(Grafo,Aristas);
 		return grafoclonado;
 	}
-	
+	public String toString() {
+		String vertices=" ";
+		String aristas=" ";
+		String grafo;
+		int v1,v2;
+		for(LinkedList<Vertice> e:Grafo) {
+			vertices=vertices+","+Integer.toString(e.get(0).getId());
+		}
+		for(Arista e:Aristas) {
+			v1=e.getExtremo1().getId();
+			v2=e.getExtremo2().getId();
+			aristas=aristas+Integer.toString(v1)+"-"+Integer.toString(v2)+"\n";
+		}
+		grafo="los vertices son: "+vertices+"\n"+
+			"las aristas son: "+ aristas;
+		return grafo;
+	}
 }
 
 class Clonacion{
-	LinkedList<LinkedList<Vértice>> grafo;
-	LinkedList<Lado> Aristas;
-	public Clonacion(LinkedList<LinkedList<Vértice>> Grafo, LinkedList<Lado> Aristas) {
+	LinkedList<LinkedList<Vertice>> grafo;
+	LinkedList<Arista> Aristas;
+	public Clonacion(LinkedList<LinkedList<Vertice>> Grafo, LinkedList<Arista> Aristas) {
 		this.grafo=Grafo;
 		this.Aristas=Aristas;
 	}
+	public LinkedList<LinkedList<Vertice>> Damegrafo(){
+		return grafo;
+	}
+	public LinkedList<Arista> DameAristas(){
+		return Aristas;
+	}
+	
+	
 }

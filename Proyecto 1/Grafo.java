@@ -1,5 +1,3 @@
-package proyecto1;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
@@ -12,11 +10,11 @@ public interface Grafo {
 	
 	public int numeroDeLados();
 	
-	public boolean agregarVertice(Vértice v);
+	public boolean agregarVertice(Vertice v);
 	
 	public boolean agregarVertice(int id, String nombre,double x, double y,double p);
 	
-	public Vértice obtenerVertice(int id);
+	public Vertice obtenerVertice(int id);
 	
 	public boolean estaVertice(int id);
 	
