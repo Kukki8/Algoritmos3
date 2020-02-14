@@ -13,7 +13,7 @@ class BFSB{
     * int Num: Cota de profundidad de recorrido
     * Grafo grafo: contiene la informacion del grafo
     */
-    public int[] Inicio(int V0, String arg, int Num, Grafo grafo){
+    public int[] Inicio(int Vertice, String arg, int Numero, Grafo grafo){
         LinkedList<Integer> cola = new LinkedList<Integer>();                    // Cola usada por BFS
 
         if(arg.equals("pred")){
@@ -27,9 +27,9 @@ class BFSB{
 				D[i] = -1;
             }
             
-            P[V0]=V0;                                                            //El predecesor de el vertice inicial es el mismo
-            cola.offer(V0);                                                      //Agrega el vertice inicial en la cola usada por BFS
-            BFS(cola, Num, Time, grafo); 
+            P[Vertice]=Vertice;                                                            //El predecesor de el vertice inicial es el mismo
+            cola.offer(Vertice);                                                      //Agrega el vertice inicial en la cola usada por BFS
+            BFS(cola, Numero, Time, grafo); 
             return P;                                                            //Restorna el arreglo de los predecesores
         }
 
@@ -44,9 +44,9 @@ class BFSB{
 				D[i] = -1;
             }
             
-            P[V0]=V0;                                                            //El predecesor de el vertice inicial es el mismo
-            cola.offer(V0);                                                      //Agrega el vertice inicial en la cola usada por BFS
-            BFS(cola, Num, Time, grafo);
+            P[Vertice]=Vertice;                                                            //El predecesor de el vertice inicial es el mismo
+            cola.offer(Vertice);                                                      //Agrega el vertice inicial en la cola usada por BFS
+            BFS(cola, Numero, Time, grafo);
             return D;                                                            //Restorna el arreglo de los Ordinales
         }
     }
@@ -58,7 +58,7 @@ class BFSB{
     * int Num: Cota de profundidad de recorrido
     * Grafo grafo: contiene la informacion del grafo
     */
-    public void InicioPrint(int V0, String arg, int Num, Grafo grafo){
+    public void InicioPrint(int vertice, String arg, int Numero, Grafo grafo){
         LinkedList<Integer> cola = new LinkedList<Integer>();                    // Cola usada por BFS
                              
 		P = new int[grafo.Dametamaño()];                                      // Inicializa el Arreglo de Colores
@@ -68,15 +68,15 @@ class BFSB{
         }
 
         String Espacio = "";                                                     //String que contiene la identacion necesaria para cada nivel
-        cola.offer(V0);                                                          //Agrega el vertice inicial en la cola usada por BFS
-        P[V0]=V0;                                                                //El predecesor de el vertice inicial es el mismo
+        cola.offer(vertice);                                                          //Agrega el vertice inicial en la cola usada por BFS
+        P[vertice]=vertice;                                                                //El predecesor de el vertice inicial es el mismo
         System.out.println(String.valueOf(0)+" - "+String.valueOf(0)+" (Raiz)");
-        BFSPrint(cola, Espacio, Num, grafo);
+        BFSPrint(cola, Espacio, Numero, grafo);
     }
 
     /*Este metodo es BFS para cuando no necesitemos imprimir el recorrido
     */
-    private int BFS(LinkedList<Integer> cola, int Num, int Time, Grafo grafo){
+    private int BFS(LinkedList<Integer> cola, int Numero, int Time, Grafo grafo){
         int ContadorNiv = 0;                                                     //Este sera el contador de Niveles de profundidad
         int NumVPorNiv = 1;                                                      //Numero de vertices por nivel
         int NumVPorNivSig = 0;                                                   //Numero de vertices del siguiente nivel
@@ -87,7 +87,7 @@ class BFSB{
             D[v] = Time;                                                         //Este sera el arreglo donde tendremos el tiempo en el cual fue descubierto un vertice
             Time = Time + 1;
             NumVPorNiv--;                                                        //Falta 1 vertice menos por revsar en el nivel dado                            
-            if(ContadorNiv<Num){                                                 //Si el recorrido llega a la profundidad cota, no sigue el recorrido
+            if(ContadorNiv<Numero){                                                 //Si el recorrido llega a la profundidad cota, no sigue el recorrido
                 for(int w=0; w<grafo.Dametamañoadyacentes(v); w++){
                     if(P[grafo.DamePos(v, w)]==-1){
                         P[grafo.DamePos(v, w)] = v;
@@ -107,7 +107,7 @@ class BFSB{
 
     /*Este metodo es BFS para cuando necesitemos imprimir el recorrido
     */
-    private void BFSPrint(LinkedList<Integer> cola, String Espacio, int Num, Grafo grafo){
+    private void BFSPrint(LinkedList<Integer> cola, String Espacio, int Numero, Grafo grafo){
 
         int ContadorNiv = 0;                                                     //Este sera el contador de Niveles de profundidad
         int NumVPorNiv = 1;                                                      //Numero de vertices por nivel
@@ -117,7 +117,7 @@ class BFSB{
         while(cola.size() != 0){
             v = cola.poll();
             NumVPorNiv--;                                                        //Falta 1 vertice menos por revsar en el nivel dado
-            if(ContadorNiv<Num){                                                 //Si el recorrido llega a la profundidad cota, no sigue el recorrido
+            if(ContadorNiv<Numero){                                                 //Si el recorrido llega a la profundidad cota, no sigue el recorrido
                 for(int w=0; w<grafo.Dametamañoadyacentes(v); w++){
                     if(P[grafo.DamePos(v, w)]==-1){
                         P[grafo.DamePos(v, w)] = v;
