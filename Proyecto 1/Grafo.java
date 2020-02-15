@@ -30,7 +30,7 @@ public interface Grafo {
 	
 	public LinkedList<Lado> incidentes(int id);
 	
-	public Clonacion clone();
+	public Grafo clone();
 	
 	public String toString();
 }

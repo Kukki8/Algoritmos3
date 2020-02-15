@@ -33,108 +33,82 @@ public class GrafoDirigido implements Grafo{
 
     public  boolean agregarArco(String vi, String vf, int tipo, double peso){
         
-        if(estaVertice(vi)== true && estaVertice(vf)== true){
-            Vertice VI = obtenerVertice(vi);
-            Vertice VF = obtenerVertice(vf);
-            int V1 = VI.getId();
-            int V2 = VF.getId();
-
-            for(Arco b : listaArcos){
-                int bt = b.getTipo();
-                String bn1 = b.getExtremoInicial().getNombre();
-                String bn2 = b.getExtremoFinal().getNombre();
-                int bp = b.getTipo();
-            
-                    if(bn1 == vi && bn1 == vf){
-                        if(bt != tipo){
-                            Arco A = new Arco(peso, tipo, VI, VF);
-                            listaArcos.add(A);
-                            return true;
-                        }else{
-                            System.out.println("Ya existe un arco entre los nodos " + vi + " y " + vf + " del mismo tipo " + tipo);
-                            return false;
-                        }
-   
-                    }else if(bn1 != vi && bn1 == vf && estaVertice(vi)== true) {
-                        Arco A = new Arco(peso, tipo, VI, VF);
-                        listaArcos.add(A);
-                        return true;
-
-
-                    }else if(bn1 == vi && bn1 != vf && estaVertice(vf)== true){
-                        Arco A = new Arco(peso, tipo, VI, VF);
-                        listaArcos.add(A);
-                        return true;
-                    }else if(bn1 != vi && bn1 != vf && estaVertice(vi)== true && estaVertice(vf)== true){
-                        Arco A = new Arco(peso, tipo, VI, VF);
-                        listaArcos.add(A);
-                        return true;
+        if(!estaArco(vi, vf, tipo)){
+            if(estaVertice(vi) && estaVertice(vf)){
+                Vertice nuevov1 = obtenerVertice(vi);
+                Vertice nuevov2 = obtenerVertice(vf);
+                Arco nuevoArco = new Arco(peso ,tipo, nuevov1, nuevov2);
+                listaArcos.add(nuevoArco);
+    
+                for(LinkedList<Vertice> v : listaVertices){
+                    if(v.get(0).getId() == nuevov1.getId()){
+                        v.add(nuevov2);
                     }
+                }
+                return true;
             }
-
-        }else if(estaVertice(vi)== false && estaVertice(vf)== true){
-            System.out.println("No se puede agregar el arco porque el vertice " + vi + " no existe.");
-            return false;
-
-        }else if(estaVertice(vi)== true && estaVertice(vf)== false){
-            System.out.println("No se puede agregar el arco porque el vertice " + vf + " no existe.");
-            return false;
-
-        }else if(estaVertice(vi)== false && estaVertice(vf)== false){
-            System.out.println("No se puede agregar el arco porque ninguno de los vertices existe." );
-            return false;  
+            return false;   
         }
-
         return false;
-        
+
     }
 
 
     public boolean estaArco(String vi, String vf, int tipo){
 
-        if(estaVertice(vi) == true && estaVertice(vf)){
-            Vertice VI = obtenerVertice(vi);
-            Vertice VF = obtenerVertice(vf);
-
+        if(estaVertice(vi) && estaVertice(vf)){
             for(Arco b : listaArcos){
-                if(b.getExtremoInicial() == VI && b.getExtremoFinal() == VF){
+                if(b.getExtremoInicial().getNombre() == vi && b.getExtremoFinal().getNombre() == vf && b.getTipo() == tipo){
                     return true;
-                }else{
-                    return false;
                 }
             }
+        }else if(!estaVertice(vi) && estaVertice(vf)){
+            System.out.println("No se puede agregar el arco porque el vertice " + vi + " no existe.");
+            return false;
+
+        }else if(estaVertice(vi) && !estaVertice(vf)){
+            System.out.println("No se puede agregar el arco porque el vertice " + vf + " no existe.");
+            return false;
+
+        }else if(!estaVertice(vi) && !estaVertice(vf)){
+            System.out.println("No se puede agregar el arco porque ninguno de los vertices existe." );
+            return false;  
         }
         return false;
-
     }
 
     public boolean eliminarArco(String vi, String vf, int tipo){
 
         if(estaArco(vi, vf, tipo)){
-            Vertice VI = obtenerVertice(vi);
-            Vertice VF = obtenerVertice(vf);
 
             for(Arco b : listaArcos){
-                if(b.getExtremoInicial() == VI && b.getExtremoFinal() == VF){
+                if(b.getExtremoInicial().getNombre() == vi && b.getExtremoFinal().getNombre() == vf && b.getTipo() == tipo){
                     listaArcos.remove(b);
+                    for(LinkedList<Vertice> listaActual : listaVertices){
+                        if(listaActual.get(0).getNombre().equals(vi)){
+                            for(Vertice v : listaActual){
+                                if(listaActual.get(0).getNombre().equals(vi)){
+                                    eliminarVertice(v.getId());
+                                }
+                            }return true;
+                        }      
+                    }
                 }
             }
-            return true;
-        }else{
-            System.out.print("No existe un arco con vertice inicial " + vi + ", vertice final " + vf + " de tipo " + tipo);
-            return false;
         }
+
+        System.out.print("No existe un arco con vertice inicial " + vi + ", vertice final " + vf + " de tipo " + tipo);
+        return false;
+        
 
     }
 
     public Arco obtenerArco(String vi, String vf, int tipo){
 
         if(estaVertice(vi) == true && estaVertice(vf)){
-            Vertice VI = obtenerVertice(vi);
-            Vertice VF = obtenerVertice(vf);
 
             for(Arco b : listaArcos){
-                if(b.getExtremoInicial() == VI && b.getExtremoFinal() == VF){
+                if(b.getExtremoInicial().getNombre() == vi && b.getExtremoFinal().getNombre() == vf){
                     return b;
                 }
             
@@ -175,10 +149,9 @@ public class GrafoDirigido implements Grafo{
     public LinkedList<Vertice> sucesores(int id){
 
         LinkedList<Vertice> sucesores = new LinkedList<Vertice>();
-        Vertice VI = obtenerVertice(id);
 
         for(Arco A: listaArcos){
-            if(A.getExtremoInicial() == VI){
+            if(A.getExtremoInicial().getId() == id){
                 sucesores.add(A.getExtremoFinal());
             }
         }
@@ -189,10 +162,9 @@ public class GrafoDirigido implements Grafo{
     public LinkedList<Vertice> sucesores(String name){
 
         LinkedList<Vertice> sucesores = new LinkedList<Vertice>();
-        Vertice VI = obtenerVertice(name);
 
         for(Arco A: listaArcos){
-            if(A.getExtremoInicial() == VI){
+            if(A.getExtremoInicial().getNombre() == name){
                 sucesores.add(A.getExtremoFinal());
             }
         }
@@ -204,10 +176,9 @@ public class GrafoDirigido implements Grafo{
 
         if(estaVertice(id)){
             LinkedList<Vertice> antecesores = new LinkedList<Vertice>();
-            Vertice VF = obtenerVertice(id);
-    
+
             for(Arco A: listaArcos){
-                if(A.getExtremoFinal() == VF){
+                if(A.getExtremoFinal().getId() == id){
                     antecesores.add(A.getExtremoInicial());
                 }
             }
@@ -222,10 +193,9 @@ public class GrafoDirigido implements Grafo{
 
         if(estaVertice(name)){
             LinkedList<Vertice> Antecesores = new LinkedList<Vertice>();
-            Vertice VF = obtenerVertice(name);
-    
+
             for(Arco A: listaArcos){
-                if(A.getExtremoFinal() == VF){
+                if(A.getExtremoFinal().getNombre() == name){
                     Antecesores.add(A.getExtremoInicial());
                 }
             }
@@ -240,7 +210,47 @@ public class GrafoDirigido implements Grafo{
 
     @Override
     public boolean cargarGrafo(String Archivo) throws IOException{
-        
+        try{ 
+            
+            BufferedReader lector = new BufferedReader(new FileReader(Archivo));
+            String lineaActual = lector.readLine();
+            String orientacion = lineaActual;
+            System.out.println("Cargando grafo " + orientacion);
+            lector.readLine();
+            int n = Integer.parseInt(lineaActual);
+            lector.readLine();
+            int m = Integer.parseInt(lineaActual);
+    
+            GrafoDirigido nuevoGrafo = crearGrafoDirigido();
+    
+            for(int vertices = 0 ; vertices < n ; vertices++){
+                String [] datos = lector.readLine().split(" ");
+                int id = Integer.parseInt(datos[0]);
+                String nombre = datos[1];
+                double x = Double.parseDouble(datos[2]);
+                double y = Double.parseDouble(datos[3]);
+                double peso = Double.parseDouble(datos[4]);
+    
+                nuevoGrafo.agregarVertice(id, nombre, x, y, peso);
+            }
+    
+            for(int arcos = 0 ; arcos < m ; arcos++){
+                String [] datos = lector.readLine().split(" ");
+                String vi = datos[0];
+                String vf = datos[1];
+                int tipo = Integer.parseInt(datos[2]);
+                double peso = Double.parseDouble(datos[3]);
+    
+                nuevoGrafo.agregarArco(vi, vf, tipo, peso);
+            }
+    
+            lector.close();
+            return true;
+
+        }catch(IOException e){
+			return false;
+		}
+       
     }
         
     @Override
@@ -337,20 +347,18 @@ public class GrafoDirigido implements Grafo{
 
         if(estaVertice(id)){
 
-            for(LinkedList<Vertice> v : listaVertices){
-                if(v.get(0).getId() == id){
-                    listaVertices.remove(v);
-                }
-            }
-                
-            for(LinkedList<Vertice> listaVerActual : listaVertices){
-                for(Vertice verActual : listaVerActual){
-                    if(verActual.getId() == id){
-                        listaVerActual.remove(verActual);
+            for(LinkedList<Vertice> listaActual : listaVertices){
+                if(listaActual.get(0).getId() == id){
+                    listaVertices.remove(listaActual);
+                }else{
+                    for(Vertice v : listaActual){
+                        if(v.getId() == id){
+                            listaActual.remove(v);
+                        }
                     }
                 }
             }
-
+                
             for(Arco AR : listaArcos){
                 if(id == AR.getExtremoInicial().getId() || id == AR.getExtremoFinal().getId()){
                     listaArcos.remove(AR);
@@ -420,10 +428,9 @@ public class GrafoDirigido implements Grafo{
 
         if(estaVertice(id)){
             LinkedList<Lado> incidentes = new LinkedList<Lado>();
-            Vertice V = obtenerVertice(id);
-    
+
             for(Arco A: listaArcos){
-                if(A.getExtremoFinal() == V){
+                if(A.getExtremoFinal().getId() == id){
                     incidentes.add(A);
                 }
             }
@@ -434,13 +441,23 @@ public class GrafoDirigido implements Grafo{
     }
 
     @Override
-    public Clonacion clone(){
+    public Grafo clone(){
 
+        GrafoDirigido grafoClonado = new GrafoDirigido();
+        for(LinkedList<Vertice> v : listaVertices){
+            Vertice vRepresen = v.get(0);
+            grafoClonado.agregarVertice(vRepresen.getId(), vRepresen.getNombre(), vRepresen.getX(), vRepresen.getY(),vRepresen.getPeso());
+        }
+        
+        for(Arco a: listaArcos){
+            grafoClonado.agregarArco(a.getExtremoInicial().getNombre(), a.getExtremoFinal().getNombre(), a.getTipo(), a.getPeso());
+        }
+        return grafoClonado;
     }
 
     @Override
     public String toString(){
-
+        return null;
     }
 
 }

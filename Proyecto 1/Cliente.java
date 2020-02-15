@@ -68,8 +68,7 @@ public class Cliente {
 		                    	System.out.println("Ingrese el peso del vertice");
 		                    	peso=entrada.nextDouble();
 		                    
-		                    		Vertice vertice=new Vertice();
-		                    		vertice.CrearVertice(id, nombre, x, y, peso);
+		                    		Vertice vertice= new Vertice(id, nombre, x, y, peso);
 		                    		Funciona=grafo.agregarVertice(vertice);
 		                    		if(Funciona) {
 		                    			System.out.println("Se agrego el vertice al grafo\n");

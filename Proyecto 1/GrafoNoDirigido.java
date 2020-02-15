@@ -230,8 +230,7 @@ public class GrafoNoDirigido implements Grafo {
 
 	@Override
 	public boolean agregarVertice(int id, String nombre, double x, double y, double p) {
-		Vertice v=new Vertice();
-		v.CrearVertice(id,nombre,x,y,p);
+		Vertice v=new Vertice(id,nombre,x,y,p);
 		for(LinkedList<Vertice> e:Grafo) {
 			if(e.get(0).getId()==v.getId()) {
 				return false;
@@ -325,15 +324,19 @@ public class GrafoNoDirigido implements Grafo {
 	}
 
 	@Override
-	public LinkedList<Integer> adyacentes(int id) {
-		LinkedList<Integer> adyaceentes=new LinkedList<Integer>();
-		for(LinkedList<Vertice> e:Grafo) {
-			if(e.get(0).getId()==id) {
-				for(int i=0;i<e.size();i++) {
-					adyaceentes.add(e.get(i).getId());
-					return adyaceentes;
+	public LinkedList<Vertice> adyacentes(int id) {
+
+		if(estaVertice(id)){
+			LinkedList<Vertice> adyacentes = new LinkedList<Vertice>();
+			for(Arista A: Aristas){
+				if(A.getExtremo1().getId() == id){
+					adyacentes.add(A.getExtremo1());
+
+				}else if(A.getExtremo2().getId() == id){
+					adyacentes.add(A.getExtremo2());
 				}
 			}
+			return adyacentes;
 		}
 		throw new NoSuchElementException("Este Vertice no existe en el grafo");
 	}
@@ -367,8 +370,8 @@ public class GrafoNoDirigido implements Grafo {
 	}
 
 	@Override
-	public Clonacion clone() {
-		Clonacion grafoclonado=new Clonacion(Grafo,Aristas);
+	public Grafo clone() {
+		Grafo grafoclonado=new Clonacion(Grafo,Aristas);
 		return grafoclonado;
 	}
 	public String toString() {
