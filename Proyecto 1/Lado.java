@@ -1,4 +1,3 @@
-
 public abstract class Lado {
 	/* Atributos de la clase lado:
 	 * peso: peso del lado

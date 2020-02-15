@@ -356,15 +356,14 @@ public class GrafoNoDirigido implements Grafo {
 			
 				}
 			}
-				
-		
+	
 		}
 		else {
 			throw new NoSuchElementException("Este Vertice no existe en el grafo");
 		}
 		return ladosincidentes;
 		
-	
+
 	}
 
 	@Override

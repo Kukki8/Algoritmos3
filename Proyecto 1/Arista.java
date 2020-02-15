@@ -1,4 +1,3 @@
-
 public class Arista extends Lado {
 
 	public  Arista(double peso, int tipo, Vertice u, Vertice v) {

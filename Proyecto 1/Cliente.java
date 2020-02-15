@@ -255,7 +255,7 @@ public class Cliente {
 		                    
 				}
 			}catch(IOException err) {
-				System.out.println("Excepción: Hay problemas para cargar grafo.txt");
+				System.out.println("Excepciï¿½n: Hay problemas para cargar grafo.txt");
 			}
 		}
 	}	

@@ -26,7 +26,7 @@ public interface Grafo {
 	
 	public int grado(int id);
 	
-	public LinkedList<Integer> adyacentes(int id);
+	public LinkedList<Vertice> adyacentes(int id);
 	
 	public LinkedList<Lado> incidentes(int id);
 	

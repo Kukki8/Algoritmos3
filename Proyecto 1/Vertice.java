@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Vertice {
 	 /*Atributos de la clase Vertice:
 	    * id: Identificador del vertice
@@ -12,24 +14,24 @@ public class Vertice {
 	    private double coordenadax;
 	    private double coordenaday;
 	    private double peso;
-	                  //Si el vertice esta en un grafo no dirigido
-	                    //Si el vertice esta en un grafo dirigido
+	    LinkedList<Arista> ListaAdyacencia;                    //Si el vertice esta en un grafo no dirigido
+	    LinkedList<Arco> ListaSucesores;                  //Si el vertice esta en un grafo dirigido
 	    
 	    //constructor de la clase vertice//
-	    public void CrearVertice(int identificador, String nombre, double x, double y,double peso) {
+	    public Vertice(int identificador, String nombre, double x, double y,double peso) {
 	    	this.id=identificador;
 	    	this.nombre=nombre;
 	    	this.coordenadax=x;
 	    	this.coordenaday=y;
 	    	this.peso=peso;
-
-	    	
+	    	ListaAdyacencia=new LinkedList<Arista>();
+	    	ListaSucesores=new LinkedList<Arco>();
 	    }
 	    // retorna el Vertice creado
-	  //  public static Vértice CrearVértice(int identificador, String nombre, double x, double y,double peso ) {
-	    //	return new Vértice(identificador, nombre, x ,y , peso);
+	    public static Vertice CrearVertice(int identificador, String nombre, double x, double y,double peso ) {
+	    	return new Vertice(identificador, nombre, x ,y , peso);
 	
-	    
+	    }
 	    // retorna el peso del vertice
 	    public double getPeso() {
 	    	return peso;
