@@ -38,6 +38,6 @@ public abstract class Lado {
 		return this.tipo;
 	}
 	
-	public abstract String aString();
+	public abstract String toString();
 
 }
