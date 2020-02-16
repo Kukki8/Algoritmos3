@@ -22,52 +22,52 @@ public class Vertice {
 	    	
 	    }
 	    /*
-	     Crea un nuevo vértice con un identificador id, llamado nombre, con coordenadas (x,y) y un peso p.
+	     Crea un nuevo vï¿½rtice con un identificador id, llamado nombre, con coordenadas (x,y) y un peso p.
 	     retorna el Vertice creado
 		*/
-	  public static Vertice CrearVértice(int identificador, String nombre, double x, double y,double peso ) {
+	  public static Vertice CrearVertice(int identificador, String nombre, double x, double y,double peso ) {
 	   	return new Vertice(identificador, nombre, x ,y , peso);
 	  }
 	
-	    /*Obtiene el peso del vértice v.
+	    /*Obtiene el peso del vï¿½rtice v.
 	     retorna el peso del vertice
 	    */
 	  public double obtenerPeso() {
 	    	return peso;
 	    }
 	  
-	    /*Obtiene el identificador del vértice v.
+	    /*Obtiene el identificador del vï¿½rtice v.
  		retorna el identificador del vertice
 	  	*/
 	    public int obtenerId() {
 	    	return id;
 	    }
 	    
-	    /*Obtiene el dato contenido en el vértice v
+	    /*Obtiene el dato contenido en el vï¿½rtice v
 	     * retorna el nombre del vertice
 	     */
 	    public String obtenerNombre() {
 	    	return this.nombre;
 	    }
-	    /*Obtiene la coordenada x del vértice v
+	    /*Obtiene la coordenada x del vï¿½rtice v
 	     * retorna la coordenada "x" del vertice.
 	     */
 	    
 	    public double obtenerX() {
 	    	return this.coordenadax;
 	    }
-	    /*Obtiene la coordenada y del vértice v
+	    /*Obtiene la coordenada y del vï¿½rtice v
 	     * retorna la coordenada "y" del vertice.
 	     */
 	    public double obtenerY() {
 	    	return this.coordenaday;
 	    	
 	    }
-	    /*Proporciona una representación del vértice v como una cadena de caracteres.
+	    /*Proporciona una representaciï¿½n del vï¿½rtice v como una cadena de caracteres.
 
 	     *retorna la informacion del vertice. 
 	     */
-	    public String toString() {
+	    public String aString() {
 	    	return "Vertice: "+ id +", Nombre: "+ nombre +", Peso: "+ peso +
 	    			", Coordenadas: "+ "x: "+ this.coordenadax+ "y: "+this.coordenaday;
 	    }

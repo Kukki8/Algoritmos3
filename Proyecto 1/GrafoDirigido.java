@@ -26,9 +26,9 @@ public class GrafoDirigido implements Grafo{
             listaArcos.add(a);
             return true;
            
-        }else{
-            return false;
         }
+        return false;
+        
     }
 
     public  boolean agregarArco(String vi, String vf, int tipo, double peso){
@@ -58,7 +58,7 @@ public class GrafoDirigido implements Grafo{
 
         if(estaVertice(vi) && estaVertice(vf)){
             for(Arco b : listaArcos){
-                if(b.obtenerExtremoInicial().obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf && b.obtenerTipo() == tipo){
+                if(obtener.obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf && b.obtenerTipo() == tipo){
                     return true;
                 }
             }
@@ -82,7 +82,7 @@ public class GrafoDirigido implements Grafo{
         if(estaArco(vi, vf, tipo)){
 
             for(Arco b : listaArcos){
-                if(b.obtenerExtremoInicial().obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf && b.obtenerTipo() == tipo){
+                if(obtener.obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf && b.obtenerTipo() == tipo){
                     listaArcos.remove(b);
                     for(LinkedList<Vertice> listaActual : listaVertices){
                         if(listaActual.get(0).obtenerNombre().equals(vi)){
@@ -96,8 +96,6 @@ public class GrafoDirigido implements Grafo{
                 }
             }
         }
-
-        System.out.print("No existe un arco con vertice inicial " + vi + ", vertice final " + vf + " de tipo " + tipo);
         return false;
         
 
@@ -105,71 +103,79 @@ public class GrafoDirigido implements Grafo{
 
     public Arco obtenerArco(String vi, String vf, int tipo){
 
-        if(estaVertice(vi) == true && estaVertice(vf)){
+        if(estaVertice(vi) && estaVertice(vf)){
 
             for(Arco b : listaArcos){
-                if(b.obtenerExtremoInicial().obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf){
+                if(obtener.obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf){
                     return b;
                 }
-            
             }
-        }else{
-            System.out.println("No existe un arco con vertice inicial " + vi + ", vertice final " + vf + " de tipo " + tipo);
         }
-        return null;
+        throw new NoSuchElementException("No existe un arco con vertice inicial " + vi + ", vertice final " + vf + " de tipo " + tipo);
 
     }
 
     public int gradoInterior(String vi, String vf, int tipo){
         int GradoIn=0;
 
-        for(Arco A: listaArcos){
-            if(A.obtenerExtremoFinal().obtenerNombre() == vf){
-                if(A.obtenerTipo() == tipo){
-                    GradoIn+=1;
+        if(estaVertice(vi) && estaVertice(vf)){
+            for(Arco A: listaArcos){
+                if(A.obtenerExtremoFinal().obtenerNombre() == vf){
+                    if(A.obtenerTipo() == tipo){
+                        GradoIn+=1;
+                    }
                 }
             }
+            return GradoIn;
         }
-        return GradoIn;
+        throw new NoSuchElementException("Los datos no son validos." ); 
     }
 
     public int gradoExterior(String vi, String vf, int tipo){
         int GradoExt=0;
 
-        for(Arco A: listaArcos){
-            if(A.obtenerExtremoInicial().obtenerNombre() == vi){
-                if(A.obtenerTipo() == tipo){
-                    GradoExt+=1;
+        if(estaVertice(vi) && estaVertice(vf)){
+            for(Arco A: listaArcos){
+                if(obtener.obtenerNombre() == vi){
+                    if(A.obtenerTipo() == tipo){
+                        GradoExt+=1;
+                    }
                 }
             }
-        }
-        return GradoExt;
+            return GradoExt;
+        }  
+        throw new NoSuchElementException("Los datos no son validos." );  
     }
 
     public LinkedList<Vertice> sucesores(int id){
 
-        LinkedList<Vertice> sucesores = new LinkedList<Vertice>();
+        if(estaVertice(id)){
+            LinkedList<Vertice> sucesores = new LinkedList<Vertice>();
 
-        for(Arco A: listaArcos){
-            if(A.obtenerExtremoInicial().obtenerId() == id){
-                sucesores.add(A.obtenerExtremoFinal());
+            for(Arco A: listaArcos){
+                if(obtener.obtenerId() == id){
+                    sucesores.add(A.obtenerExtremoFinal());
+                }
             }
-        }
-        return sucesores;
+            return sucesores;
+        }  
+        throw new NoSuchElementException("No existe un vertice con el id "  + id + "."); 
     
     }
 
-    public LinkedList<Vertice> sucesores(String name){
+    public LinkedList<Vertice> sucesores(String nombre){
 
-        LinkedList<Vertice> sucesores = new LinkedList<Vertice>();
+        if(estaVertice(nombre)){
+            LinkedList<Vertice> sucesores = new LinkedList<Vertice>();
 
-        for(Arco A: listaArcos){
-            if(A.obtenerExtremoInicial().obtenerNombre() == name){
-                sucesores.add(A.obtenerExtremoFinal());
+            for(Arco A: listaArcos){
+                if(obtener.obtenerNombre() == nombre){
+                    sucesores.add(A.obtenerExtremoFinal());
+                }
             }
+            return sucesores;
         }
-        return sucesores;
-    
+        throw new NoSuchElementException("No existe un vertice llamado "  + nombre + ".");
     }
 
     public LinkedList<Vertice> antecesores(int id){
@@ -179,29 +185,28 @@ public class GrafoDirigido implements Grafo{
 
             for(Arco A: listaArcos){
                 if(A.obtenerExtremoFinal().obtenerId() == id){
-                    antecesores.add(A.obtenerExtremoInicial());
+                    antecesores.add(obtener);
                 }
             }
             return antecesores;
         }
-        return null;
-
-        
+        throw new NoSuchElementException("No existe un vertice con el id "  + id + ".");
     }
 
-    public LinkedList<Vertice> antecesores(String name){
+    public LinkedList<Vertice> antecesores(String nombre){
 
-        if(estaVertice(name)){
+
+        if(estaVertice(nombre)){
             LinkedList<Vertice> Antecesores = new LinkedList<Vertice>();
 
             for(Arco A: listaArcos){
-                if(A.obtenerExtremoFinal().obtenerNombre() == name){
-                    Antecesores.add(A.obtenerExtremoInicial());
+                if(A.obtenerExtremoFinal().obtenerNombre() == nombre){
+                    Antecesores.add(obtener);
                 }
             }
             return Antecesores;
         }
-        return null;
+        throw new NoSuchElementException("No existe un vertice llamado "  + nombre + ".");
 
         
     }
@@ -226,22 +231,31 @@ public class GrafoDirigido implements Grafo{
             for(int vertices = 0 ; vertices < n ; vertices++){
                 String [] datos = lector.readLine().split(" ");
                 int id = Integer.parseInt(datos[0]);
-                String nombre = datos[1];
-                double x = Double.parseDouble(datos[2]);
-                double y = Double.parseDouble(datos[3]);
-                double peso = Double.parseDouble(datos[4]);
-    
-                nuevoGrafo.agregarVertice(id, nombre, x, y, peso);
+
+                if(datos.length==5) {
+                    String nombre = datos[1];
+                    double x = Double.parseDouble(datos[2]);
+                    double y = Double.parseDouble(datos[3]);
+                    double peso = Double.parseDouble(datos[4]);
+        
+                    nuevoGrafo.agregarVertice(id, nombre, x, y, peso);
+                }else{
+                    throw new IllegalArgumentException(" No es una linea de vertices valida");
+                }
             }
     
             for(int arcos = 0 ; arcos < m ; arcos++){
                 String [] datos = lector.readLine().split(" ");
-                String vi = datos[0];
-                String vf = datos[1];
-                int tipo = Integer.parseInt(datos[2]);
-                double peso = Double.parseDouble(datos[3]);
-    
-                nuevoGrafo.agregarArco(vi, vf, tipo, peso);
+                if(datos.length==4) {	
+                    String vi = datos[0];
+                    String vf = datos[1];
+                    int tipo = Integer.parseInt(datos[2]);
+                    double peso = Double.parseDouble(datos[3]);
+        
+                    nuevoGrafo.agregarArco(vi, vf, tipo, peso);
+                }else{
+                    throw new IllegalArgumentException("No es una linea de arcos valida"); 
+                }
             }
     
             lector.close();
@@ -269,11 +283,8 @@ public class GrafoDirigido implements Grafo{
             LinkedList<Vertice> nuevoVert =new LinkedList<Vertice>();
             nuevoVert.add(v);
             listaVertices.add(nuevoVert);            
-        }else{
-                System.out.println("No existe un vertice en el grafo con" + v.obtenerId() + " de id.");
-            }
-        
-            return false;
+        }
+        return false;
     }
 
 
@@ -281,15 +292,13 @@ public class GrafoDirigido implements Grafo{
     public boolean agregarVertice(int id, String nombre,double x, double y,double p){
 
         if(!estaVertice(id)){
-        	
             Vertice v = new Vertice(id, nombre, x, y, p);
             LinkedList<Vertice> nuevoVert =new LinkedList<Vertice>();
             nuevoVert.add(v);
             listaVertices.add(nuevoVert);
             return true;
-        }else{
-            return false;
         }
+        return false;
  
     }
 
@@ -303,23 +312,19 @@ public class GrafoDirigido implements Grafo{
                 }
             }
         }
-        System.out.println("No existe un vertice en el grafo con" + id + " de id.");
-        return null;                                        //Aqui va excepcion
+        throw new NoSuchElementException("No existe un vertice en el grafo con" + id + " de id.");
     }
 
-    public Vertice obtenerVertice(String name){
+    public Vertice obtenerVertice(String nombre){
 
-        if(estaVertice(name)){
+        if(estaVertice(nombre)){
             for(LinkedList<Vertice> v : listaVertices){
-                if(v.get(0).obtenerNombre().equals(name) ){
+                if(v.get(0).obtenerNombre().equals(nombre) ){
                     return v.get(0);
                 }
             }
-        }else{
-            System.out.println("No existe un vertice en el grafo llamado " + name);
         }
-        return null;
-
+        throw new NoSuchElementException("No existe un vertice en el grafo llamado " + nombre + ".");
     }
 
     @Override
@@ -329,7 +334,6 @@ public class GrafoDirigido implements Grafo{
                 return true;
             }
         }
-        System.out.println("No existe un vertice en el grafo con " + id + " de id.");
         return false;
     }
 
@@ -339,7 +343,6 @@ public class GrafoDirigido implements Grafo{
                 return true;
             }
         }
-        System.out.println("No existe un vertice en el grafo llamado " +nombre);
         return false;
     }
 
@@ -361,15 +364,13 @@ public class GrafoDirigido implements Grafo{
             }
                 
             for(Arco AR : listaArcos){
-                if(id == AR.obtenerExtremoInicial().obtenerId() || id == AR.obtenerExtremoFinal().obtenerId()){
+                if(id == Aobtener.obtenerId() || id == AR.obtenerExtremoFinal().obtenerId()){
                     listaArcos.remove(AR);
                 }
             }
             return true;
-        }else{
-            System.out.println("No existe un vertice en el grafo con" + id + " de id.");
-            return false;
         }
+        return false;
     }
 
     @Override
@@ -398,18 +399,18 @@ public class GrafoDirigido implements Grafo{
         if(estaVertice(id)){
             Vertice v = obtenerVertice(id);
             for(Arco a : listaArcos){
-                    if(a.obtenerExtremoInicial().obtenerId() == id){
+                    if(obtener.obtenerId() == id){
                         Tipo = a.obtenerTipo();
-                        Grado += gradoExterior(a.obtenerExtremoInicial().obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), Tipo);
+                        Grado += gradoExterior(obtener.obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), Tipo);
 
                     }if(a.obtenerExtremoFinal().obtenerId()  == id){
                         Tipo = a.obtenerTipo();
-                        Grado += gradoInterior(a.obtenerExtremoInicial().obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), Tipo);
+                        Grado += gradoInterior(obtener.obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), Tipo);
                     }
             }
             return Grado;
         }
-        return 0;
+        throw new NoSuchElementException("No existe un vertice en el grafo con" + id + " de id.");
     }
 
     @Override
@@ -420,7 +421,7 @@ public class GrafoDirigido implements Grafo{
             adyacentes.addAll(antecesores(id));
             return adyacentes;
         }
-        return null;
+        throw new NoSuchElementException("No existe un vertice en el grafo con" + id + " de id.");
     }
 
     
@@ -437,28 +438,50 @@ public class GrafoDirigido implements Grafo{
             }
             return incidentes;
         }
-        return null;
+        throw new NoSuchElementException("No existe un vertice en el grafo con" + id + " de id.");
 
     }
 
     @Override
-    public Grafo clonar(){
+    public Grafo clone(){
 
         GrafoDirigido grafoClonado = new GrafoDirigido();
         for(LinkedList<Vertice> v : listaVertices){
             Vertice vRepresen = v.get(0);
-            grafoClonado.agregarVertice(vRepresen.obtenerId(), vRepresen.obtenerNombre(), vRepresen.obtenerX(), vRepresen.obtenerY(),vRepresen.obtenerPeso());
+            grafoClonado.agregarVertice(vRepresen.obtenerId(), vRepresen.obtenerNombre(), vRepresen.getX(), vRepresen.getY(),vRepresen.getPeso());
         }
         
         for(Arco a: listaArcos){
-            grafoClonado.agregarArco(a.obtenerExtremoInicial().obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), a.obtenerTipo(), a.obtenerPeso());
+            grafoClonado.agregarArco(obtener.obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), a.obtenerTipo(), a.getPeso());
         }
         return grafoClonado;
     }
 
     @Override
     public String toString(){
-        return null;
+
+        String info = "";
+
+        for(LinkedList<Vertice> listaActual: listaVertices){
+            info += listaActual.get(0).obtenerNombre() + " -----> ";
+
+                for(Vertice v : listaActual){
+                    info += "       "+ v.obtenerNombre() + " ";
+                }
+
+                System.out.println("Vertices: ");
+                for(Vertice v : listaActual){
+                    info += "Info de vertice " + v.obtenerNombre() + " : " + v.toString();
+                }
+        }
+
+        System.out.println("Arcos: ");
+        int i = 0;
+        for(Arco arco : listaArcos){
+            info += "Info del arco " + i + " : " + arco.toString();
+            i += 1;
+        }
+        return info;
     }
 
 }

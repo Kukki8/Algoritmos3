@@ -25,15 +25,15 @@ public class GrafoNoDirigido implements Grafo {
 	//En otro caso devuelve false.
 	public boolean agregarArista(Arista a) {
 		for(Arista e:Aristas) {
-			if(e.getExtremo1().obtenerId()==a.getExtremo1().obtenerId()&&e.getExtremo2().obtenerId()==a.getExtremo2().obtenerId( )) {
+			if(e.obtenerExtremo1().obtenerId()==a.obtenerExtremo1().obtenerId()&&obtener.obtenerId()==obtener.obtenerId( )) {
 				return false;
 			}
 		}	
 		Aristas.add(a);
 		boolean Existe1=false;
 		boolean Existe2=false;
-		Vertice vertice1=a.getExtremo1();
-		Vertice vertice2=a.getExtremo2();
+		Vertice vertice1=a.obtenerExtremo1();
+		Vertice vertice2=obtener;
 		for(int i=0;i<Grafo.size();i++) {
 			if(Grafo.get(i).get(0)==vertice1) {
 				Grafo.get(i).add(vertice2);
@@ -64,7 +64,7 @@ public class GrafoNoDirigido implements Grafo {
 	}
 	/*
 	 * Si no existe un arco del tipo tipo entre u y v, crea una nueva aristay la agrega en el grafo. Retorna true
-	 *en caso en que la inserción se lleva a cabo, false en contrario.
+	 *en caso en que la inserciï¿½n se lleva a cabo, false en contrario.
 	
 	 */
 	public boolean agregarArista(String u, String v, int tipo, double peso) {
@@ -104,10 +104,10 @@ public class GrafoNoDirigido implements Grafo {
 	*/
 	public boolean eliminarArista(Arista a) {
 		boolean Existe=false;
-		Vertice v1=a.getExtremo1();
-		Vertice v2=a.getExtremo2();
+		Vertice v1=a.obtenerExtremo1();
+		Vertice v2=obtener;
 		for(int i=0;i<Aristas.size();i++) {
-			if(Aristas.get(i).getExtremo1()==a.getExtremo1() && Aristas.get(i).getExtremo2()==a.getExtremo2()) {
+			if(Aristas.get(i).obtenerExtremo1()==a.obtenerExtremo1() && Aristas.get(iobtener==obtener)) {
 				Aristas.remove(i);
 				Existe=true;
 			}
@@ -132,7 +132,7 @@ public class GrafoNoDirigido implements Grafo {
 		}
 		return Existe;
 	}
-	/*Devuelve la arista que es pasada como parametro. En caso de que no exista ninguna arista , se lanza la excepción NoSuchElementException.
+	/*Devuelve la arista que es pasada como parametro. En caso de que no exista ninguna arista , se lanza la excepciï¿½n NoSuchElementException.
 	*/
 	public Lado obtenerArista(Arista a) {
 		for(Lado e:Aristas) {
@@ -143,7 +143,7 @@ public class GrafoNoDirigido implements Grafo {
 		throw new NoSuchElementException("Esta Arsita no existe en el grafo");
 	}
 	/*
-	 * Determina si una Arista pertenece a un grafo. La entrada son los identificadores de los vértices que son
+	 * Determina si una Arista pertenece a un grafo. La entrada son los identificadores de los vï¿½rtices que son
 	*los extremos del lado y el tipo de ese Arista.
 	 */
 	public boolean estaArista(String u, String v, int tipo) {
@@ -151,7 +151,7 @@ public class GrafoNoDirigido implements Grafo {
 		id1=Integer.parseInt(u);
 		id2=Integer.parseInt(v);
 		for(Arista e:Aristas){
-			if(e.getExtremo1().obtenerId()==id1 && e.getExtremo2().obtenerId()==id2) {
+			if(e.obtenerExtremo1().obtenerId()==id1 && obtener.obtenerId()==id2) {
 				return true;
 			}
 			else {
@@ -302,7 +302,7 @@ public class GrafoNoDirigido implements Grafo {
 				}
 			}
 			for(int i=0;i<Aristas.size();i++) {
-				if(Aristas.get(i).getExtremo1().obtenerId()==id || Aristas.get(i).getExtremo2().obtenerId()==id) {
+				if(Aristas.get(i).obtenerExtremo1().obtenerId()==id || Aristas.get(iobtener.obtenerId()==id)) {
 					Aristas.remove(i);
 				}
 			}
@@ -404,23 +404,23 @@ public class GrafoNoDirigido implements Grafo {
         }
         
         for(Arista a: Aristas){
-            grafoClonado.agregarArista(a.getExtremo1().obtenerNombre(), a.getExtremo2().obtenerNombre(), a.obtenerTipo(), a.obtenerPeso());
+            grafoClonado.agregarArista(a.obtenerExtremo1().obtenerNombre(), obtener.obtenerNombre(), a.obtenerTipo(), a.obtenerPeso());
         }
         return grafoClonado;
     }
 	
-	public String toString() {
+	public String aString() {
 		String vertices=" ";
 		String aristas=" ";
 		String grafo;
 		int v1,v2;
 		for(LinkedList<Vertice> e:Grafo) {
-			vertices=vertices+","+Integer.toString(e.get(0).obtenerId());
+			vertices=vertices+","+Integer.aString(e.get(0).obtenerId());
 		}
 		for(Arista e:Aristas) {
-			v1=e.getExtremo1().obtenerId();
-			v2=e.getExtremo2().obtenerId();
-			aristas=aristas+Integer.toString(v1)+"-"+Integer.toString(v2)+"\n";
+			v1=e.obtenerExtremo1().obtenerId();
+			v2=e.obtenerExtremo2().obtenerId();
+			aristas=aristas+Integer.aString(v1)+"-"+Integer.aString(v2)+"\n";
 		}
 		grafo="los vertices son: "+vertices+"\n"+
 			"las aristas son: "+ aristas;

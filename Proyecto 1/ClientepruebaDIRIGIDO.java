@@ -108,7 +108,7 @@ public class Cliente {
 		                    	System.out.println("Ingrese e lidentificador del vetice");
 		                    	id=entrada.nextInt();
 		                    	try {
-		                    		System.out.println(grafo.obtenerVertice(id).aString());
+		                    		System.out.println(grafo.obtenerVertice(id).toString());
 		                    	}catch(NoSuchElementException err) {
 		                    		System.out.println("El Vertice Ingresado no existe en el Grafo");
 		                    	}
@@ -130,7 +130,7 @@ public class Cliente {
 		                    	v1=grafo.obtenerVertice(id1);
 		                    	v2=grafo.obtenerVertice(id2);
 		                    	Arista nuevaarista=new Arista(peso,tipo,v1,v2);
-		                    	System.out.println(grafo.obtenerArista(nuevaarista).aString());
+		                    	System.out.println(grafo.obtenerArista(nuevaarista).toString());
 		                    	}catch(NoSuchElementException err){
 		                    		System.out.println("La arista/o los vertices  ingresados no existe en el grafo");
 		                    		
@@ -200,10 +200,10 @@ public class Cliente {
 		                    	}
 		                    }
 		                    if(tecla.equalsIgnoreCase("k")) {
-		                    	System.out.println("la lista de vertices del grafo es:\n "+grafo.vertices().aString());
+		                    	System.out.println("la lista de vertices del grafo es:\n "+grafo.vertices().toString());
 		                    }
 		                    if(tecla.equalsIgnoreCase("l")) {
-		                    	System.out.println("la lista de Arista del grafo es:\n "+grafo.lados().aString());
+		                    	System.out.println("la lista de Arista del grafo es:\n "+grafo.lados().toString());
 		                    }
 		                    if(tecla.equalsIgnoreCase("m")) {
 		                    	int id;
@@ -220,7 +220,7 @@ public class Cliente {
 		                    	System.out.println("Ingrese el identificador del vertice");
 		                    	id=entrada.nextInt();
 		                    	try {
-		                    		System.out.println("Los adyacendes del vertice son: \n"+grafo.adyacentes(id).aString());
+		                    		System.out.println("Los adyacendes del vertice son: \n"+grafo.adyacentes(id).toString());
 		                    	}catch(NoSuchElementException err){
 		                    		System.out.println("Este vertice no existe en el grafo asegurece de que si");
 		                    	}
@@ -231,7 +231,7 @@ public class Cliente {
 		                    	System.out.println("Ingrese el identificador del vertice");
 		                    	id=entrada.nextInt();
 		                    	try {
-		                    		System.out.println("Las Aristas incidentes al vertice son: \n"+grafo.incidentes(id).aString());
+		                    		System.out.println("Las Aristas incidentes al vertice son: \n"+grafo.incidentes(id).toString());
 		                    	}catch(NoSuchElementException err){
 		                    		System.out.println("Este vertice no existe en el grafo asegurece de que si");
 		                    	}
@@ -242,7 +242,7 @@ public class Cliente {
 		                    	grafoclonado=(GrafoNoDirigido) grafo.clonar();
 		                    }
 		                    if(tecla.equalsIgnoreCase("q")) {
-		                    	System.out.println("Grafo:\n"+grafo.aString());
+		                    	System.out.println("Grafo:\n"+grafo.toString());
 		                    }
 		                    if(tecla.equalsIgnoreCase("r")) {
 		                    	break;
