@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
 
 public class GrafoNoDirigido implements Grafo {
 	/*Atributos de la clase GrafoNoDirigido
-	 * Grafo: Lista de lista de vertices que es la representacion de la lista de adyacencia del grafo
-	 * Arista: lista de arista que es la lista de todas las arista que posee el grafo
+	 * Grafo: Lista de lista de vertices que es la representacion como lista de adyacencia del grafo
+	 * Arista: lista de todas las aristas que posee el grafo
 	 */
 	LinkedList<LinkedList<Vertice>> Grafo;
 	LinkedList<Arista> Aristas;
@@ -21,8 +21,8 @@ public class GrafoNoDirigido implements Grafo {
 	public Grafo crearGrafoNoDirigido(){
 		return new GrafoNoDirigido();
 	}
-	// Agrega una Arista la lista de Aristas si la Arista no se encuentra y devuelve true,
-	//En otro caso devuelve false.
+	// Si la arista no se encuentra, agrega una Arista a la lista de Aristas y devuelve true
+	//En caso contrario, devuelve false.
 	public boolean agregarArista(Arista a) {
 		for(Arista e:Aristas) {
 			if(e.obtenerExtremo1().obtenerId()==a.obtenerExtremo1().obtenerId()&&e.obtenerExtremo2().obtenerId()==a.obtenerExtremo2().obtenerId( )) {
@@ -63,8 +63,8 @@ public class GrafoNoDirigido implements Grafo {
 		return true;
 	}
 	/*
-	 * Si no existe un arco del tipo tipo entre u y v, crea una nueva aristay la agrega en el grafo. Retorna true
-	 *en caso en que la inserci�n se lleva a cabo, false en contrario.
+	 * Si no existe un arco del tipo daod entre u y v, crea una nueva arista y la agrega en el grafo. Retorna true
+	 *en caso en que la inserci@n se lleva a cabo, false si no.
 	
 	 */
 	public boolean agregarArista(String u, String v, int tipo, double peso) {
@@ -98,7 +98,7 @@ public class GrafoNoDirigido implements Grafo {
 		}
 		return true;
 	}
-	/*Elimina la arista que es pasada como parametro. Se retorna true en caso que se haya
+	/*Elimina la arista pasada como parametro. Se retorna true en caso que se haya
 	eliminado la arista del grafo y false en caso de que no exista una arista con ese identificador en el
 	grafo
 	*/
@@ -132,18 +132,18 @@ public class GrafoNoDirigido implements Grafo {
 		}
 		return Existe;
 	}
-	/*Devuelve la arista que es pasada como parametro. En caso de que no exista ninguna arista , se lanza la excepci�n NoSuchElementException.
+	/*Devuelve la arista pasada como parametro. En caso de que no exista ninguna arista, se lanza la excepci@n NoSuchElementException.
 	*/
 	public Lado obtenerArista(Arista a) {
-		for(Lado e:Aristas) {
-			if(e==a) {
-				return e;
-			}
-		}
-		throw new NoSuchElementException("Esta Arsita no existe en el grafo");
-	}
+	  for(Arista e:Aristas) {
+	   if(e.obtenerExtremo1().obtenerId()==a.obtenerExtremo1().obtenerId() && e.obtenerExtremo2().obtenerId()==a.obtenerExtremo2().obtenerId()&& e.obtenerPeso()==a.obtenerPeso()&& e.obtenerTipo()==a.obtenerTipo()) {
+		return e;
+	   }
+	  }
+	  throw new NoSuchElementException("Esta Arsita no existe en el grafo");
+	 }
 	/*
-	 * Determina si una Arista pertenece a un grafo. La entrada son los identificadores de los v�rtices que son
+	 * Determina si una Arista pertenece a un grafo. La entrada son los identificadores de los v@rtices que son
 	*los extremos del lado y el tipo de ese Arista.
 	 */
 	public boolean estaArista(String u, String v, int tipo) {
@@ -422,9 +422,7 @@ public class GrafoNoDirigido implements Grafo {
 	               
 	        }
 	        info=info+"\n";
-	        
-	       
-	        	//info=info+"Arcos:\n";
+
 	        	info=info+"\n";
 	                info += "Info de las Aristas: " +"\n";
 	                for(int j=0;j<Aristas.size();j++) {
