@@ -68,7 +68,7 @@ public class Cliente {
 		                    	System.out.println("Ingrese el peso del vertice");
 		                    	peso=entrada.nextDouble();
 		                    
-		                    		Vertice vertice= new Vertice(id, nombre, x, y, peso);
+		                    		Vertice vertice=new Vertice(id, nombre, x, y, peso);
 		                    		Funciona=grafo.agregarVertice(vertice);
 		                    		if(Funciona) {
 		                    			System.out.println("Se agrego el vertice al grafo\n");
@@ -237,12 +237,9 @@ public class Cliente {
 		                    	}
 		                    }
 		                    if(tecla.equalsIgnoreCase("p")) {
-		                    	Clonacion grafoclon;
-		                    	grafoclon=grafo.clone();
-		                    	LinkedList<LinkedList<Vertice>> GrafoClonado=new  LinkedList<LinkedList<Vertice>>();
-		                    	GrafoClonado=grafoclon.Damegrafo();
-		                    	LinkedList<Arista> Aristasclonadas=new LinkedList<Arista>();
-		                    	Aristasclonadas=grafoclon.DameAristas();
+		                    	GrafoNoDirigido grafoclonado=new GrafoNoDirigido();
+		                    	grafoclonado.crearGrafoNoDirigido();
+		                    	grafoclonado=(GrafoNoDirigido) grafo.clonar();
 		                    }
 		                    if(tecla.equalsIgnoreCase("q")) {
 		                    	System.out.println("Grafo:\n"+grafo.toString());
@@ -254,7 +251,7 @@ public class Cliente {
 		                    
 				}
 			}catch(IOException err) {
-				System.out.println("Excepciï¿½n: Hay problemas para cargar grafo.txt");
+				System.out.println("Excepción: Hay problemas para cargar grafo.txt");
 			}
 		}
 	}	

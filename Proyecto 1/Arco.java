@@ -11,15 +11,15 @@ public class Arco extends Lado {
 		return Arco;
 	}
 	// retorna el vertice inicial
-	public Vertice getExtremoInicial() {
+	public Vertice obtenerExtremoInicial() {
 		return this.vi;
 	}
 	// retorna el vertice final
-	public Vertice getExtremoFinal() {
+	public Vertice obtenerExtremoFinal() {
 		return this.vf;
 	}
 	// si el vertice dado es inicial retorna true en otro caso false
-	public boolean esExtremoInicial(Vertice v) {
+	public boolean obtenerExtremoInicial(Vertice v) {
 		boolean esExtremoInicial=true;
 		if(v!=this.vi) {
 			esExtremoInicial=false;

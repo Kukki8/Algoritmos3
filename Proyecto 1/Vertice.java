@@ -1,21 +1,15 @@
-import java.util.*;
-
 public class Vertice {
 	 /*Atributos de la clase Vertice:
 	    * id: Identificador del vertice
 	    * nombre: nombre del vertice
 	    * coordenadas: coordenadas del  vertice
 	    * peso: peso de el Vertice
-	    * ListaAdyacencia: LinkedList con las Aristas que inciden en el vertice (utilizado en Grafos no Dirigidos)
-	    * ListaSucesores: LinkedList con los Arco que inciden en el vertice (utilizado en Grafos Dirigidos)
 	    */
 	    private int id;
 	    private String nombre;
 	    private double coordenadax;
 	    private double coordenaday;
 	    private double peso;
-	    LinkedList<Arista> ListaAdyacencia;                    //Si el vertice esta en un grafo no dirigido
-	    LinkedList<Arco> ListaSucesores;                  //Si el vertice esta en un grafo dirigido
 	    
 	    //constructor de la clase vertice//
 	    public Vertice(int identificador, String nombre, double x, double y,double peso) {
@@ -24,36 +18,55 @@ public class Vertice {
 	    	this.coordenadax=x;
 	    	this.coordenaday=y;
 	    	this.peso=peso;
-	    	ListaAdyacencia=new LinkedList<Arista>();
-	    	ListaSucesores=new LinkedList<Arco>();
+
+	    	
 	    }
-	    // retorna el Vertice creado
-	    public static Vertice CrearVertice(int identificador, String nombre, double x, double y,double peso ) {
-	    	return new Vertice(identificador, nombre, x ,y , peso);
+	    /*
+	     Crea un nuevo vértice con un identificador id, llamado nombre, con coordenadas (x,y) y un peso p.
+	     retorna el Vertice creado
+		*/
+	  public static Vertice CrearVértice(int identificador, String nombre, double x, double y,double peso ) {
+	   	return new Vertice(identificador, nombre, x ,y , peso);
+	  }
 	
-	    }
-	    // retorna el peso del vertice
-	    public double getPeso() {
+	    /*Obtiene el peso del vértice v.
+	     retorna el peso del vertice
+	    */
+	  public double obtenerPeso() {
 	    	return peso;
 	    }
-	    // retorna el identificador del vertice
-	    public int getId() {
+	  
+	    /*Obtiene el identificador del vértice v.
+ 		retorna el identificador del vertice
+	  	*/
+	    public int obtenerId() {
 	    	return id;
 	    }
-	    //retorna el nombre del vertice
-	    public String getNombre() {
+	    
+	    /*Obtiene el dato contenido en el vértice v
+	     * retorna el nombre del vertice
+	     */
+	    public String obtenerNombre() {
 	    	return this.nombre;
 	    }
-	    //retorna la coordenada "x" del vertice
-	    public double getX() {
+	    /*Obtiene la coordenada x del vértice v
+	     * retorna la coordenada "x" del vertice.
+	     */
+	    
+	    public double obtenerX() {
 	    	return this.coordenadax;
 	    }
-	    //retorna la coordenada "y" del vertice
-	    public double getY() {
+	    /*Obtiene la coordenada y del vértice v
+	     * retorna la coordenada "y" del vertice.
+	     */
+	    public double obtenerY() {
 	    	return this.coordenaday;
 	    	
 	    }
-	    // retorna la informacion del vertice
+	    /*Proporciona una representación del vértice v como una cadena de caracteres.
+
+	     *retorna la informacion del vertice. 
+	     */
 	    public String toString() {
 	    	return "Vertice: "+ id +", Nombre: "+ nombre +", Peso: "+ peso +
 	    			", Coordenadas: "+ "x: "+ this.coordenadax+ "y: "+this.coordenaday;

@@ -1,9 +1,10 @@
+
 public abstract class Lado {
 	/* Atributos de la clase lado:
 	 * peso: peso del lado
 	 * tipo: tipo del lado
-	 * v1: vertice 1 que pertenece al lado
-	 * v2: vertice 2  que pertenece al lado
+	 * vi: vertice 1 que pertenece al lado
+	 * vj: vertice 2  que pertenece al lado
 	 */
 	protected double peso;
 	protected int tipo;
@@ -17,8 +18,10 @@ public abstract class Lado {
 		this.vf=v2;
 		
 	}
-	//retorna el peso del lado
-	public double getPeso() {
+	/*Obtiene el peso del lado l.
+	 *retorna el peso 
+	 */
+	public double obtenerPeso() {
 		return this.peso;
 	}
 	//retorna si el lado incide en el vertice v
@@ -31,7 +34,7 @@ public abstract class Lado {
 		return incide;
 	}
 	// retorna el tipo de el lado
-	public int getTipo() {
+	public int obtenerTipo() {
 		return this.tipo;
 	}
 	

@@ -22,7 +22,7 @@ public class GrafoDirigido implements Grafo{
  
     public boolean agregarArco(Arco a){
 
-        if(!estaArco(a.getExtremoInicial().getNombre(),a.getExtremoFinal().getNombre(), a.getTipo())){
+        if(!estaArco(a.obtenerExtremoInicial().obtenerNombre(),a.obtenerExtremoFinal().obtenerNombre(), a.obtenerTipo())){
             listaArcos.add(a);
             return true;
            
@@ -41,7 +41,7 @@ public class GrafoDirigido implements Grafo{
                 listaArcos.add(nuevoArco);
     
                 for(LinkedList<Vertice> v : listaVertices){
-                    if(v.get(0).getId() == nuevov1.getId()){
+                    if(v.get(0).obtenerId() == nuevov1.obtenerId()){
                         v.add(nuevov2);
                     }
                 }
@@ -58,7 +58,7 @@ public class GrafoDirigido implements Grafo{
 
         if(estaVertice(vi) && estaVertice(vf)){
             for(Arco b : listaArcos){
-                if(b.getExtremoInicial().getNombre() == vi && b.getExtremoFinal().getNombre() == vf && b.getTipo() == tipo){
+                if(b.obtenerExtremoInicial().obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf && b.obtenerTipo() == tipo){
                     return true;
                 }
             }
@@ -82,13 +82,13 @@ public class GrafoDirigido implements Grafo{
         if(estaArco(vi, vf, tipo)){
 
             for(Arco b : listaArcos){
-                if(b.getExtremoInicial().getNombre() == vi && b.getExtremoFinal().getNombre() == vf && b.getTipo() == tipo){
+                if(b.obtenerExtremoInicial().obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf && b.obtenerTipo() == tipo){
                     listaArcos.remove(b);
                     for(LinkedList<Vertice> listaActual : listaVertices){
-                        if(listaActual.get(0).getNombre().equals(vi)){
+                        if(listaActual.get(0).obtenerNombre().equals(vi)){
                             for(Vertice v : listaActual){
-                                if(listaActual.get(0).getNombre().equals(vi)){
-                                    eliminarVertice(v.getId());
+                                if(listaActual.get(0).obtenerNombre().equals(vi)){
+                                    eliminarVertice(v.obtenerId());
                                 }
                             }return true;
                         }      
@@ -108,7 +108,7 @@ public class GrafoDirigido implements Grafo{
         if(estaVertice(vi) == true && estaVertice(vf)){
 
             for(Arco b : listaArcos){
-                if(b.getExtremoInicial().getNombre() == vi && b.getExtremoFinal().getNombre() == vf){
+                if(b.obtenerExtremoInicial().obtenerNombre() == vi && b.obtenerExtremoFinal().obtenerNombre() == vf){
                     return b;
                 }
             
@@ -124,8 +124,8 @@ public class GrafoDirigido implements Grafo{
         int GradoIn=0;
 
         for(Arco A: listaArcos){
-            if(A.getExtremoFinal().getNombre() == vf){
-                if(A.getTipo() == tipo){
+            if(A.obtenerExtremoFinal().obtenerNombre() == vf){
+                if(A.obtenerTipo() == tipo){
                     GradoIn+=1;
                 }
             }
@@ -137,8 +137,8 @@ public class GrafoDirigido implements Grafo{
         int GradoExt=0;
 
         for(Arco A: listaArcos){
-            if(A.getExtremoInicial().getNombre() == vi){
-                if(A.getTipo() == tipo){
+            if(A.obtenerExtremoInicial().obtenerNombre() == vi){
+                if(A.obtenerTipo() == tipo){
                     GradoExt+=1;
                 }
             }
@@ -151,8 +151,8 @@ public class GrafoDirigido implements Grafo{
         LinkedList<Vertice> sucesores = new LinkedList<Vertice>();
 
         for(Arco A: listaArcos){
-            if(A.getExtremoInicial().getId() == id){
-                sucesores.add(A.getExtremoFinal());
+            if(A.obtenerExtremoInicial().obtenerId() == id){
+                sucesores.add(A.obtenerExtremoFinal());
             }
         }
         return sucesores;
@@ -164,8 +164,8 @@ public class GrafoDirigido implements Grafo{
         LinkedList<Vertice> sucesores = new LinkedList<Vertice>();
 
         for(Arco A: listaArcos){
-            if(A.getExtremoInicial().getNombre() == name){
-                sucesores.add(A.getExtremoFinal());
+            if(A.obtenerExtremoInicial().obtenerNombre() == name){
+                sucesores.add(A.obtenerExtremoFinal());
             }
         }
         return sucesores;
@@ -178,8 +178,8 @@ public class GrafoDirigido implements Grafo{
             LinkedList<Vertice> antecesores = new LinkedList<Vertice>();
 
             for(Arco A: listaArcos){
-                if(A.getExtremoFinal().getId() == id){
-                    antecesores.add(A.getExtremoInicial());
+                if(A.obtenerExtremoFinal().obtenerId() == id){
+                    antecesores.add(A.obtenerExtremoInicial());
                 }
             }
             return antecesores;
@@ -195,8 +195,8 @@ public class GrafoDirigido implements Grafo{
             LinkedList<Vertice> Antecesores = new LinkedList<Vertice>();
 
             for(Arco A: listaArcos){
-                if(A.getExtremoFinal().getNombre() == name){
-                    Antecesores.add(A.getExtremoInicial());
+                if(A.obtenerExtremoFinal().obtenerNombre() == name){
+                    Antecesores.add(A.obtenerExtremoInicial());
                 }
             }
             return Antecesores;
@@ -265,12 +265,12 @@ public class GrafoDirigido implements Grafo{
 
     @Override
     public boolean agregarVertice(Vertice v){
-        if(!estaVertice(v.getId())){
+        if(!estaVertice(v.obtenerId())){
             LinkedList<Vertice> nuevoVert =new LinkedList<Vertice>();
             nuevoVert.add(v);
             listaVertices.add(nuevoVert);            
         }else{
-                System.out.println("No existe un vertice en el grafo con" + v.getId() + " de id.");
+                System.out.println("No existe un vertice en el grafo con" + v.obtenerId() + " de id.");
             }
         
             return false;
@@ -281,6 +281,7 @@ public class GrafoDirigido implements Grafo{
     public boolean agregarVertice(int id, String nombre,double x, double y,double p){
 
         if(!estaVertice(id)){
+        	
             Vertice v = new Vertice(id, nombre, x, y, p);
             LinkedList<Vertice> nuevoVert =new LinkedList<Vertice>();
             nuevoVert.add(v);
@@ -297,7 +298,7 @@ public class GrafoDirigido implements Grafo{
 
         if(estaVertice(id)){
             for(LinkedList<Vertice> v : listaVertices){
-                if(v.get(0).getId() == id){
+                if(v.get(0).obtenerId() == id){
                     return v.get(0);
                 }
             }
@@ -310,7 +311,7 @@ public class GrafoDirigido implements Grafo{
 
         if(estaVertice(name)){
             for(LinkedList<Vertice> v : listaVertices){
-                if(v.get(0).getNombre().equals(name) ){
+                if(v.get(0).obtenerNombre().equals(name) ){
                     return v.get(0);
                 }
             }
@@ -324,7 +325,7 @@ public class GrafoDirigido implements Grafo{
     @Override
     public boolean estaVertice(int id){
         for(LinkedList<Vertice> v : listaVertices){
-            if(v.get(0).getId() == id){
+            if(v.get(0).obtenerId() == id){
                 return true;
             }
         }
@@ -334,7 +335,7 @@ public class GrafoDirigido implements Grafo{
 
     public boolean estaVertice(String nombre){
         for(LinkedList<Vertice> v : listaVertices){
-            if(v.get(0).getNombre().equals(nombre) ){
+            if(v.get(0).obtenerNombre().equals(nombre) ){
                 return true;
             }
         }
@@ -348,11 +349,11 @@ public class GrafoDirigido implements Grafo{
         if(estaVertice(id)){
 
             for(LinkedList<Vertice> listaActual : listaVertices){
-                if(listaActual.get(0).getId() == id){
+                if(listaActual.get(0).obtenerId() == id){
                     listaVertices.remove(listaActual);
                 }else{
                     for(Vertice v : listaActual){
-                        if(v.getId() == id){
+                        if(v.obtenerId() == id){
                             listaActual.remove(v);
                         }
                     }
@@ -360,7 +361,7 @@ public class GrafoDirigido implements Grafo{
             }
                 
             for(Arco AR : listaArcos){
-                if(id == AR.getExtremoInicial().getId() || id == AR.getExtremoFinal().getId()){
+                if(id == AR.obtenerExtremoInicial().obtenerId() || id == AR.obtenerExtremoFinal().obtenerId()){
                     listaArcos.remove(AR);
                 }
             }
@@ -375,7 +376,7 @@ public class GrafoDirigido implements Grafo{
     public LinkedList<Integer> vertices(){
         LinkedList V = new LinkedList<Vertice>();
         for(LinkedList<Vertice> L : listaVertices){
-            V.add(L.get(0).getId());
+            V.add(L.get(0).obtenerId());
         }
         return V;
 
@@ -397,13 +398,13 @@ public class GrafoDirigido implements Grafo{
         if(estaVertice(id)){
             Vertice v = obtenerVertice(id);
             for(Arco a : listaArcos){
-                    if(a.getExtremoInicial().getId() == id){
-                        Tipo = a.getTipo();
-                        Grado += gradoExterior(a.getExtremoInicial().getNombre(), a.getExtremoFinal().getNombre(), Tipo);
+                    if(a.obtenerExtremoInicial().obtenerId() == id){
+                        Tipo = a.obtenerTipo();
+                        Grado += gradoExterior(a.obtenerExtremoInicial().obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), Tipo);
 
-                    }if(a.getExtremoFinal().getId()  == id){
-                        Tipo = a.getTipo();
-                        Grado += gradoInterior(a.getExtremoInicial().getNombre(), a.getExtremoFinal().getNombre(), Tipo);
+                    }if(a.obtenerExtremoFinal().obtenerId()  == id){
+                        Tipo = a.obtenerTipo();
+                        Grado += gradoInterior(a.obtenerExtremoInicial().obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), Tipo);
                     }
             }
             return Grado;
@@ -430,7 +431,7 @@ public class GrafoDirigido implements Grafo{
             LinkedList<Lado> incidentes = new LinkedList<Lado>();
 
             for(Arco A: listaArcos){
-                if(A.getExtremoFinal().getId() == id){
+                if(A.obtenerExtremoFinal().obtenerId() == id){
                     incidentes.add(A);
                 }
             }
@@ -441,16 +442,16 @@ public class GrafoDirigido implements Grafo{
     }
 
     @Override
-    public Grafo clone(){
+    public Grafo clonar(){
 
         GrafoDirigido grafoClonado = new GrafoDirigido();
         for(LinkedList<Vertice> v : listaVertices){
             Vertice vRepresen = v.get(0);
-            grafoClonado.agregarVertice(vRepresen.getId(), vRepresen.getNombre(), vRepresen.getX(), vRepresen.getY(),vRepresen.getPeso());
+            grafoClonado.agregarVertice(vRepresen.obtenerId(), vRepresen.obtenerNombre(), vRepresen.obtenerX(), vRepresen.obtenerY(),vRepresen.obtenerPeso());
         }
         
         for(Arco a: listaArcos){
-            grafoClonado.agregarArco(a.getExtremoInicial().getNombre(), a.getExtremoFinal().getNombre(), a.getTipo(), a.getPeso());
+            grafoClonado.agregarArco(a.obtenerExtremoInicial().obtenerNombre(), a.obtenerExtremoFinal().obtenerNombre(), a.obtenerTipo(), a.obtenerPeso());
         }
         return grafoClonado;
     }
