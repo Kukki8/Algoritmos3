@@ -1,4 +1,3 @@
-
 public class Arco extends Lado {
 	 //constructor que llama al super constructor de la clase padre Lado
 	public Arco(double peso, int tipo, Vertice v1, Vertice v2) {
@@ -19,7 +18,7 @@ public class Arco extends Lado {
 		return this.vf;
 	}
 	// si el vertice dado es inicial retorna true en otro caso false
-	public boolean obtenerExtremoInicial(Vertice v) {
+	public boolean esExtremoInicial(Vertice v) {
 		boolean esExtremoInicial=true;
 		if(v!=this.vi) {
 			esExtremoInicial=false;
@@ -35,8 +34,8 @@ public class Arco extends Lado {
 		return esExtremoFinal;
 	}
 	// retorna un String con los datos de arco
-	public String toString() {
-		return "Extremo incial: " +vi+", Extrremo final: "+ vf+ ", Peso: "+ peso+
-				", Tipo: "+ tipo;
+	public String aString() {
+		return "Extremo incial: " +vi+"Extremo final: "+ vf+ "Peso: "+ peso+
+				"Tipo: "+ tipo;
 	}
 }

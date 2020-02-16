@@ -11,18 +11,18 @@ public class Arista extends Lado {
 		
 	}
 	//obtiene el extremo del primer vertice de esa arista
-	public Vertice getExtremo1() {
+	public Vertice obtenerExtremo1() {
 		return this.vi;
 	}
 	// ibtine el extremo del segundo vertice de esa arista
-	public Vertice getExtremo2() {
+	public Vertice obtenerExtremo2() {
 		return this.vf;
 	}
 	@Override
-	public String toString() {
+	public String aString() {
 		// TODO Auto-generated method stub
-		return "Extremo 1: " +vi+", Extremo 2: "+ vf+ ", Peso: "+ peso+
-				", Tipo: "+ tipo;
+		return "Extremo 1: " +vi.aString()+ "Extremo 2: "+ vf.aString()+ "Peso: "+ peso+
+				"Tipo: "+ tipo;
 	}
 	
 	

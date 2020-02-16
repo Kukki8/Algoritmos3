@@ -242,7 +242,7 @@ public class Cliente {
 		                    	grafoclonado=(GrafoNoDirigido) grafo.clonar();
 		                    }
 		                    if(tecla.equalsIgnoreCase("q")) {
-		                    	System.out.println("Grafo:\n"+grafo.toString());
+		                    	System.out.println("Grafo:\n"+grafo.aString());
 		                    }
 		                    if(tecla.equalsIgnoreCase("r")) {
 		                    	break;
@@ -251,7 +251,7 @@ public class Cliente {
 		                    
 				}
 			}catch(IOException err) {
-				System.out.println("Excepción: Hay problemas para cargar grafo.txt");
+				System.out.println("Excepcion: Hay problemas para cargar grafo.txt");
 			}
 		}
 	}	

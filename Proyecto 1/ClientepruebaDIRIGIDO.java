@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class Cliente {
+public class ClientepruebaDIRIGIDO {
 		public static void main(String[] args) throws IOException, IllegalArgumentException{
 			if(args.length < 1){
 				System.err.println("por favor ejecute: java Cliente <nombreArchivo>");
@@ -18,27 +18,27 @@ public class Cliente {
 				String linea=Lector.readLine(); //primera linea
 				tipo_grafo=linea.trim();
 				 // creamos un grafo Dirigido o un grafo no Dirigido dependiendo de tipo_grafo
-				if(tipo_grafo.equals("N")){
+				if(tipo_grafo.equals("D")){
 					Scanner entrada=new Scanner(System.in);
 					GrafoNoDirigido grafo=null;
-					grafo=new GrafoNoDirigido();
-					grafo.CrearGrafoNoDirigido();
+					grafo = new GrafoDirigido();
+					//grafo.CrearGrafoDirigido();
 					grafo.cargarGrafo(args[0]);
 					 while(true){
 		                    System.out.println(
 		                        "Menu de opciones sobre el grafo NoDirigido: \n" +
 		                        "Presione a (seguido de \"Enter\") para saber el numero de Vertices del grafo \n" +
-		                        "Presione b (seguido de \"Enter\") para saber el numero de Aristas del grafo \n" +
+		                        "Presione b (seguido de \"Enter\") para saber el numero de Arcos del grafo \n" +
 		                        "Presione c (seguido de \"Enter\") para agregar un nuevo Vertice al grafo  \n" +
-		                        "Presione d (seguido de \"Enter\") para agregar una nueva Arista al grafo  \n" +
+		                        "Presione d (seguido de \"Enter\") para agregar un nuevo Arco al grafo  \n" +
 		                        "Presione e (seguido de \"Enter\") para obtener un Vertice del grafo \n" +
-		                        "Presione f (seguido de \"Enter\") para obtener una Arista del grafo \n" +
+		                        "Presione f (seguido de \"Enter\") para obtener un Arco del grafo \n" +
 		                        "Presione g (seguido de \"Enter\") para saber si un Vertice esta en el grafo \n" +
-		                        "Presione h (seguido de \"Enter\") para saber si un Arista esta en el grafo \n" +
+		                        "Presione h (seguido de \"Enter\") para saber si un Arco esta en el grafo \n" +
 		                        "Presione i (seguido de \"Enter\") para eliminar un Vertice del grafo \n" +
-		                        "Presione j (seguido de \"Enter\") para eliminar una Arista del grafo \n" +
+		                        "Presione j (seguido de \"Enter\") para eliminar un Arco del grafo \n" +
 		                        "Presione k (seguido de \"Enter\") para imprimir una lista de los Vertices del grafo \n" +
-		                        "Presione l (seguido de \"Enter\") para imprimir la lista de Aristas del grafo \n" +
+		                        "Presione l (seguido de \"Enter\") para imprimir la lista de Arcos del grafo \n" +
 		                        "Presione m (seguido de \"Enter\") para imprimir el grado de un Vertice del grafo \n" +
 		                        "Presione n (seguido de \"Enter\") para obtener los Vertices adyacentes a un Vertice dado \n" +
 		                        "Presione o (seguido de \"Enter\") para obtener la lista de Arcos incidentes a un Vertice dado \n" +
@@ -51,7 +51,7 @@ public class Cliente {
 		                    	 System.out.println("El numero de Vertices es: " + grafo.numeroDeVertices()+"\n");
 		                    }
 		                    if(tecla.equalsIgnoreCase("b")) {
-		                    	System.out.println("El numero de Aristas es: " + grafo.numeroDeLados()+"\n");
+		                    	System.out.println("El numero de Arcos es: " + grafo.numeroDeLados()+"\n");
 		                    }
 		                    if(tecla.equalsIgnoreCase("c")) {
 		                    	boolean Funciona=false;
@@ -81,26 +81,26 @@ public class Cliente {
 		                    	   boolean Funciona = false;
 		                    	   double peso;
 		                    	   int tipo,id1,id2;             
-		                           System.out.println("Escriba el peso de la nueva Arista: ");
+		                           System.out.println("Escriba el peso de la nueva Arco: ");
 		                           peso = entrada.nextDouble();
-		                           System.out.println("Escriba el tipo de la nueva Arista: ");
+		                           System.out.println("Escriba el tipo de la nueva Arco: ");
 		                           tipo= entrada.nextInt();
-		                           System.out.println("Escriba el Identificador del vertice 1 de la Arista: ");
+		                           System.out.println("Escriba el Identificador del vertice 1 de la Arco: ");
 		                           id1 = entrada.nextInt();
-		                           System.out.println("Escriba el Identificador del vertice 2 de la Arista: ");
+		                           System.out.println("Escriba el Identificador del vertice 2 de la Arco: ");
 		                           id2 = entrada.nextInt();
 		                           try {
-		                        	   Arista aristanueva=new Arista(peso, tipo,grafo.obtenerVertice(id1),grafo.obtenerVertice(id2));
-		                        	   Funciona=grafo.agregarArista(aristanueva);
+		                        	   Arco Arconueva=new Arco(peso, tipo,grafo.obtenerVertice(id1),grafo.obtenerVertice(id2));
+		                        	   Funciona=grafo.agregarArco(Arconueva);
 		                        	   if(Funciona){
-		                                   System.out.println("Se agrego La Arista al grafo");
+		                                   System.out.println("Se agrego La Arco al grafo");
 		                               }
 		                               else{
-		                                   System.out.println("No se agrego la arista al grafo porque ya existia");
+		                                   System.out.println("No se agrego la Arco al grafo porque ya existia");
 		                               }
 
 		                           }catch(NoSuchElementException err1){
-		                               System.out.println("Salio algo mal agregando la Arista, revisa si los vertices extremos existen en el Grafo");
+		                               System.out.println("Salio algo mal agregando la Arco, revisa si los vertices extremos existen en el Grafo");
 		                           }
 		                    }
 		                    if(tecla.equalsIgnoreCase("e")) {
@@ -122,17 +122,17 @@ public class Cliente {
 		                    	id1=entrada.nextInt();
 		                    	System.out.println("Ingrese el lidentificador del vetice2");
 		                    	id2=entrada.nextInt();
-		                    	System.out.println("Ingrese el tipo de la Arista");
+		                    	System.out.println("Ingrese el tipo de la Arco");
 		                    	tipo=entrada.nextInt();
-		                    	System.out.println("Ingrese el peso de la arista ");
+		                    	System.out.println("Ingrese el peso de la Arco ");
 		                    	peso=entrada.nextDouble();
 		                    	try {
 		                    	v1=grafo.obtenerVertice(id1);
 		                    	v2=grafo.obtenerVertice(id2);
-		                    	Arista nuevaarista=new Arista(peso,tipo,v1,v2);
-		                    	System.out.println(grafo.obtenerArista(nuevaarista).toString());
+		                    	Arco nuevaArco=new Arco(peso,tipo,v1,v2);
+		                    	System.out.println(grafo.obtenerArco(nuevaArco).toString());
 		                    	}catch(NoSuchElementException err){
-		                    		System.out.println("La arista/o los vertices  ingresados no existe en el grafo");
+		                    		System.out.println("La Arco/o los vertices  ingresados no existe en el grafo");
 		                    		
 		                    	}
 		                    }
@@ -155,13 +155,13 @@ public class Cliente {
 		                    	id1=entrada.next();
 		                    	System.out.println("Ingrese el identificador del vertice 2");
 		                    	id2=entrada.next();
-		                    	System.out.println("Ingrese el tipo de la arista ");
+		                    	System.out.println("Ingrese el tipo de la Arco ");
 		                    	tipo=entrada.nextInt();
-		                    	if(grafo.estaArista(id1, id2, tipo)) {
-		                    	   	System.out.println("La arista esta en el Grafo ");
+		                    	if(grafo.estaArco(id1, id2, tipo)) {
+		                    	   	System.out.println("La Arco esta en el Grafo ");
 		                    	}
 		                    	else {
-		                    	   	System.out.println("La arista no esta en el grafo ");
+		                    	   	System.out.println("La Arco no esta en el grafo ");
 		                    	}
 		                    }
 		                    if(tecla.equalsIgnoreCase("i")) {
@@ -182,18 +182,18 @@ public class Cliente {
 		                    	id1=entrada.nextInt();
 		                    	System.out.println("Ingrese el identificador del vertice2");
 		                    	id2=entrada.nextInt();
-		                    	System.out.println("Ingrese el tipo de la arista");
+		                    	System.out.println("Ingrese el tipo de la Arco");
 		                    	tipo=entrada.nextInt();
-		                    	System.out.println("Ingrese el peso de la Arista");
+		                    	System.out.println("Ingrese el peso de la Arco");
 		                    	peso=entrada.nextDouble();
 		                    	try {
-		                    	Arista nuevaarista=new Arista(peso,tipo,grafo.obtenerVertice(id1),grafo.obtenerVertice(id2));
-		                    	if(grafo.eliminarArista(nuevaarista)) {
-		                    		System.out.println("La arista fue eliminada del grafo");
+		                    	Arco nuevaArco=new Arco(peso,tipo,grafo.obtenerVertice(id1),grafo.obtenerVertice(id2));
+		                    	if(grafo.eliminarArco(nuevaArco)) {
+		                    		System.out.println("La Arco fue eliminada del grafo");
 		                    	
 		                    	}
 		                    	else {
-		                    		System.out.println("La arista no esta en el grafo grafo asegurece de que este");
+		                    		System.out.println("La Arco no esta en el grafo grafo asegurece de que este");
 		                    	}
 		                    	}catch(NoSuchElementException err){
 		                    		System.out.println("Los vertices no pertenecen al grafo");
@@ -203,7 +203,7 @@ public class Cliente {
 		                    	System.out.println("la lista de vertices del grafo es:\n "+grafo.vertices().toString());
 		                    }
 		                    if(tecla.equalsIgnoreCase("l")) {
-		                    	System.out.println("la lista de Arista del grafo es:\n "+grafo.lados().toString());
+		                    	System.out.println("la lista de Arco del grafo es:\n "+grafo.lados().toString());
 		                    }
 		                    if(tecla.equalsIgnoreCase("m")) {
 		                    	int id;
@@ -231,7 +231,7 @@ public class Cliente {
 		                    	System.out.println("Ingrese el identificador del vertice");
 		                    	id=entrada.nextInt();
 		                    	try {
-		                    		System.out.println("Las Aristas incidentes al vertice son: \n"+grafo.incidentes(id).toString());
+		                    		System.out.println("Las Arcos incidentes al vertice son: \n"+grafo.incidentes(id).toString());
 		                    	}catch(NoSuchElementException err){
 		                    		System.out.println("Este vertice no existe en el grafo asegurece de que si");
 		                    	}
