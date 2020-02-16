@@ -67,7 +67,7 @@ public class Vertice {
 
 	     *retorna la informacion del vertice. 
 	     */
-	    public String aString() {
+	    public String toString() {
 	    	return "Vertice: "+ id +"\n"+"Nombre: "+ nombre +"\n"+"Peso: "+ peso +"\n"+
 	    			"Coordenadas: "+"\n"+"x: "+ this.coordenadax+ "\n"+"y: "+this.coordenaday+"\n";
 	    }

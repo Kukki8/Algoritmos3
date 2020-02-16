@@ -99,8 +99,7 @@ public class GrafoDirigido implements Grafo{
                     listaArcos.remove(b);
                     for(LinkedList<Vertice> listaActual : listaVertices){
                         if(listaActual.get(0).obtenerNombre().equals(vi)){
-                            * Grafo: Lista de lista de vertices que es la representacion de la lista de adyacencia del grafo
-                            * Arista: lista de arista que es la lista de todas las arista que posee el grafo          for(Vertice v : listaActual){
+                            for(Vertice v : listaActual){
                                 if(listaActual.get(0).obtenerNombre().equals(vi)){
                                     eliminarVertice(v.obtenerId());
                                 }
@@ -252,15 +251,16 @@ public class GrafoDirigido implements Grafo{
             String lineaActual = lector.readLine();                               
             String orientacion = lineaActual;                                      //Primera linea representa la orientacion
             System.out.println("Cargando grafo " + orientacion);
-            lector.readLine();
+            lineaActual = lector.readLine();
             int n = Integer.parseInt(lineaActual);                                  //Segunda linea representa el numero de vertices
-            lector.readLine();
+            lineaActual = lector.readLine();
             int m = Integer.parseInt(lineaActual);                                  //Tercera linea representa el numero de arcos
     
-            GrafoDirigido nuevoGrafo = crearGrafoDirigido();
+            //GrafoDirigido nuevoGrafo = crearGrafoDirigido();
     
             for(int vertices = 0 ; vertices < n ; vertices++){                      //Las siguientes filas, tantas como vertices existan, representan
-                String [] datos = lector.readLine().split(" ");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
+                lineaActual = lector.readLine();
+                String [] datos = lineaActual.split(" ");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
                 int id = Integer.parseInt(datos[0]);                                // espacio entre ellos.
 
                 if(datos.length==5) {                                               // Cada vertice debe tener 5 atributos:
@@ -269,21 +269,24 @@ public class GrafoDirigido implements Grafo{
                     double y = Double.parseDouble(datos[3]);                        // Coordenada y
                     double peso = Double.parseDouble(datos[4]);                     // Peso
         
-                    nuevoGrafo.agregarVertice(id, nombre, x, y, peso);              //Agregamos los vertices con dichos atributos.
+                    //nuevoGrafo.agregarVertice(id, nombre, x, y, peso);              //Agregamos los vertices con dichos atributos.
+                    agregarVertice(id, nombre, x, y, peso); 
                 }else{
                     throw new IllegalArgumentException(" No es una linea de vertices valida");    //En caso de que exceda la cantidad de atributos.
                 }
             }
     
             for(int arcos = 0 ; arcos < m ; arcos++){                               //Las siguientes filas, tantos arcos  existan, representan
-                String [] datos = lector.readLine().split(" ");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
+                lineaActual = lector.readLine();                          
+                String [] datos = lineaActual.split(" ");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
                 if(datos.length==4) {	                                            // espacio entre ellos. Cada arco debe tener 4 atributos:
                     String vi = datos[0];                                           // Vertice inicial
                     String vf = datos[1];                                           // Vertice final
                     int tipo = Integer.parseInt(datos[2]);                          // Tipo de arco
                     double peso = Double.parseDouble(datos[3]);                     // Peso del arco
         
-                    nuevoGrafo.agregarArco(vi, vf, tipo, peso);
+                    //nuevoGrafo.agregarArco(vi, vf, tipo, peso);
+                    agregarArco(vi, vf, tipo, peso);
                 }else{
                     throw new IllegalArgumentException("No es una linea de arcos valida");      //En caso de que exceda la cantidad de atributos.
                 }
@@ -519,7 +522,7 @@ public class GrafoDirigido implements Grafo{
     }
 
     @Override
-    public String aString(){
+    public String toString(){
     
             String info = "";
     
@@ -533,13 +536,13 @@ public class GrafoDirigido implements Grafo{
             }
             info += "Vertices: " + "\n";
             for(LinkedList<Vertice> v : listaVertices){
-                info += "Info de vertice " + v.get(0).obtenerNombre() + " : " + v.get(0).aString() + "\n";
+                info += "Info de vertice " + v.get(0).obtenerNombre() + " : " + v.get(0).toString() + "\n";
     
             }
             info += "Arcos: " + "\n";
             int i = 0;
             for(Arco arco : listaArcos){
-                info += "Info del arco " + i + " : " + arco.aString() + "\n";
+                info += "Info del arco " + i + " : " + arco.toString() + "\n";
                 i += 1;
             }
             return info;

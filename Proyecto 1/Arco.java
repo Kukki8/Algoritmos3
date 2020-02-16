@@ -34,7 +34,7 @@ public class Arco extends Lado {
 		return esExtremoFinal;
 	}
 	// retorna un String con los datos de arco
-	public String aString() {
+	public String toString() {
 		return "Extremo incial: " +vi+"Extremo final: "+ vf+ "Peso: "+ peso+
 				"Tipo: "+ tipo;
 	}

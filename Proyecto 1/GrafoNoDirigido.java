@@ -409,7 +409,7 @@ public class GrafoNoDirigido implements Grafo {
         return grafoClonado;
     }
 	
-	public String aString() {
+	public String toString() {
 		   String info = "";
 
 	        for(int i=0;i<Grafo.size();i++){
@@ -426,7 +426,7 @@ public class GrafoNoDirigido implements Grafo {
 	        	info=info+"\n";
 	                info += "Info de las Aristas: " +"\n";
 	                for(int j=0;j<Aristas.size();j++) {
-	                info+="Arista "+ j +":"+"\n"+Aristas.get(j).aString()+"\n";
+	                info+="Arista "+ j +":"+"\n"+Aristas.get(j).toString()+"\n";
 	                info=info+"\n";
 	                }
 	            

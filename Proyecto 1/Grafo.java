@@ -110,5 +110,5 @@ public interface Grafo {
 	 * Devuelve una representaci@n del contenido del grafo como una cadena de caracteres
 	 * @return
 	 */
-	public String aString();
+	public String toString();
 }

@@ -19,9 +19,9 @@ public class Arista extends Lado {
 		return this.vf;
 	}
 	@Override
-	public String aString() {
+	public String toString() {
 		// TODO Auto-generated method stub
-		return "Extremo 1: " +vi.aString()+ "Extremo 2: "+ vf.aString()+ "Peso: "+ peso+
+		return "Extremo 1: " +vi.toString()+ "Extremo 2: "+ vf.toString()+ "Peso: "+ peso+
 				"Tipo: "+ tipo;
 	}
 	
