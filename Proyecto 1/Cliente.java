@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Cliente {
 		public static void main(String[] args) throws IOException, IllegalArgumentException{
 			if(args.length < 1){
-				System.err.println("por favor ejecute: java Cliente <nombreArchivo>");
+				System.err.println("por favor ejecute: java Cliente <nombreArchivo>");  //Error en caso de no colocar el nombre del archivo
 				return;
 			}
 			try {
@@ -18,8 +18,8 @@ public class Cliente {
 				String linea=Lector.readLine(); //primera linea
 				tipo_grafo=linea.trim();
 				 // creamos un grafo Dirigido o un grafo no Dirigido dependiendo de tipo_grafo
-				if(tipo_grafo.equals("N")){
-					Scanner entrada=new Scanner(System.in);
+				if(tipo_grafo.equals("N")){                                   //Inicio del cado NoDirigido
+					Scanner entrada=new Scanner(System.in);					//Procedemos a expandir una serie de opciones posibles para el grafo cargado
 					GrafoNoDirigido grafo=null;
 					grafo=new GrafoNoDirigido();
 					grafo.CrearGrafoNoDirigido();
@@ -249,11 +249,11 @@ public class Cliente {
 					 }      
 		                    
 				}
-				if(tipo_grafo.equals("D")){
-					Scanner entrada=new Scanner(System.in);
-					GrafoDirigido grafo=null;
-					grafo = new GrafoDirigido();
-					grafo.crearGrafoDirigido();
+				if(tipo_grafo.equals("D")){                                     	//Caso Grafo dirigido
+					Scanner entrada=new Scanner(System.in);							//Expandimos las opciones. Por comodidd, para este grafo, se utilizaron nuevas entradas
+					GrafoDirigido grafo=null;										//para funciones anteriores. Es decir, existen opciones en las que
+					grafo = new GrafoDirigido();									//se escaneara la entrada, verificando si es un string o un int, de manera
+					grafo.crearGrafoDirigido();										//de usar el metodo correspondiente.
 					grafo.cargarGrafo(args[0]);
 					 while(true){
 		                    System.out.println(

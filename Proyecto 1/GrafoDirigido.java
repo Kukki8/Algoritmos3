@@ -534,15 +534,15 @@ public class GrafoDirigido implements Grafo{
                     }
                     info += "\n";
             }
-            info += "Vertices: " + "\n";
+            info += "\n" + "Vertices: " + "\n";
             for(LinkedList<Vertice> v : listaVertices){
-                info += "Info de vertice " + v.get(0).obtenerNombre() + " : " + v.get(0).toString() + "\n";
+                info += "\n" +"Info de vertice: " + v.get(0).obtenerNombre() + "\n" + v.get(0).toString() + "\n";
     
             }
             info += "Arcos: " + "\n";
             int i = 0;
             for(Arco arco : listaArcos){
-                info += "Info del arco " + i + " : " + arco.toString() + "\n";
+                info += "\n" + "Info del arco: " + i + "\n"  + arco.toString() + "\n";
                 i += 1;
             }
             return info;
