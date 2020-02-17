@@ -64,7 +64,7 @@ public class GrafoNoDirigido implements Grafo {
 	}
 	/*
 	 * Si no existe un arco del tipo tipo entre u y v, crea una nueva aristay la agrega en el grafo. Retorna true
-	 *en caso en que la inserción se lleva a cabo, false en contrario.
+	 *en caso en que la inserci@n se lleva a cabo, false en contrario.
 	
 	 */
 	public boolean agregarArista(String u, String v, int tipo, double peso) {
@@ -136,7 +136,7 @@ public class GrafoNoDirigido implements Grafo {
 		}
 		return Existe;
 	}
-	/*Devuelve la arista que es pasada como parametro. En caso de que no exista ninguna arista , se lanza la excepción NoSuchElementException.
+	/*Devuelve la arista que es pasada como parametro. En caso de que no exista ninguna arista , se lanza la excepci@n NoSuchElementException.
 	*/
 	public Lado obtenerArista(Arista a) {
 		for(Arista e:Aristas) {
@@ -147,7 +147,7 @@ public class GrafoNoDirigido implements Grafo {
 		throw new NoSuchElementException("Esta Arsita no existe en el grafo");
 	}
 	/*
-	 * Determina si una Arista pertenece a un grafo. La entrada son los identificadores de los vértices que son
+	 * Determina si una Arista pertenece a un grafo. La entrada son los identificadores de los v@rtices que son
 	*los extremos del lado y el tipo de ese Arista.
 	 */
 	public boolean estaArista(String u, String v, int tipo) {
@@ -172,7 +172,7 @@ public class GrafoNoDirigido implements Grafo {
 	        return false;
 	    }
 	/*
-	 * Determina si una Arista pertenece a un grafo. La entrada son los identificadores de los vértices que son
+	 * Determina si una Arista pertenece a un grafo. La entrada son los identificadores de los v@rtices que son
 	*los extremos del lado y el tipo de ese Arista.
 	 */
 	public boolean estaArista(int u, int v, int tipo) {

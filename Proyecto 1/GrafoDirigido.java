@@ -527,7 +527,7 @@ public class GrafoDirigido implements Grafo{
             String info = "";
     
             for(LinkedList<Vertice> listaActual: listaVertices){
-                info += listaActual.get(0).obtenerNombre() + " —---> ";
+                info += listaActual.get(0).obtenerNombre() + " ----> ";
     
                     for(Vertice v : listaActual){
                         info += "       "+ v.obtenerNombre() + " ";
