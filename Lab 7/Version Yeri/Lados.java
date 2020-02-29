@@ -9,7 +9,7 @@ public class Lados{
         this.mesa2 = mesaFi;
     }
 
-    public int obtenerCosto(Mesa mesaIn, Mesa mesaFin){
+    public double obtenerCosto(Mesa mesaIn, Mesa mesaFin){
         return Math.sqrt(Math.pow(mesaFin.obtenerX() - mesaIn.obtenerX(), 2) + Math.pow(mesaFin.obtenerY() - mesaIn.obtenerY(), 2));
     }
 

@@ -2,13 +2,13 @@ import java.util.LinkedList;
 
 public class Bellman{
 
-    public int[] costo;
+    public double[] costo;
     public int[] predecesor;
     public Mesa mesa;
     public GrafoND grafo;
 
     Bellman(GrafoND grafo){
-        this.costo = new int[grafo.lados.size()];
+        this.costo = new double[grafo.lados.size()];
         this.predecesor = new int[grafo.lados.size()];
     }
 
@@ -35,6 +35,5 @@ public class Bellman{
                 return;
             }
         }
-
 
 }

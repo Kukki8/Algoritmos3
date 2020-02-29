@@ -9,8 +9,8 @@ public class GrafoND{
     }
 
 
-    public void agregarMesa(int x, int y){
-        Mesa nuevaMesa = new Mesa(x,y);
+    public void agregarMesa(int x, int y, int id){
+        Mesa nuevaMesa = new Mesa(x,y, id);
         mesas.add(nuevaMesa);
 
     }
