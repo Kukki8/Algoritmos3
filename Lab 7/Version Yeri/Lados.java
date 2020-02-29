@@ -1,8 +1,7 @@
 public class Lados{
 
-    //private int costo ;
-    Mesa mesa1 ;
-    Mesa mesa2 ;
+    public Mesa mesa1 ;
+    public Mesa mesa2 ;
 
     Lados(Mesa mesaIn, Mesa mesaFi){
         this.mesa1 = mesaIn;
@@ -10,7 +9,15 @@ public class Lados{
     }
 
     public double obtenerCosto(Mesa mesaIn, Mesa mesaFin){
-        return Math.sqrt(Math.pow(mesaFin.obtenerX() - mesaIn.obtenerX(), 2) + Math.pow(mesaFin.obtenerY() - mesaIn.obtenerY(), 2));
+        int x1 = mesaIn.obtenerX();
+        int x2 = mesaFin.obtenerX();
+        int y1 = mesaIn.obtenerY();
+        int y2 = mesaFin.obtenerY();
+
+        double mpx =  Math.pow(x2 - x1, 2);
+        double mpy = Math.pow(y2 - y1, 2);
+
+        return Math.sqrt(mpx + mpy);
     }
 
 }

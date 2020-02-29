@@ -6,6 +6,7 @@ public class GrafoND{
 
     GrafoND(){
         this.lados = new LinkedList<Lados>();
+        this.mesas = new LinkedList<Mesa>();
     }
 
 
@@ -16,8 +17,20 @@ public class GrafoND{
     }
 
     public void agregarLado(Mesa In , Mesa Fi){
-        Lados nuevoLado = new Lados(In,Fi);
-        lados.add(nuevoLado);
+        Lados nuevoLado1 = new Lados(In,Fi);
+        lados.add(nuevoLado1);
+        Lados nuevoLado2 = new Lados(Fi,In);
+        lados.add(nuevoLado2);
+    }
+
+    public Mesa obtenerMesa(int id){
+
+        for(Mesa m : mesas){
+            if(m.obtenerID() == id){
+                return m;
+            }
+        }
+        return null;
     }
 
 }
