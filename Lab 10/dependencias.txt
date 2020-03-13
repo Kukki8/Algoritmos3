@@ -1,0 +1,3 @@
+Digrafo.java: Grafo.java Vertice.java Arco.java Lado.java
+Grafo.java: Vertice.java Lado.java
+Arco.java: Lado.java Vertice.java

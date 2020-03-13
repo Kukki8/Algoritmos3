@@ -1,0 +1,5 @@
+s7.java: su.java so.java
+su.java: se.java si.java
+so.java: sa.java
+si.java: sa.java
+se.java: sa.java
