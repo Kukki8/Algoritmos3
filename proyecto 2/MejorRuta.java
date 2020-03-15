@@ -18,7 +18,7 @@ public class MejorRuta {
 		LinkedList<String> LineaApagadas=new LinkedList<String>();
 		String linea;
 		linea=Lector.readLine();
-		while(linea.length()>=2) {
+		while(linea!=null) {
 			LineasDisponibles.add(linea);
 			linea=Lector.readLine();
 		}
@@ -36,51 +36,22 @@ public class MejorRuta {
 				}
 			}
 		}
-		
-		
-		Set<String> hashSet = new HashSet<String>(TodasLasLineas);
-		TodasLasLineas.clear();
-		TodasLasLineas.addAll(hashSet);
-		boolean diferente=true;
-		if(LineasDisponibles.size()!=TodasLasLineas.size()) {
-			for(int i=0;i<LineasDisponibles.size();i++) {
-				String lineaPrendida=LineasDisponibles.get(i);
-				for(int j=0;j<TodasLasLineas.size();j++) {
-					if(TodasLasLineas.get(j).equalsIgnoreCase(lineaPrendida)) {
-						TodasLasLineas.remove(j);
-					}
-				}
-			}
+		LinkedList<Arista> TodaslasAristas=new LinkedList<Arista>();
+		for(Arista e:GrafoClon.Tramos) {
+			TodaslasAristas.add(e);
 		}
-		LineaApagadas=TodasLasLineas;
-		String lineaAapagar;
-		LinkedList<Arista> proximaslineasaapagar=new LinkedList<Arista>();
-		for(String e:LineaApagadas) {
-			lineaAapagar=e.trim();
-			for(Arista f:GrafoClon.Tramos) {
-				if(f.ObtenerLinea().equalsIgnoreCase(lineaAapagar)) {
-					proximaslineasaapagar.add(f);
-				}
-			}
-		}
-		for(Arista e:proximaslineasaapagar) {
+		for(Arista e:TodaslasAristas) {
 			GrafoClon.eliminarArista(e);
-			
 		}
 		for(Arista e:salvararista) {
-			int v1,v2,Tiempo;
-			v1=e.ObtenerPrimeraParada().ObtenerId();
-			v2=e.ObtenerSegundaParada().ObtenerId();
-			Tiempo=e.ObtenerTiempo();
+			int v1=e.ObtenerPrimeraParada().ObtenerId();
+			int v2=e.ObtenerSegundaParada().ObtenerId();
 			String Linea=e.ObtenerLinea();
-			if(GrafoClon.estaArista(e)==false) {
-				GrafoClon.agregarArista(v1, v2, Linea, Tiempo);
-			}
+			Linea.trim();
+			int Tiempo=e.ObtenerTiempo();
+			GrafoClon.agregarArista(v1, v2, Linea, Tiempo);
 		}
-		
-		
-		
-		
+	
 		return GrafoClon;
 	}
 	
@@ -104,6 +75,11 @@ public class MejorRuta {
 				LinkedList<Arista> lineasdisponibles;
 				GrafoClon=GrafoInducidoLineas(grafo, args[1]);
 				System.out.println(GrafoClon.toString());
+				System.out.println(grafo.toString());
+				/*for(Arista e:lineasdisponibles) {
+					System.out.println(e.ObtenerPrimeraParada().ObtenerId()+" "+ e.ObtenerSegundaParada().ObtenerId()+" "+e.ObtenerLinea());
+				}
+				*/
 			}
 		
 	}

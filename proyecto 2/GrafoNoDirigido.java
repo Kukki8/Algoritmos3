@@ -343,10 +343,10 @@ public class GrafoNoDirigido{
 		   String info = "";
 
 	        for(int i=0;i<Mapa.size();i++){
-	            	info = info+Mapa.get(i).get(0).ObtenerNombre() + " -----> ";
+	            	info = info+Mapa.get(i).get(0).ObtenerId() + " -----> ";
 
 	                for(int j=1;j<Mapa.get(i).size();j++){
-	                    info=info+Mapa.get(i).get(j).ObtenerNombre() + " ";
+	                    info=info+Mapa.get(i).get(j).ObtenerId() + " ";
 	                }
 	                info=info+"\n";
 	               
