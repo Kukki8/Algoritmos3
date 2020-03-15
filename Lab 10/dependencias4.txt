@@ -1,0 +1,6 @@
+s7.java: s6.java s5.java
+s5.java: s4.java
+s2.java: s1.java
+s6.java: s4.java s3.java
+s4.java: s2.java
+s3.java: s1.java
