@@ -11,20 +11,24 @@ public class Grafo{
 
     }
 
-    public void agregarLado(Lados l){
+    public boolean agregarLado(Lados l){
         if(estaLado(l) == false){
             grafo.add(l);
+            return true;
         }
+        return false;
 
     }
 
-    public void agregarVertice(Vertices v){
+    public boolean agregarVertice(Vertices v){
 
         String nombrev = v.obtenerNombre();
 
         if(estaVertice(nombrev) == false){
             vertices.add(v);
+            return true;
         }
+        return false;
     }
 
     public boolean estaVertice(String n){
@@ -34,6 +38,16 @@ public class Grafo{
             }
         }
         return false;
+    }
+
+    public Vertices buscarVertice(String n){
+
+        for(Vertices v : vertices){
+            if(v.obtenerNombre().equals(n)){
+                return v;
+            }
+        }
+        return null;
     }
 
     public boolean estaLado(Lados a){

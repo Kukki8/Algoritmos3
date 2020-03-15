@@ -16,27 +16,37 @@ public class Orden{
 
             String[] division = linea.split(":");
             Vertices archivo = new Vertices(division[0] , i);
-            grafito.agregarVertice(archivo);
-            i += 1;
+
+            if(grafito.estaVertice(archivo.obtenerNombre()) == false){
+                grafito.agregarVertice(archivo);
+                i += 1;  
+            }else{
+                archivo = grafito.buscarVertice(division[0]);
+            }
+            
             String[] dependencias = division[1].split(" ");
 
-            for(int j = 0 ; j< dependencias.length ; j++){
+            for(int j = 1 ; j< dependencias.length ; j++){
                 Vertices dependencia = new Vertices(dependencias[j] , i);
-                Lados l = new Lados( archivo , dependencia);
+
+                if(grafito.agregarVertice(dependencia) == true){
+                    i+=1;
+                }else{
+                    dependencia = grafito.buscarVertice(dependencias[j]);
+                }
+
+                Lados l = new Lados(dependencia, archivo);
                 grafito.agregarLado(l);
-                i += 1;
+                
             }
-            i += 1;
             linea = lector.readLine();
         }
 
-        System.out.println("Termine de leer");
+        
         lector.close();
         return grafito;
 
     }
-
-
 
     public static void main(String args[]) throws IOException{
 

@@ -21,35 +21,31 @@ public class OrdenTop{
             }
         }
 
-        for(int k = 0; k < grafito.vertices.size() ; k++){
+        for(int k = 0; k < grafito.vertices.size() + 1; k++){
             int j = 0;
             while(j < grafito.vertices.size()){
                 if(f[j] == k){
                     for(Vertices v : grafito.vertices){
                         if(v.obtenerId() == j){
-                            System.out.println(v.obtenerNombre());
+                            System.out.print(v.obtenerNombre() + " ");
                             break;
                         }
                     }
                 }
                 j+= 1;
-
             }
         }
-
-
     }
-
 
     public void dfsREC(Vertices v){
         int vid = v.obtenerId();
         String vn = v.obtenerNombre();
         visitados[vid] = true;
-    
+        
         for(Lados l : grafito.grafo){
             String lnIn = l.verIni.obtenerNombre();
 
-            if(lnIn == vn){
+            if(lnIn.equals(vn)){
                 int lidFin = l.verFin.obtenerId();
                     if(visitados[lidFin] == false){
                         dfsREC(l.verFin);
