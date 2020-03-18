@@ -54,7 +54,36 @@ public class MejorRuta {
 	
 		return GrafoClon;
 	}
+	public static int[]  RecorridoCamino(GrafoNoDirigido grafo, int v1, int v2, int[] recorrido) {
+		for(int x=0; x<recorrido.length;x++) {
+			recorrido[x]=-1;
+		}
+		recorrido[v1]=v1;
+		recursion(v1,grafo, recorrido);
+		return recorrido;
+	}
 	
+	public static void recursion(int vertice,GrafoNoDirigido grafo,int[] recorrido) {
+		int pos=0;
+		for(int i=0;i<grafo.Mapa.get(vertice).size();i++) {
+			pos=DamePosdeVertice(grafo.Mapa.get(vertice).get(i).ObtenerId(), grafo);
+			if(recorrido[pos]==-1) {
+				recorrido[pos]=vertice;
+				recursion(pos,grafo, recorrido);
+			}
+		}
+	
+		
+	}
+	public static int DamePosdeVertice(int args, GrafoNoDirigido grafo) {
+		int lugar = 0;
+		for(int i=0;i<grafo.Mapa.size();i++) {
+			if(grafo.Mapa.get(i).get(0).ObtenerId()==args) {
+				lugar=i;
+			}
+		}
+		return lugar;
+	}
 	public static void main(String[] args) throws IOException {
 		if(args.length < 1){
 			System.err.println("por favor ejecute: java PlanearTrassbordos <mapa> <Lineas> <pIni> <pFin>");  //Error en caso de no colocar el nombre del archivo
@@ -74,8 +103,16 @@ public class MejorRuta {
 				GrafoNoDirigido GrafoClon;
 				LinkedList<Arista> lineasdisponibles;
 				GrafoClon=GrafoInducidoLineas(grafo, args[1]);
-				System.out.println(GrafoClon.toString());
-				System.out.println(grafo.toString());
+				int[] recorrido= new int[GrafoClon.Mapa.size()];
+				int verticeIn;
+				int verticeFn;
+				verticeIn=DamePosdeVertice(Integer.parseInt(args[2]), grafo);
+				verticeFn=DamePosdeVertice(Integer.parseInt(args[3]), GrafoClon);
+				RecorridoCamino(GrafoClon,verticeIn, verticeFn, recorrido);
+				System.out.print(GrafoClon.toString());
+				for(int i=0; i<recorrido.length;i++) {
+					System.out.println(recorrido[i]);
+				}
 				/*for(Arista e:lineasdisponibles) {
 					System.out.println(e.ObtenerPrimeraParada().ObtenerId()+" "+ e.ObtenerSegundaParada().ObtenerId()+" "+e.ObtenerLinea());
 				}
