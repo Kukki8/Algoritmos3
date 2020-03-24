@@ -1,15 +1,18 @@
-import java.util.LinkedList;
-import java.util.Stack;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Stack;
 
 public class Ruta {
 
     public int transbordo;
     public LinkedList<Lado> recorrido;
+    public Hashtable<String, Integer> tablita;
     
-    Ruta(){
+    Ruta(Hashtable<String, Integer> tablita){
         this.transbordo = 0;
         this.recorrido = new LinkedList<Lado>();
+        this.tablita = tablita ; 
     }
 
     public void cargarRutaD(Stack<Arco> caminoActual){
@@ -45,7 +48,17 @@ public class Ruta {
                 String vInNom = a.obtenerExtremoInicial().obtenerNombre();
                 String vFinNom = a.obtenerExtremoFinal().obtenerNombre();
                 int aColor = a.obtenerTipo();
-                System.out.println("Tome la linea " + aColor+ " desde " + vInID + " " + vInNom + " hasta " + vFinID + " " + vFinNom);
+                String aLlave = "" ;
+
+                for(Map.Entry<String,Integer> entrada: tablita.entrySet()){
+
+                    if(aColor == entrada.getValue()){
+                        aLlave = entrada.getKey();
+                        break;
+                    }
+                }
+
+                System.out.println("Tome la linea " + aLlave+ " desde " + vInID + " " + vInNom + " hasta " + vFinID + " " + vFinNom);
             }
             System.out.println("Transbordos totales: " + transbordo);
             
@@ -63,7 +76,16 @@ public class Ruta {
                 String vInNom = a.obtenerExtremo1().obtenerNombre();
                 String vFinNom = a.obtenerExtremo2().obtenerNombre();
                 int aColor = a.obtenerTipo();
-                System.out.println("Tome la linea " + aColor+ " desde " + vInID + " " + vInNom + " hasta " + vFinID + " " + vFinNom);
+                String aLlave = "" ;
+
+                for(Map.Entry<String,Integer> entrada: tablita.entrySet()){
+
+                    if(aColor == entrada.getValue()){
+                        aLlave = entrada.getKey();
+                        break;
+                    }
+                }
+                System.out.println("Tome la linea " + aLlave+ " desde " + vInID + " " + vInNom + " hasta " + vFinID + " " + vFinNom);
             }
             System.out.println("Transbordos totales: " + transbordo);
             

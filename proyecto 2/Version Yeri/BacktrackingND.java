@@ -16,7 +16,7 @@ public class BacktrackingND{
         this.transbordoActual = grafo.numeroDeVertices();
         this.rutaActual =  new Stack<Arista>();
         this.visitados = new Hashtable<Integer , Integer>() ;
-        this.ruta = new Ruta();
+        this.ruta = new Ruta(grafo.lineas);
 
         for(int i = 0; i < grafo.lineas.size() ; i++){
             tipos.add(i);

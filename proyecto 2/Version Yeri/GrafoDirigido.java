@@ -398,9 +398,9 @@ public class GrafoDirigido implements Grafo{
             for(int i = 0; i < n ; i++){
 
                 linea = lector.readLine();
-                String [] datos = linea.split(" ");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
+                String [] datos = linea.split("\\s+");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
                 int id = Integer.parseInt(datos[0]);                                // espacio entre ellos.
-                System.out.println(linea);
+                
                 if(datos.length==5) {                                               // Cada vertice debe tener 5 atributos:
                     String nombre = datos[1];                                       // Nombre
                     double latitud = Double.parseDouble(datos[2]);                  // Latitud
@@ -419,7 +419,7 @@ public class GrafoDirigido implements Grafo{
 
             for(int arcos = 0 ; arcos < m ; arcos++){                               //Las siguientes filas, tantos arcos  existan, representan
                 linea = lector.readLine();                          
-                String [] datos = linea.split(" ");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
+                String [] datos = linea.split("\\s+");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
                 if(datos.length==4) {	                                            // espacio entre ellos. Cada arco debe tener 4 atributos:
                     int pi = Integer.parseInt(datos[0]);                                           // Parada inicial
                     int pf = Integer.parseInt(datos[1]);                                           // Parada final
@@ -459,12 +459,10 @@ public class GrafoDirigido implements Grafo{
             BufferedReader lector = new BufferedReader(new FileReader(archivo));
             GrafoDirigido inducido = (GrafoDirigido) clonar();
             String linea = lector.readLine();
-            LinkedList<Integer> claves = new LinkedList<Integer>();
             
             while( linea != null){
-
                 int clave = lineas.get(linea);
-                claves.add(clave);               //Aqui agregamos todas las lineas
+                inducido.lineas.put(linea,clave);               //Aqui agregamos todas las lineas
                 linea = lector.readLine();
             }
 
@@ -473,7 +471,7 @@ public class GrafoDirigido implements Grafo{
             for(Arco a : inducido.listaArcos){
                 int tipo = a.obtenerTipo();
 
-                if(!claves.contains(tipo)){
+                if(!inducido.lineas.contains(tipo)){
                     aEliminar.add(a);
                 }
             }

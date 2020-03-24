@@ -59,17 +59,17 @@ d
 20323 LaEstancia              -66.854 10.485  45
 20324 LaFloresta              -66.848 10.491  45
 22102 CaroniconRio            -66.856 10.483  42.5
-22102 ElevadoLasMercedes      -66.865 10.487  40
-22102 Mohedano                -66.864 10.490  40
-22102 MonterreyconPpal        -66.863 10.483  48.33
-22102 MonterreyconRio         -66.863 10.486  42.5
-22102 MucuchiesconRio         -66.861 10.485  42.5
-22102 NuevaYorkconPpal        -66.861 10.481  48.33
-22102 NuevaYorkconRio         -66.858 10.483  42.5
-22102 OrinococonParis         -66.856 10.481  42.5
-22102 OrinococonPpal          -66.859 10.480  48.33
-22102 Ppal.LasMercedes        -66.865 10.485  48.33
-22102 TrinidadconRio          -66.860 10.484  42.5
+22103 ElevadoLasMercedes      -66.865 10.487  40
+22104 Mohedano                -66.864 10.490  40
+22105 MonterreyconPpal        -66.863 10.483  48.33
+22106 MonterreyconRio         -66.863 10.486  42.5
+22107 MucuchiesconRio         -66.861 10.485  42.5
+22108 NuevaYorkconPpal        -66.861 10.481  48.33
+22109 NuevaYorkconRio         -66.858 10.483  42.5
+22110 OrinococonParis         -66.856 10.481  42.5
+22111 OrinococonPpal          -66.859 10.480  48.33
+22112 Ppal.LasMercedes        -66.865 10.485  48.33
+22113 TrinidadconRio          -66.860 10.484  42.5
 22210 America                 -66.874 10.447  60
 22211 ElPennon                -66.876 10.439  60
 22212 ElPlacerdeMaria         -66.877 10.437  60
@@ -194,26 +194,26 @@ d
 20322 20323 203delMetrobus   1.69
 20323 20324 203delMetrobus   3.59
 20324 14    203delMetrobus   1.59
-14    22102 221delMetrobus   4.13
-22102 22102 221delMetrobus   1.28
-22102 22102 221delMetrobus   1.58
-22102 22102 221delMetrobus   0.85
-22102 20303 221delMetrobus   1.25
-20303 20321 221delMetrobus   2.03
-20321 22102 221delMetrobus   2.09
-22102 22102 221delMetrobus   1.08
-22102 22102 221delMetrobus   0.99
-22102 22102 221delMetrobus   0.81
-22102 22102 221delMetrobus   0.87
-22102 22102 221delMetrobus   0.97
-22102 22102 221delMetrobus   1.11
-22102 22102 221delMetrobus   1.59
-22102 14    221delMetrobus   2.41
-14    22102 222delMetrobus   3.89
-22102 22102 222delMetrobus   1.23
-22102 22102 222delMetrobus   1.62
-22102 22102 222delMetrobus   0.95
-22102 20304 222delMetrobus   1.10
+14    22112 221delMetrobus   3.42
+22112 22105 221delMetrobus   1.09
+22105 22108 221delMetrobus   1.20
+22108 22111 221delMetrobus   0.94
+22111 20303 221delMetrobus   1.43
+20303 20321 221delMetrobus   3.00
+20321 22110 221delMetrobus   1.74
+22110 22102 221delMetrobus   1.19
+22102 22109 221delMetrobus   1.03
+22109 22113 221delMetrobus   0.61
+22113 22107 221delMetrobus   0.64
+22107 22106 221delMetrobus   0.87
+22106 22103 221delMetrobus   1.17
+22103 22104 221delMetrobus   1.57
+22104 14    221delMetrobus   1.95
+14    22112 222delMetrobus   3.31
+22112 22105 222delMetrobus   1.01
+22105 22108 222delMetrobus   1.32
+22108 22111 222delMetrobus   0.63
+22111 20304 222delMetrobus   1.04
 20304 20202 222delMetrobus   7.83
 20202 20306 222delMetrobus   6.91
 20306 20307 222delMetrobus   1.76
@@ -255,19 +255,19 @@ d
 31517 31518 315delMetrobus   1.39
 31518 31519 315delMetrobus   0.97
 31519 12    315delMetrobus   3.35
-48    68102 P-681delMetrobus 1.95
-68102 22102 P-681delMetrobus 2.97
-22102 22102 P-681delMetrobus 0.87
-22102 22102 P-681delMetrobus 1.31
-22102 22102 P-681delMetrobus 0.64
-22102 20303 P-681delMetrobus 1.27
-20303 20321 P-681delMetrobus 3.19
-20321 22102 P-681delMetrobus 1.67
-22102 22102 P-681delMetrobus 1.18
-22102 22102 P-681delMetrobus 0.69
-22102 22102 P-681delMetrobus 0.60
-22102 22102 P-681delMetrobus 0.69
-22102 22102 P-681delMetrobus 0.97
-22102 31516 P-681delMetrobus 4.85
+48    68102 P-681delMetrobus 1.93
+68102 22112 P-681delMetrobus 2.34
+22112 22105 P-681delMetrobus 0.82
+22105 22108 P-681delMetrobus 1.29
+22108 22111 P-681delMetrobus 0.98
+22111 20303 P-681delMetrobus 1.12
+20303 20321 P-681delMetrobus 2.25
+20321 22110 P-681delMetrobus 2.40
+22110 22102 P-681delMetrobus 1.03
+22102 22109 P-681delMetrobus 0.81
+22109 22113 P-681delMetrobus 0.89
+22113 22107 P-681delMetrobus 0.79
+22107 22106 P-681delMetrobus 1.06
+22106 31516 P-681delMetrobus 3.38
 31516 68116 P-681delMetrobus 0.78
 68116 48    P-681delMetrobus 1.08

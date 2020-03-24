@@ -16,7 +16,7 @@ public class BacktrackingD{
         this.transbordoActual = grafo.numeroDeVertices();
         this.rutaActual =  new Stack<Arco>();
         this.visitados = new Hashtable<Integer , Integer>() ;
-        this.ruta = new Ruta();
+        this.ruta = new Ruta(grafo.lineas);
 
         for(int i = 0; i < grafo.lineas.size() ; i++){
             tipos.add(i);
@@ -33,15 +33,12 @@ public class BacktrackingD{
         Vertice vertPfin = grafo.obtenerVertice(nombrePfin);
         int pin = vertPin.obtenerId();
         int pfin = vertPfin.obtenerId();
-
         if(pin == pfin){
             return null;
         }
         for(Vertice l : grafo.sucesores(pin)){                                               //Verifica los sucesores del vertice inicial
-
-            for(Integer j : tipos){                                                          //Recorre los tipos/colores de las lineas
+            for(Integer j : tipos){                                                         //Recorre los tipos/colores de las lineas
                 if(grafo.estaArco(pin, l.obtenerId(), j.intValue())){                       //Verifica si existe algun arco que contenga al vertice inicial y al final
-
                     String pfinNombre = grafo.obtenerVertice(l.obtenerId()).obtenerNombre() ;   //del tipo/color que la linea actual. 
                     rutaActual.push(grafo.obtenerArco(nombrePin, pfinNombre, j.intValue()));
                     hacerDFS(l.obtenerId(), pfin, 0, j.intValue());
