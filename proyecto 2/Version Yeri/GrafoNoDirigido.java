@@ -301,7 +301,7 @@ public class GrafoNoDirigido implements Grafo {
 			}
 			
 	}
-
+	// metodo getter que devuelve un valor bolleano dependienso si carrga cada atributo del mapa bien o no.
 	public boolean cargarGrafoMetro(String archivo) throws IOException{
         try{
             BufferedReader lector = new BufferedReader(new FileReader(archivo));
@@ -366,7 +366,7 @@ public class GrafoNoDirigido implements Grafo {
 		}
 
     }
-
+	// Metodo getter que retorna el grafo inducido dependiendo de las lienas activas.
     public GrafoNoDirigido cargarGrafoInducido(String archivo) throws IOException{
 
         try{

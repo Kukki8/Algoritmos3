@@ -2,14 +2,21 @@ import java.util.LinkedList;
 import java.util.*;
 
 public class BacktrackingND{
-
+	/*Atributos de la Clase BacktrackingD:
+	 * GrafoDirigido: GrafoNoDirigido(representacion del mapa)
+	 * tipos: lista enlazada que posee los tipos de las lineas
+	 * transbordoActual: Cantidad de vertices (estaciones) del grafo(Mapa)
+	 * visitados: Tabla de hash de interos para guardar los vertices vicitados (estaciones)
+	 * ruta: objeto ruta(para guardar la posible ruta)
+	 * 
+	 */
     public GrafoNoDirigido grafo;
     public LinkedList<Integer> tipos;
     public int transbordoActual;
     public Stack<Arista> rutaActual ;
     public Hashtable<Integer , Integer> visitados;
     public Ruta ruta;
-    
+    // constructor de la clase BacktrackingD
     BacktrackingND(GrafoNoDirigido grafo){
         this.grafo = grafo;
         this.tipos = new LinkedList<Integer>();
@@ -18,15 +25,15 @@ public class BacktrackingND{
         this.visitados = new Hashtable<Integer , Integer>() ;
         this.ruta = new Ruta(grafo.lineas);
 
-        for(int i = 0; i < grafo.lineas.size() ; i++){
+        for(int i = 0; i < grafo.lineas.size() ; i++){ // guarda todas las lineas disponibles del grafo(mapa)
             tipos.add(i);
         }
 
-        for(Integer id : grafo.vertices()){
+        for(Integer id : grafo.vertices()){ //inicializa la tabla de hash con 0 y sus respectivos id de cada parada(vertice del grafo) del mapa
             visitados.put(id , 0);
         }
     }
-
+	// metodo getter: que genera la ruta usando el algoritmo de DFS.
     public Ruta DFS(String nombrePin, String nombrePfin){
         
         Vertice vertPin = grafo.obtenerVertice(nombrePin);
@@ -50,7 +57,7 @@ public class BacktrackingND{
         }
         return ruta;
     }
-
+	// metodo que utiliza el metodo anterior y crea la mejor ruta con menos transbordos posibles(Backtracking)
     public void hacerDFS(int pin, int pfin, int transbordos, int tipo){
 
         if(pin == pfin){
