@@ -124,7 +124,7 @@ public class GrafoNoDirigido implements Grafo {
 
 
 
-	public Vertice obtenerVertice(String name){
+	public Vertice obtenerVertice(String name){						//Obtiene el vertice por su nombre(String)
 
 		if(estaVertice(name)){
 			for(LinkedList<Vertice> v : Grafo){
@@ -301,7 +301,7 @@ public class GrafoNoDirigido implements Grafo {
 			}
 			
 	}
-	// metodo getter que devuelve un valor bolleano dependienso si carrga cada atributo del mapa bien o no.
+	// metodo getter que devuelve un valor booleano dependienso si carga cada atributo del mapa bien o no.
 	public boolean cargarGrafoMetro(String archivo) throws IOException{
         try{
             BufferedReader lector = new BufferedReader(new FileReader(archivo));
@@ -313,7 +313,7 @@ public class GrafoNoDirigido implements Grafo {
 
                 linea = lector.readLine();
                 String [] datos = linea.split("\\s+");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
-                int id = Integer.parseInt(datos[0]);                                // espacio entre ellos.
+                int id = Integer.parseInt(datos[0]);                       // espacio entre ellos.
 
                 if(datos.length==5) {                                               // Cada vertice debe tener 5 atributos:
                     String nombre = datos[1];                                       // Nombre
@@ -331,21 +331,21 @@ public class GrafoNoDirigido implements Grafo {
 
             int contador = 0;
 
-            for(int aristas = 0 ; aristas < m ; aristas++){                               //Las siguientes filas, tantos arcos  existan, representan
+            for(int aristas = 0 ; aristas < m ; aristas++){                //Las siguientes filas, tantos arcos  existan, representan
                 linea = lector.readLine();                          
                 String [] datos = linea.split("\\s+");                     // sus atributos individuales. Cramos un arreglo de strings, quitando el
-                if(datos.length==4) {	                                            // espacio entre ellos. Cada arco debe tener 4 atributos:
-                    int pi = Integer.parseInt(datos[0]);                                           // Parada inicial
-                    int pf = Integer.parseInt(datos[1]);                                           // Parada final
+                if(datos.length==4) {	                                   // espacio entre ellos. Cada arco debe tener 4 atributos:
+                    int pi = Integer.parseInt(datos[0]);                   // Parada inicial
+                    int pf = Integer.parseInt(datos[1]);                   // Parada final
                     String tipo = datos[2];                          // Tramo/color de arco
                     int clave = 0;
 
-                    if(lineas.containsKey(tipo)){
-                        clave = lineas.get(tipo);
+                    if(lineas.containsKey(tipo)){				//Verifica si la linea ya existe en la tabla de hash de las lineas
+                        clave = lineas.get(tipo);				//Si ya existe, buscamos su clave.
                 
-                    }else{
-                        clave = contador ;
-                        lineas.put(tipo,contador);
+                    }else{										//En caso de no existir la linea en la tabla, se le asigna una clave,
+                        clave = contador ;						//se agrega a la tabla de hash (lineas) y
+                        lineas.put(tipo,contador);				// aumentamos al contador
                         contador += 1;
                     }
 
@@ -366,12 +366,12 @@ public class GrafoNoDirigido implements Grafo {
 		}
 
     }
-	// Metodo getter que retorna el grafo inducido dependiendo de las lienas activas.
+	// Metodo getter que retorna el grafo inducido dependiendo de las lineas activas.
     public GrafoNoDirigido cargarGrafoInducido(String archivo) throws IOException{
 
         try{
             BufferedReader lector = new BufferedReader(new FileReader(archivo));
-            GrafoNoDirigido inducido = (GrafoNoDirigido) clonar();
+            GrafoNoDirigido inducido = (GrafoNoDirigido) clonar();		//Casting necesario, ya que el metodo solo regresa un Grafo
             String linea = lector.readLine();
             
             while( linea != null){
@@ -386,12 +386,12 @@ public class GrafoNoDirigido implements Grafo {
             for(Arista a : inducido.Aristas){
                 int tipo = a.obtenerTipo();
 
-                if(!inducido.lineas.contains(tipo)){
-                    aEliminar.add(a);
+                if(!inducido.lineas.contains(tipo)){			//Buscamos aquellas lineas que no pertenezcan al grafo inducido y las agregamos a
+                    aEliminar.add(a);							//la lista de lineas que vamos a eliminar
                 }
             }
 
-            for(Arista b : aEliminar){
+            for(Arista b : aEliminar){							//Eliminamos todas las lineas de nuestra lista aEliminar que esten en el inducido
                 inducido.eliminarArista(b);
             }
             
@@ -580,6 +580,11 @@ public class GrafoNoDirigido implements Grafo {
 	
 	}
 
+	//Se crea un nuevo grafo y se recorre el grafo original. En primer lugar, se recorre la lista de listas, solo importando el representante de cada lista
+    // y buscando sus atributos, los cuales se pasaran por valor al nuevo grafo, creando nuevos vertices en el.
+    //Luego, recorremos la lista de aristas y pasamos los atributos del grafo original por valor, creando nuevos aristas en el grafo clonado.
+	//Retornamos el grafo.
+	
 	@Override
 	public Grafo clonar() {
 

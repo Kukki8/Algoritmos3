@@ -426,12 +426,12 @@ public class GrafoDirigido implements Grafo{
                     String tipo = datos[2];                          // Tramo/color de arco
                     int clave = 0;
 
-                    if(lineas.containsKey(tipo)){
-                        clave = lineas.get(tipo);
+                    if(lineas.containsKey(tipo)){                   //Verifica si la linea ya existe en la tabla de hash de las lineas
+                        clave = lineas.get(tipo);                   //Si ya existe, buscamos su clave.
                 
-                    }else{
-                        clave = contador ;
-                        lineas.put(tipo,contador);
+                    }else{                                          //En caso de no existir la linea en la tabla, se le asigna una clave,
+                        clave = contador ;                          //se agrega a la tabla de hash (lineas) y
+                        lineas.put(tipo,contador);                  // aumentamos al contador
                         contador += 1;
                     }
 
@@ -471,13 +471,13 @@ public class GrafoDirigido implements Grafo{
             for(Arco a : inducido.listaArcos){
                 int tipo = a.obtenerTipo();
 
-                if(!inducido.lineas.contains(tipo)){
-                    aEliminar.add(a);
+                if(!inducido.lineas.contains(tipo)){            //Buscamos aquellas lineas que no pertenezcan al grafo inducido y las agregamos a
+                    aEliminar.add(a);                           //la lista de lineas que vamos a eliminar
                 }
             }
 
             for(Arco b : aEliminar){
-                inducido.eliminarArco(b);
+                inducido.eliminarArco(b);                        //Eliminamos todas las lineas de nuestra lista aEliminar que esten en el inducido
             }
             
             lector.close();
@@ -694,7 +694,7 @@ public class GrafoDirigido implements Grafo{
     //Se crea un nuevo grafo y se recorre el grafo original. En primer lugar, se recorre la lista de listas, solo importando el representante de cada lista
     // y buscando sus atributos, los cuales se pasaran por valor al nuevo grafo, creando nuevos vertices en el.
     //Luego, recorremos la lista de arcos y pasamos los atributos del grafo original por valor, creando nuevos arcos en el grafo clonado.
-    //Retirnamos el grafo.
+    //Retionamos el grafo.
     @Override
     public Grafo clonar(){
 

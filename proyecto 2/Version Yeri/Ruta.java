@@ -17,8 +17,8 @@ public class Ruta {
 
     public void cargarRutaD(Stack<Arco> caminoActual){
         
-        recorrido.clear();
-        for(Arco a : caminoActual){
+        recorrido.clear();                  //Este metodo es utilizado cuando vamos a reemplazar la ruta anterior por una mejor.
+        for(Arco a : caminoActual){         //Para ello, es necesario borrar la ruta anterior en su totalidad.
             recorrido.add(a);
         }
 

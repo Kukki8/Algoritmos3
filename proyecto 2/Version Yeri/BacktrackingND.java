@@ -5,8 +5,8 @@ public class BacktrackingND{
 	/*Atributos de la Clase BacktrackingD:
 	 * GrafoDirigido: GrafoNoDirigido(representacion del mapa)
 	 * tipos: lista enlazada que posee los tipos de las lineas
-	 * transbordoActual: Cantidad de vertices (estaciones) del grafo(Mapa)
-	 * visitados: Tabla de hash de interos para guardar los vertices vicitados (estaciones)
+	 * transbordoActual: Cantidad de vertices (estaciones) de la ruta actual
+	 * visitados: Tabla de hash de enteros para guardar los vertices visitados (estaciones)
 	 * ruta: objeto ruta(para guardar la posible ruta)
 	 * 
 	 */
@@ -57,7 +57,7 @@ public class BacktrackingND{
         }
         return ruta;
     }
-	// metodo que utiliza el metodo anterior y crea la mejor ruta con menos transbordos posibles(Backtracking)
+	// metodo que utiliza el metodo anterior y crea la mejor ruta con menos transbordos posibles(Backtracking)/Aplicamos DFS Recursivo
     public void hacerDFS(int pin, int pfin, int transbordos, int tipo){
 
         if(pin == pfin){
