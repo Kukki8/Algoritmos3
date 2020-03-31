@@ -27,10 +27,10 @@ MVictoria: .asciiz "Usted ha ganado!"
 
 #Serpiente
 
-SCabezaX: .word 21
+SCabezaX: .word 16
 SCabezaY: .word 16
-SColaX: .word 21
-SColaY: .word 19
+SColaX: .word 16
+SColaY: .word 20
 
 #Manzana
 
@@ -40,6 +40,8 @@ ManzanaY: .word
 .text
 
 main:
+
+.include "TadLista.s"
 
 ###################################################
 #Seccion lectura cambio de variables por el usuario
@@ -128,23 +130,19 @@ PintarCabeza:
 	lw $a1, SCCabeza
 	jal Colorear
 
-PintarMedio:
 
-	lw $a0, SCabezaY		#Primer porcion del medio
-	add $a0, $a0, 1
+PintarMedio:					#Ciclo para pintar seccion del medio (3 caracteres)
+	li $t0, 1
+PintarMedio_loop:
+	lw $a0, SCabezaY
 	lw $a1, SCabezaX
+	add $a0, $a0, $t0
 	jal AlinearDireccion
 	move $a0, $v0
 	lw $a1, SCCola
 	jal Colorear
-	
-	lw $a0, SCabezaY		#Segunda porcion del medio
-	add $a0, $a0, 2
-	lw $a1, SCabezaX
-	jal AlinearDireccion
-	move $a0, $v0
-	lw $a1, SCCola
-	jal Colorear
+	add $t0, $t0, 1
+	bne $t0, 4, PintarMedio_loop
 	
 	
 PintarCola:
