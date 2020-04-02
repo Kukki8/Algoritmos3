@@ -13,6 +13,7 @@ CPared: .word	0xCCCCFF
 SCCabeza: .word	0x006633
 SCCola: .word  0x009900
 CManzanas: .word 0xFF3333
+Negro: .word 0x000000
 
 #Stats
 
@@ -41,7 +42,7 @@ ManzanaY: .word
 
 main:
 
-.include "TadLista.s"
+###.include "TadLista.s"
 
 ###################################################
 #Seccion lectura cambio de variables por el usuario
@@ -184,9 +185,8 @@ PintarManzana:
 ###################################################
 #********************Logica***********************#
 ###################################################
-
-
-
+li $a0, 6
+jal MoverhaciaArriba
 
 #----------------------x-------------------------#
 li $v0, 10
@@ -209,6 +209,43 @@ Colorear:
 
 
 
-
+MoverhaciaArriba:
+sw $fp, ($sp)
+move $fp, $sp
+addiu $sp, $sp, -4
+# cuerpo de la funcion
+	move $t3, $a0
+	li $t4, 1
+loop1:	beq $t3, $t4  finloop
+	lw $a0, SCabezaY
+	lw $a1, SCabezaX
+	move $a2, $a0
+	add $a0, $a0, -1
+	sw $a0, SCabezaY
+	jal AlinearDireccion
+	move $a0, $v0
+	lw $a1, SCCabeza
+	jal Colorear
+	
+	move $a0, $a2
+	lw $a1, SCabezaX
+	jal AlinearDireccion
+	move $a0, $v0
+	lw $a1, SCCola
+	jal Colorear
+	
+	lw $a0, SColaY
+	lw $a1, SColaX
+	add $a3, $a0, -1
+	sw $a3, SColaY
+	jal AlinearDireccion
+	move $a0,$v0
+	lw $a1, Negro
+	jal Colorear
+	
+	add $t3, $t3, 1
+	b loop1
+finloop:	
+	jr $ra
 
 
