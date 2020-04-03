@@ -17,9 +17,11 @@ Negro: .word 0x000000
 
 #Stats
 
+Puntuacion: .word 0
 Aumentopuntos: .word 10
 SVelocidad: .word 200
-Metas: .word 100 , 250 , 500 
+Metas: .word 100 , 250 , 500
+DireccionActual: .word 119
 
 #Mensajes
 
@@ -164,7 +166,8 @@ UbicarManzana:
 	syscall				#Llamamos nuevamente para generar numero random para la cordenada Y
 	addiu $a0, $a0, 1		#Mismo caso anterior, aseguramos que no quede en el borde inferior
 	sw $a0, ManzanaY
-
+	
+	
 #----------------------x-------------------------#
 	#Pintar Manzana en posicion inicial
 #----------------------x-------------------------#
@@ -181,7 +184,7 @@ PintarManzana:
 					#Por lo tanto, buscamos una nueva direccion.
 	lw $a1, CManzanas
 	jal Colorear
-	
+
 ###################################################
 #********************Logica***********************#
 ###################################################
@@ -242,18 +245,22 @@ Mover_accion:
 	lw $fp, 8($sp)
 	addiu $sp, $sp , 8
 	
-	addiu $sp, $sp, -12	#Prologo
-	sw $fp, 12($sp)
-	sw $ra, 8($sp)
-	sw $a0, 4($sp)
-	addiu $fp , $sp, 12
+	addiu $sp, $sp, -20	#Prologo
+	sw $fp, 20($sp)
+	sw $ra,16($sp)
+	sw $a0, 12($sp)
+	sw $t0, 8($sp)
+	sw $t1, 4($sp)
+	addiu $fp , $sp, 20
 	
 	jal ChequearColisiones
 	
-	lw $a0, 4($sp)		#Epilogo
-	lw $ra, 8($sp)		
-	lw $fp, 12($sp)
-	addiu $sp, $sp , 12
+	lw $t1, 4($sp)		#Epilogo
+	lw $t0, 8($sp)
+	lw $a0, 12($sp)
+	lw $ra,16($sp)		
+	lw $fp, 20($sp)
+	addiu $sp, $sp , 20
 	
 	lw $a1, SCCabeza
 	
@@ -355,7 +362,7 @@ Mover_accion:
 	jr $ra
 
 #----------------------x-------------------------#
-		#Chuequear Colisiones
+		#Chequear Colisiones
 #----------------------x-------------------------#
 
 ChequearColisiones:
@@ -369,12 +376,12 @@ ChequearColisiones:
 
 	lw $s0, ($a0)					#Cargamos en $t0 el contenido de la direccion a verificar
 	beqz $s0, ChequearColisiones_fin		#Verificamos si el espacio a moverse esta vacio
-	lw $s1, CManzanas				#Cargamos en $t1 el color de las manzanas.
-	beq $s0, $s1, IncrementarPuntuacion		#Verificamos si la cabeza colisiono con una manzana. De ser asi, salta a IncPuntuacion
 	lw $s1, SCCola					#Cargamos en $t1 el color de la cola.
 	beq $s0, $t1, FinJuego				#Verificamos si la cabeza colisiono con el cuerpo. De ser asi, salta a FinJuego
 	lw $s1, CPared					#Cargamos en $t1 el color de  las paredes.
 	beq $s0, $s1, FinJuego				#Verificamos si la cabeza colisiono con una pared. De ser asi, salta a FinJuego
+	lw $s1, CManzanas				#Cargamos en $t1 el color de las manzanas.
+	beq $s0, $s1, IncrementarPuntuacion		#Verificamos si la cabeza colisiono con una manzana. De ser asi, salta a IncPuntuacion
 	
 ChequearColisiones_fin:
 
@@ -414,5 +421,130 @@ Colorear:
 
 IncrementarPuntuacion:
 	
+	lw $s0, Aumentopuntos	#Cargo los puntos a aumentar en $s0
+	lw $s1, Puntuacion	#Cargo en $s1, la puntuacion actual
+	add $s1, $s1, $s0	#Actualizo la puntuacion, sumando la puntuacion actual + los puntos a aumentar
+	#chequear metas
+	sw $s1, Puntuacion	#Guardo la nueva puntuacion como puntuacion actual.
+	
+	lw $s0, SColaY		#Cargo en $s0 la coordenada actual X de la cola
+	lw $s1, SColaX		#Cargo en $s1 la coordenada actual Y de la cola
+	lw $s2, DireccionActual		#Cargo en $s2 la orientacion actual de la serpiente
+	move $a0, $s2
+	
+	addiu $sp, $sp, -8 		#Prologo
+	sw $fp, 8($sp)
+	sw $ra, 4($sp)
+	addiu $fp , $sp, 8
+	
+	jal ObtenerCodigo		#Saltamos a obtener el codigo
+	move $a0, $v0		#Movemos a $a0, el cambio a efectuarse en la coordenada Y
+	move $a1, $v1		#Movemos a $a1, el cambio a efectuarse en la coordenada X
+	
+	lw $ra, 4($sp)			#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp , $sp, 8
+	
+	mul $a0 , $a0, -1	#Cambiamos ambos cambios a realizar por el contrario, ya que la cola estara en la direccion contraria a la trayectoria de la serpiente
+	mul $a1 , $a1, -1
+	add $s0, $s0, $a0	#Sumamos en la coordenada actual Y de la cola, el cambio correspondiente en la coordenada Y
+	add $s1, $s1, $a1	#Sumamos en la coordenada actual X de la cola, el cambio correspondiente en la coordenada X
+	
+	sw $s0, SColaY		#Guardamos la nueva coordenada Y de la cola
+	sw $s1, SColaX		#Guardamos la nueva coordenada X de la cola
+	move $a0, $s0		#Movemos la coord Y a $ao
+	move $a1, $s1		#Movemos la coord X a $a1
+	
+	addiu $sp, $sp, -8	#Prologo
+	sw $fp, 8($sp)
+	sw $ra, 4($sp)
+	addiu $fp , $sp, 8
+	
+	jal AlinearDireccion 	#Saltamos a alinear direccion
+	
+	move $a0, $v0		#Recuperamos la nueva direccion
+	
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	lw $a1, SCCola		#Cargamos en $a1, el color de la cola
+	
+	addiu $sp, $sp, -20  	#Prologo
+	sw $fp, 20($sp)
+	sw $ra, 16($sp)
+	sw $a0, 12($sp)
+	sw $a1, 8($sp)
+	sw $a2, 4($sp)
+	addiu $fp , $sp, 20
+	
+	jal Colorear		#Saltamos a colorear
 
+	lw $a2, 4($sp)		#Epilogo
+	lw $a1, 8($sp)	
+	lw $a0, 12($sp)
+	lw $ra, 16($sp)
+	lw $fp, 20($sp)
+	addiu $sp , $sp, 20
+	
+	b ChequearColisiones_fin
 
+ObtenerCodigo:
+
+	addiu $sp, $sp, -8	#Prologo
+	sw $fp, 8($sp)
+	sw $ra, 4($sp)
+	addiu $fp , $sp, 8
+	
+	move $t0, $a0
+	beq $t0, 119, ObtenerCodigo_W
+	beq $t0, 115, ObtenerCodigo_S
+	beq $t0, 97, ObtenerCodigo_A
+	beq $t0, 100, ObtenerCodigo_D
+	
+	
+ObtenerCodigo_W:		#La serpiente va hacia arriba
+
+	li $v0,	-1		#Cambio a ejecutar en la coordenada Y
+	li $v1,	0		#Cambio a ejecutar en la coordenada X
+	
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	jr $ra
+	
+ObtenerCodigo_S:		#La serpiente va hacia abajo
+
+	li $v0,	1		#Cambio a ejecutar en la coordenada Y
+	li $v1,	0		#Cambio a ejecutar en la coordenada X
+	
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	jr $ra
+	
+ObtenerCodigo_A:		#La serpiente va hacia la izquierda
+
+	li $v0,	0		#Cambio a ejecutar en la coordenada Y
+	li $v1,	-1		#Cambio a ejecutar en la coordenada X
+
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	jr $ra
+	
+ObtenerCodigo_D:		#La serpiente va hacia la derecha
+
+	li $v0,	0		#Cambio a ejecutar en la coordenada Y
+	li $v1,	1		#Cambio a ejecutar en la coordenada X
+
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	jr $ra
+	
+	
