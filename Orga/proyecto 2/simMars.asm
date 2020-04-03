@@ -185,14 +185,175 @@ PintarManzana:
 ###################################################
 #********************Logica***********************#
 ###################################################
-li $a0, 6
-jal MoverhaciaArriba
+#1)Chequear los inputs
+#2)Actualizar datos(Mover/calcular colisiones)
+#3)Pintar
+#4)Sumar puntos/Incremento tamano
+#5)Tiempo de espera que genera un frame (Timer)
+#6)Loop
+
+#----------------------x-------------------------#
+		#Movimientos
+#----------------------x-------------------------#
+
+li $a0, -1					#PRUEBA
+li $a1, 0
+jal Mover_accion
+
+li $a0, -1
+li $a1, 0
+jal Mover_accion
+
+li $a0, -1					#PRUEBA
+li $a1, 0
+jal Mover_accion
+
+li $a0, 0
+li $a1, 1
+jal Mover_accion
+
+li $a0, 1
+li $a1, 0
+jal Mover_accion				#PRUEBA
 
 #----------------------x-------------------------#
 li $v0, 10
 syscall
 #----------------------x-------------------------#
 
+Mover_accion:
+	addiu $sp, $sp, -8	#Prologo
+	sw $fp, 8($sp)
+	sw $ra, 4($sp)
+	addiu $fp , $sp, 8
+	
+	move $t0, $a0		#Muevo a $t0 la coord en Y a donde voy
+	move $t1, $a1		#Muevo a $t1 la coord X a donde voy
+	
+	
+	lw $s0, SCabezaY	#Cargamos en $s0 la coord inicial en Y de la cabeza
+	lw $s1, SCabezaX	#Cargamos en $s1 la coord inicial en X de la cabeza
+	#move $a2, $s0
+	add $t2, $s0, $t0	#Sumo a la coord Y de la cabeza el cambio a realizar
+	add $t3, $s1, $t1	#Sumo a la coord X de la cabeza el cambio a realizar
+	sw $t2, SCabezaY	#Guardo la nueva coord Y que tendra la cabeza
+	sw $t3, SCabezaX	#Guardo la nueva coord X que tendra la cabeza
+	move $a0, $t2
+	move $a1, $t3
+	
+	addiu $sp, $sp, -8	#Prologo
+	sw $fp, 8($sp)
+	sw $ra, 4($sp)
+	addiu $fp , $sp, 8
+	
+	jal AlinearDireccion
+	move $a0, $v0
+	
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+
+	lw $a1, SCCabeza
+	
+	addiu $sp, $sp, -20  	#Prologo
+	sw $fp, 20($sp)
+	sw $ra, 16($sp)
+	sw $a0, 12($sp)
+	sw $a1, 8($sp)
+	sw $a2, 4($sp)
+	addiu $fp , $sp, 20
+	
+	jal Colorear
+	
+	lw $a2, 4($sp)		#Epilogo
+	lw $a1, 8($sp)	
+	lw $a0, 12($sp)
+	lw $ra, 16($sp)
+	lw $fp, 20($sp)
+	addiu $sp , $sp, 20
+	
+	move $a0, $s0		#Pos antigua de la cabeza en Y
+	move $a1, $s1		#Pos antigua de la cabeza en X
+	
+	addiu $sp, $sp, -8	#Prologo
+	sw $fp, 8($sp)
+	sw $ra, 4($sp)
+	addiu $fp , $sp, 8
+	
+	jal AlinearDireccion
+	move $a0, $v0
+	
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	lw $a1, SCCola
+	
+	addiu $sp, $sp, -20  	#Prologo
+	sw $fp, 20($sp)
+	sw $ra, 16($sp)
+	sw $a0, 12($sp)
+	sw $a1, 8($sp)
+	sw $a2, 4($sp)
+	addiu $fp , $sp, 20
+	
+	jal Colorear
+
+	lw $a2, 4($sp)		#Epilogo
+	lw $a1, 8($sp)	
+	lw $a0, 12($sp)
+	lw $ra, 16($sp)
+	lw $fp, 20($sp)
+	addiu $sp , $sp, 20
+	
+	lw $a0, SColaY		#Cola original
+	lw $a1, SColaX
+	move $t2, $a0
+	move $t3, $a1		
+	add $t4, $a0, $t0	#Calculo la dif entre la coord Y original y la nueva en $t4
+	add $t5 , $a1, $t1	#Calculo la dif entre la coord X original y la nueva en $t
+	sw $t4, SColaY		#Guardo la nueva coord Y de la cola
+	sw $t5, SColaX		#Guardo la nueva coord X de la cola
+	
+	addiu $sp, $sp, -8	#Prologo
+	sw $fp, 8($sp)
+	sw $ra, 4($sp)
+	addiu $fp , $sp, 8
+	
+	jal AlinearDireccion
+	move $a0,$v0
+	
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	lw $a1, Negro
+	
+	addiu $sp, $sp, -20  	#Prologo
+	sw $fp, 20($sp)
+	sw $ra, 16($sp)
+	sw $a0, 12($sp)
+	sw $a1, 8($sp)
+	sw $a2, 4($sp)
+	addiu $fp , $sp, 20
+	
+	jal Colorear
+
+	lw $a2, 4($sp)		#Epilogo
+	lw $a1, 8($sp)	
+	lw $a0, 12($sp)
+	lw $ra, 16($sp)
+	lw $fp, 20($sp)
+	addiu $sp , $sp, 20
+	
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	jr $ra
+
+
+#-----------------------------------------------------------------------------
 
 AlinearDireccion:
 	lw $v0 , M		#Cargar el ancho de la pantalla en $v0
@@ -208,44 +369,5 @@ Colorear:
 	jr $ra
 
 
-
-MoverhaciaArriba:
-sw $fp, ($sp)
-move $fp, $sp
-addiu $sp, $sp, -4
-# cuerpo de la funcion
-	move $t3, $a0
-	li $t4, 1
-loop1:	beq $t3, $t4  finloop
-	lw $a0, SCabezaY
-	lw $a1, SCabezaX
-	move $a2, $a0
-	add $a0, $a0, -1
-	sw $a0, SCabezaY
-	jal AlinearDireccion
-	move $a0, $v0
-	lw $a1, SCCabeza
-	jal Colorear
-	
-	move $a0, $a2
-	lw $a1, SCabezaX
-	jal AlinearDireccion
-	move $a0, $v0
-	lw $a1, SCCola
-	jal Colorear
-	
-	lw $a0, SColaY
-	lw $a1, SColaX
-	add $a3, $a0, -1
-	sw $a3, SColaY
-	jal AlinearDireccion
-	move $a0,$v0
-	lw $a1, Negro
-	jal Colorear
-	
-	add $t3, $t3, 1
-	b loop1
-finloop:	
-	jr $ra
 
 
