@@ -45,8 +45,7 @@ Llamado:
 	addiu $fp , $sp, 32
 	
 	
-	li $v0, 0
-	lw $s5, 4($sp)			#Epilogo modificado
+	lw $s5, 4($sp)			#Epilogo
 	lw $s4, 8($sp)
 	lw $s3, 12($sp)
 	lw $s2, 16($sp)

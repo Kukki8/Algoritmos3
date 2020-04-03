@@ -42,8 +42,6 @@ ManzanaY: .word
 
 main:
 
-###.include "TadLista.s"
-
 ###################################################
 #Seccion lectura cambio de variables por el usuario
 #Inicializacion customizada
@@ -160,7 +158,7 @@ PintarCola:
 
 UbicarManzana:
 	li $v0, 42
-	li $a1 ,62			#Limite superior de manera de que no quede en el borde der (O proximamente, en el borde sup)
+	li $a1 ,30			#Limite superior de manera de que no quede en el borde der (O proximamente, en el borde sup)
 	addiu $a0, $a0, 1		#Ya que no podemos determinar el limite inferior, debemos asegurar que nunca quede en el borde iz.Ademas, no tomamos en consideracion valores neg
 	sw $a0, ManzanaX		#Asignamos el num random a la coordenada X de la manzana
 	syscall				#Llamamos nuevamente para generar numero random para la cordenada Y
@@ -174,51 +172,43 @@ UbicarManzana:
 PintarManzana:
 	lw $a0, ManzanaX
 	lw $a1, ManzanaY
-	#chequear si colisiona con la serpiente
-	
+
 	jal AlinearDireccion
 	move $a0, $v0
+	
+	lw $t0, ($a0)			#Chequeamos si colisiona con la serpiente
+	bnez $t0, UbicarManzana		#Si la dir dada es diferente a 0, quiere decir que choca con la serpiente (ya que ya nos aseguramos de que no ocurriera con las paredes)
+					#Por lo tanto, buscamos una nueva direccion.
 	lw $a1, CManzanas
 	jal Colorear
 	
-
 ###################################################
 #********************Logica***********************#
 ###################################################
+main_game:
+	li $a0, -1					
+	li $a1, 0
+	jal Mover_accion
+	jal Frame
+	
+	b main_game
+	
 #1)Chequear los inputs
-#2)Actualizar datos(Mover/calcular colisiones)
+#2)Actualizar datos(Mover/calcular colisiones) (Y)
 #3)Pintar
 #4)Sumar puntos/Incremento tamano
-#5)Tiempo de espera que genera un frame (Timer)
-#6)Loop
+#5)Tiempo de espera que genera un frame (Timer)(Y)
+#6)Loop (Y)
+
+#----------------------x-------------------------#
+FinJuego:
+li $v0, 10
+syscall
+#----------------------x-------------------------#
+
 
 #----------------------x-------------------------#
 		#Movimientos
-#----------------------x-------------------------#
-
-li $a0, -1					#PRUEBA
-li $a1, 0
-jal Mover_accion
-
-li $a0, -1
-li $a1, 0
-jal Mover_accion
-
-li $a0, -1					#PRUEBA
-li $a1, 0
-jal Mover_accion
-
-li $a0, 0
-li $a1, 1
-jal Mover_accion
-
-li $a0, 1
-li $a1, 0
-jal Mover_accion				#PRUEBA
-
-#----------------------x-------------------------#
-li $v0, 10
-syscall
 #----------------------x-------------------------#
 
 Mover_accion:
@@ -233,7 +223,6 @@ Mover_accion:
 	
 	lw $s0, SCabezaY	#Cargamos en $s0 la coord inicial en Y de la cabeza
 	lw $s1, SCabezaX	#Cargamos en $s1 la coord inicial en X de la cabeza
-	#move $a2, $s0
 	add $t2, $s0, $t0	#Sumo a la coord Y de la cabeza el cambio a realizar
 	add $t3, $s1, $t1	#Sumo a la coord X de la cabeza el cambio a realizar
 	sw $t2, SCabezaY	#Guardo la nueva coord Y que tendra la cabeza
@@ -252,7 +241,20 @@ Mover_accion:
 	lw $ra, 4($sp)		#Epilogo
 	lw $fp, 8($sp)
 	addiu $sp, $sp , 8
-
+	
+	addiu $sp, $sp, -12	#Prologo
+	sw $fp, 12($sp)
+	sw $ra, 8($sp)
+	sw $a0, 4($sp)
+	addiu $fp , $sp, 12
+	
+	jal ChequearColisiones
+	
+	lw $a0, 4($sp)		#Epilogo
+	lw $ra, 8($sp)		
+	lw $fp, 12($sp)
+	addiu $sp, $sp , 12
+	
 	lw $a1, SCCabeza
 	
 	addiu $sp, $sp, -20  	#Prologo
@@ -352,9 +354,51 @@ Mover_accion:
 	
 	jr $ra
 
+#----------------------x-------------------------#
+		#Chuequear Colisiones
+#----------------------x-------------------------#
 
-#-----------------------------------------------------------------------------
+ChequearColisiones:
 
+	addiu $sp, $sp, -16	#Prologo
+	sw $fp, 16($sp)
+	sw $ra, 12($sp)
+	sw $s0, 8($sp)
+	sw $s1, 4($sp)
+	addiu $fp , $sp, 16
+
+	lw $s0, ($a0)					#Cargamos en $t0 el contenido de la direccion a verificar
+	beqz $s0, ChequearColisiones_fin		#Verificamos si el espacio a moverse esta vacio
+	lw $s1, CManzanas				#Cargamos en $t1 el color de las manzanas.
+	beq $s0, $s1, IncrementarPuntuacion		#Verificamos si la cabeza colisiono con una manzana. De ser asi, salta a IncPuntuacion
+	lw $s1, SCCola					#Cargamos en $t1 el color de la cola.
+	beq $s0, $t1, FinJuego				#Verificamos si la cabeza colisiono con el cuerpo. De ser asi, salta a FinJuego
+	lw $s1, CPared					#Cargamos en $t1 el color de  las paredes.
+	beq $s0, $s1, FinJuego				#Verificamos si la cabeza colisiono con una pared. De ser asi, salta a FinJuego
+	
+ChequearColisiones_fin:
+
+	lw $s1, 4($sp)			#Epilogo
+	lw $s0, 8($sp)
+	lw $ra, 12($sp)
+	lw $fp, 16($sp)
+	addiu $sp, $sp , 16
+	
+	jr $ra
+
+#----------------------x-------------------------#
+		#Actualizacion
+#----------------------x-------------------------#
+	
+Frame:
+	lw $a0, SVelocidad
+	li $v0, 32
+	syscall
+	jr $ra
+
+#----------------------x-------------------------#
+		#Funciones de ayuda
+#----------------------x-------------------------#
 AlinearDireccion:
 	lw $v0 , M		#Cargar el ancho de la pantalla en $v0
 	mul $v0, $v0, $a0	#Nos movemos por el tablero, desplazandonos casilla por casilla hasta conseguir la fila deseada (Posicion y)
@@ -368,6 +412,7 @@ Colorear:
 	sw $a1, ($a0)		#Colocamos el color en el pixel
 	jr $ra
 
-
+IncrementarPuntuacion:
+	
 
 
