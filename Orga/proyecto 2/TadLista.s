@@ -17,13 +17,13 @@ list_crear:
 	sw $ra, 8($sp)
 	sw $s0, 4($sp)
 	addiu $fp , $sp, 12
-#cuerpo de la funcion:
-	move $t0, $a0	#cargamos en $t0 la direccion inicial de la lista
-	move $t1, $a1	#cargamos en $t1 en tamano de la lista
+
+	move $t0, $a0	#Cargamos en $t0 la direccion inicial de la lista
+	move $t1, $a1	#Cargamos en $t1 en tamano de la lista
 	li $v0, 9 
-	li $a0, 8     	#reserva espacio del header
+	li $a0, 12     	#Reserva espacio del header
 	syscall		
-	move $s0, $v0	# guarda en $s0 la direccion del header
+	move $s0, $v0	#Guarda en $s0 la direccion del header
 	move $a0, $t0	
 	
 	addiu $sp, $sp, -24    	#Prologo
@@ -47,17 +47,18 @@ list_crear:
 	addiu $sp , $sp, 24
 	
 	sw $t2, ($s0)		#guardo la direccion de la cabeza en la primera pos del header
-	li $t3, 1		#Cargaos tamano inicial (solo con header)
-	sw $t3, 4($s0) 		#guardo el tamano de la lista en la primera pos del header
+	li $t3, 1		#Cargamos tamano inicial (solo con header)
+	sw $t3, 4($s0) 		#Guardo el tamano de la lista en la primera pos del header
+	sw $t2, 8($s0)		#guardo la direccion de la cola en la ultima pos del header
 	
 	add $t3, $t1, -1
 	lw $t4, ($t2)		#Cargamos el valor de la cabeza de la lista (primer nodo)
 list_crear_loop:
 	beqz $t3, list_crear_fin
-	add $t4, $t4, 4		#Valor del siguiente nodo
+	add $t4, $t4, 128		#Valor del siguiente nodo
 	
-	lw $a0, ($s0)		#Cargamos en $a0 la dir de la lista					##REVISAR##
-	lw $a1, ($t4)		#Cargamos el valor del nodo nuevo como argumento para list_insertar    ##REVISAR##
+	move $a0, $s0		#Cargamos en $a0 la dir de la lista					##REVISAR##
+	move $a1, $t4		#Cargamos el valor del nodo nuevo como argumento para list_insertar    ##REVISAR##
 
 	addiu $sp, $sp, -44    	#Prologo
 	sw $fp, 44($sp)
@@ -92,7 +93,8 @@ list_crear_loop:
 	b list_crear_loop
 	
 list_crear_fin:
-
+	move $v0, $s0
+	
 	lw $s0, 4($sp)		#Epilogo
 	lw $ra, 8($sp)
 	lw $fp, 12($sp)
@@ -134,7 +136,7 @@ list_crear_nodo:
 # Funcion list_insertar
 # Descripcion: funcion que inserta un elemento del tipo element en la lista
 # Parametros: $a0, direccion de la lista,  $a1= valor elemento a insertar
-# Retorna: $v0 el valor de 0 si se inserta el elemento bien $v1 la direccion de la lista
+# Retorna: $v0 el valor de 0 si se inserta el elemento bien, $v1 la direccion de la lista
 list_insertar:
 
 	addiu $sp, $sp, -8	#Prologo
@@ -142,18 +144,18 @@ list_insertar:
 	sw $ra, 4($sp)
 	addiu $fp , $sp, 8
 	
-#cuerpo de la funcion
-	move $t0, $a0 # guarda el apuntador de la direccion de la lista en $t3
+	move $t0, $a0		 #Guarda el apuntador de la direccion de la lista en $t0
+	move $a0, $a1		#Guardo en $a0, el valor/direccion del elemento a insertar
 	
 	addiu $sp, $sp, -16    	#Prologo
-	sw $fp, 44($sp)
-	sw $ra, 40($sp)
-	sw $a0, 36($sp)
-	sw $t0, 24($sp)
+	sw $fp, 16($sp)
+	sw $ra, 12($sp)
+	sw $a0, 8($sp)
+	sw $t0, 4($sp)
 	addiu $fp , $sp, 16
 	
 	jal list_crear_nodo
-	move $t1, $v0		#Movemos a $t5 la dir del nuevo nodo
+	move $t1, $v0		#Movemos a $t1 la dir del nuevo nodo
 	
 	lw $t0, 4($sp)		#Epilogo
 	lw $a0, 8($sp)
@@ -161,7 +163,7 @@ list_insertar:
 	lw $fp, 16($sp)
 	addiu $sp , $sp, 16
 	
-	lw $t2, ($t0)		#Cargo en $t2 la direccion del nodo
+	lw $t2, ($t0)		#Cargo en $t2 la direccion del primer nodo
 	lw $t3, 4($t2)		#Cargo en $t3 el nodo siguiente 
 	
 list_insertar_loop: 	
@@ -175,6 +177,7 @@ list_insertar_final:
 	lw $t4, 4($t0)
 	addi $t4, $t4, 1
 	sw $t4, 4($t0)
+	sw $t1, 8($t0)
 	
 	lw $ra, 4($sp)		#Epilogo
 	lw $fp, 8($sp)
