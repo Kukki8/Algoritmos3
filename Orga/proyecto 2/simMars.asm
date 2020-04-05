@@ -14,6 +14,7 @@ SCCabeza: .word	0x006633
 SCCola: .word  0x009900
 CManzanas: .word 0xFF3333
 Negro: .word 0x000000
+Rosa: .word 0xCC0066
 
 #Stats
 
@@ -22,18 +23,19 @@ Aumentopuntos: .word 10
 SVelocidad: .word 200
 Metas: .word 100 , 250 , 500
 DireccionActual: .word 119
+Inicio: .word 0
 
 #Mensajes
 
 MPerdida: .asciiz "Usted ha perdido... Su puntuacion fue: "
-MVictoria: .asciiz "Usted ha ganado!"
-
+MQuit: .asciiz "Gracias por jugar! Su puntuacion fue: "
 #Serpiente
 
 SCabezaX: .word 16
 SCabezaY: .word 16
 SColaX: .word 16
 SColaY: .word 20
+LSerpiente: .word 0
 
 #Manzana
 
@@ -48,7 +50,7 @@ main:
 #Seccion lectura cambio de variables por el usuario
 #Inicializacion customizada
 ###################################################
-
+	
 ###################################################
 #********************Pintando********************#
 ###################################################
@@ -128,6 +130,23 @@ PintarCabeza:
 	lw $a1 ,SCabezaX
 	jal AlinearDireccion
 	move $a0, $v0
+	li $a1, 5
+	
+	addiu $sp, $sp, -12  		#Prologo
+	sw $fp, 12($sp)
+	sw $ra, 8($sp)
+	sw $a0, 4($sp)
+	addiu $fp , $sp,12
+	
+	jal list_crear			#Creamos nuestra lista, con posicion inicial igual a la dir de la cabeza
+	move $a2, $v0			#Movemos a $a2 la dir del header de la lista
+	sw $a2, LSerpiente		#Guardamos la dir del header en LSerpiente
+	
+	lw $a0, 4($sp)			#Epilogo
+	lw $ra, 8($sp)
+	lw $fp, 12($sp)
+	addiu $sp , $sp, 12
+			
 	lw $a1, SCCabeza
 	jal Colorear
 
@@ -183,33 +202,119 @@ PintarManzana:
 	bnez $t0, UbicarManzana		#Si la dir dada es diferente a 0, quiere decir que choca con la serpiente (ya que ya nos aseguramos de que no ocurriera con las paredes)
 					#Por lo tanto, buscamos una nueva direccion.
 	lw $a1, CManzanas
+	
 	jal Colorear
-
+	
+	lw $s0, Inicio
+	bnez $s0, ChequearColisiones_fin
+	
+	
 ###################################################
 #********************Logica***********************#
 ###################################################
+
+	li $a0, 1			#Cargamos 1 en $a0
+	sw $a0, Inicio			#Cambiamos el valor de Inicio, para indicar que ya no estamos en el proceso de inicializacion del juego
 main_game:
-	li $a0, -1					
-	li $a1, 0
-	jal Mover_accion
-	jal Frame
+
+
+	jal ChequearInput		#Saltamos a chequear si hubo un input o no
 	
-	b main_game
 	
-#1)Chequear los inputs
+	move $a0, $v0			#Movemos a $a0 la nueva o misma coord Y,dependiendo de si hubo un cambio de orientacio o no.	
+	move $a1, $v1			#Movemos a $a1 la nueva o misma coord X,dependiendo de si hubo un cambio de orientacio o no.
+	
+	jal Mover_accion		#Saltamos a la funcion de movimiento
+	jal Frame			#Saltamos al tiempo de espera de refrescamiento
+	
+	b main_game			#Empezamos nuevamente el ciclo del juego
+		
+########COSAS POR HACER#############
+#0)Customizacion de dimensiones	
+#1)Chequear los inputs:
+  #3.1)Pausa (Y)
+  #3.2)Mejorar Quit (Puntuacion (Y)/Musica(?))
+  #3.3)Secuencia de perdida (Y)
+  #3.4)Secuencia de Victoria (?)
+  #3.3)Validez (otros aparte de wasdpd (Y) y que no se atraviese (Y))
 #2)Actualizar datos(Mover/calcular colisiones) (Y)
-#3)Pintar
+#3)Pintar (no oruga)(Y)
 #4)Sumar puntos/Incremento tamano
+   #4.1)Repintar manzana(Y)
+   #4.3)Aumentar tamano (Y) ##PROBAR SLEEP!!
 #5)Tiempo de espera que genera un frame (Timer)(Y)
-#6)Loop (Y)
+#6)Loop (Y)'
+
+#7)Excepciones
+
+#Extra
+#1)Chequear Milestone
+#2)Obstaculos
+#3)Portales
 
 #----------------------x-------------------------#
-FinJuego:
-li $v0, 10
-syscall
+FinJuego_Perdida:
+	
+	la $a0, MPerdida	#En caso de haber perdido, cargamos en $a0 la direccion del mensaje de perdida
+	
+FinJuego_Puntuacion:
+
+	lw $a1, Puntuacion	#Cargamos la puntuacion final en $a1
+	li $v0, 56		#Imprimimos mensaje correspondiente y puntuacion final
+	syscall
+	
+	
+	li $v0, 10		#Llamada a finalizar el programa
+	syscall
+	
+FinJuego_Quit:
+	la $a0, MQuit		#En caso de haber renunciado, cargamos en $a0 la direccion del mensaje de perdida
+	b FinJuego_Puntuacion
 #----------------------x-------------------------#
 
+#----------------------x-------------------------#
+		#Chequear inputs
+#----------------------x-------------------------#
 
+ChequearInput:
+
+	addiu $sp, $sp, -8	#Prologo
+	sw $fp, 8($sp)
+	sw $ra, 4($sp)
+	addiu $fp , $sp, 8
+	
+	lui $a0, 0xffff
+	lw $t0, 0($a0)
+	andi $t0, $t0, 0x1
+	beqz $t0, ChequearInput_fin_DireccionActual		#Si $t0 es igual a 0, significa que no hay ningun input nuevo, por lo que saltamos a proceso encargado de continuar la orientacion actual
+	lw $v0, 4($a0)						#Si $t0 es dif de 0, cargamos el nuevo input en $v0
+	move $a0, $v0						#Movemos el nuevo input para pasar como argumento
+		
+ChequearInput_fin:
+	
+	addiu $sp, $sp, -12 		#Prologo
+	sw $fp, 12($sp)
+	sw $ra, 8($sp)
+	sw $a0, 4($sp)
+	addiu $fp , $sp, 12
+	
+	jal ObtenerCodigo		#Obtenemos el codigo del input en cuestion
+
+	lw $a0, 4($sp)			#Epilogo
+	lw $ra, 8($sp)
+	lw $fp, 12($sp)
+	addiu $sp , $sp, 12
+
+	lw $ra, 4($sp)		#Epilogo
+	lw $fp, 8($sp)
+	addiu $sp, $sp , 8
+	
+	jr $ra
+	
+ChequearInput_fin_DireccionActual:
+	lw $a0, DireccionActual					#Cargamos en $a0 la direccion actual
+	b ChequearInput_fin					#Procedemos a terminar el chequeo del input
+	
 #----------------------x-------------------------#
 		#Movimientos
 #----------------------x-------------------------#
@@ -222,7 +327,6 @@ Mover_accion:
 	
 	move $t0, $a0		#Muevo a $t0 la coord en Y a donde voy
 	move $t1, $a1		#Muevo a $t1 la coord X a donde voy
-	
 	
 	lw $s0, SCabezaY	#Cargamos en $s0 la coord inicial en Y de la cabeza
 	lw $s1, SCabezaX	#Cargamos en $s1 la coord inicial en X de la cabeza
@@ -239,7 +343,7 @@ Mover_accion:
 	addiu $fp , $sp, 8
 	
 	jal AlinearDireccion
-	move $a0, $v0
+	move $a0, $v0		#Movemos a $a0 nuestra nueva direccion, ya alineada
 	
 	lw $ra, 4($sp)		#Epilogo
 	lw $fp, 8($sp)
@@ -262,99 +366,50 @@ Mover_accion:
 	lw $fp, 20($sp)
 	addiu $sp, $sp , 20
 	
-	lw $a1, SCCabeza
+	lw $s0 , LSerpiente	#Cargamos en $s0, el header de la lista
+	lw $s1, ($s0)		#Cargamos la direccion del primero nodo (cabeza)
+	lw $s2, 4($s0)		#Cargamos el tamano de la lista, para crear nuestro contador
 	
-	addiu $sp, $sp, -20  	#Prologo
-	sw $fp, 20($sp)
-	sw $ra, 16($sp)
-	sw $a0, 12($sp)
-	sw $a1, 8($sp)
-	sw $a2, 4($sp)
-	addiu $fp , $sp, 20
+	lw $s3, ($s1)		#Cargamos la direccion vieja del primer nodo/cabeza de la serpiente en $s3	
+	sw $a0, ($s1)		#Actualizamos la dir de la cabeza con la direccion nueva
+	
+	lw $a1, SCCabeza
 	
 	jal Colorear
 	
-	lw $a2, 4($sp)		#Epilogo
-	lw $a1, 8($sp)	
-	lw $a0, 12($sp)
-	lw $ra, 16($sp)
-	lw $fp, 20($sp)
-	addiu $sp , $sp, 20
+	add $s2, $s2, -1	#Restamos 1 al contador
 	
-	move $a0, $s0		#Pos antigua de la cabeza en Y
-	move $a1, $s1		#Pos antigua de la cabeza en X
-	
-	addiu $sp, $sp, -8	#Prologo
-	sw $fp, 8($sp)
-	sw $ra, 4($sp)
-	addiu $fp , $sp, 8
-	
-	jal AlinearDireccion
-	move $a0, $v0
-	
-	lw $ra, 4($sp)		#Epilogo
-	lw $fp, 8($sp)
-	addiu $sp, $sp , 8
+	lw $s1, 4($s1)		#Cargamos en $s1 la dir del siguiente nodo
+	move $a0, $s3		#Movemos a $a0, la dir vieja de la cabeza, que sera la dir nueva del siguiente nodo
+			
+Mover_accion_loop:
+	beq $s2, 1,  Mover_accion_fin	#Cuando termine de actualizar las direcciones del cuerpo, procedera a actualizar a la cola
+	lw $s3, ($s1)		#Cargamos la direccion vieja del nodo actual de la serpiente en $s3	
+	sw $a0, ($s1)
 	
 	lw $a1, SCCola
 	
-	addiu $sp, $sp, -20  	#Prologo
-	sw $fp, 20($sp)
-	sw $ra, 16($sp)
-	sw $a0, 12($sp)
-	sw $a1, 8($sp)
-	sw $a2, 4($sp)
-	addiu $fp , $sp, 20
+	jal Colorear
+	move $a0, $s3		#Movemos a $a0 la direccion vieja del noo actual, que sera la nueva del proximo nodo
+	
+	lw $s1, 4($s1)		#Cargamos en $s1 la dir del siguiente nodo
+	add $s2, $s2, -1	#Restamos 1 al contador
+	b Mover_accion_loop
+
+Mover_accion_fin:
+
+	lw $s3, ($s1)		#Cargamos la direccion vieja de la cola de la serpiente en $s3	
+	sw $a0, ($s1)		#Actualizamos la direccion de la cola
+	
+	lw $a1, SCCola
 	
 	jal Colorear
-
-	lw $a2, 4($sp)		#Epilogo
-	lw $a1, 8($sp)	
-	lw $a0, 12($sp)
-	lw $ra, 16($sp)
-	lw $fp, 20($sp)
-	addiu $sp , $sp, 20
-	
-	lw $a0, SColaY		#Cola original
-	lw $a1, SColaX
-	move $t2, $a0
-	move $t3, $a1		
-	add $t4, $a0, $t0	#Calculo la dif entre la coord Y original y la nueva en $t4
-	add $t5 , $a1, $t1	#Calculo la dif entre la coord X original y la nueva en $t
-	sw $t4, SColaY		#Guardo la nueva coord Y de la cola
-	sw $t5, SColaX		#Guardo la nueva coord X de la cola
-	
-	addiu $sp, $sp, -8	#Prologo
-	sw $fp, 8($sp)
-	sw $ra, 4($sp)
-	addiu $fp , $sp, 8
-	
-	jal AlinearDireccion
-	move $a0,$v0
-	
-	lw $ra, 4($sp)		#Epilogo
-	lw $fp, 8($sp)
-	addiu $sp, $sp , 8
+	move $a0, $s3		#Movemos a $a0 la direccion vieja de la cola, que sera ahora el espacio vacio
 	
 	lw $a1, Negro
 	
-	addiu $sp, $sp, -20  	#Prologo
-	sw $fp, 20($sp)
-	sw $ra, 16($sp)
-	sw $a0, 12($sp)
-	sw $a1, 8($sp)
-	sw $a2, 4($sp)
-	addiu $fp , $sp, 20
-	
 	jal Colorear
-
-	lw $a2, 4($sp)		#Epilogo
-	lw $a1, 8($sp)	
-	lw $a0, 12($sp)
-	lw $ra, 16($sp)
-	lw $fp, 20($sp)
-	addiu $sp , $sp, 20
-	
+		
 	lw $ra, 4($sp)		#Epilogo
 	lw $fp, 8($sp)
 	addiu $sp, $sp , 8
@@ -377,9 +432,9 @@ ChequearColisiones:
 	lw $s0, ($a0)					#Cargamos en $t0 el contenido de la direccion a verificar
 	beqz $s0, ChequearColisiones_fin		#Verificamos si el espacio a moverse esta vacio
 	lw $s1, SCCola					#Cargamos en $t1 el color de la cola.
-	beq $s0, $t1, FinJuego				#Verificamos si la cabeza colisiono con el cuerpo. De ser asi, salta a FinJuego
+	beq $s0, $s1, FinJuego_Perdida			#Verificamos si la cabeza colisiono con el cuerpo. De ser asi, salta a FinJuego
 	lw $s1, CPared					#Cargamos en $t1 el color de  las paredes.
-	beq $s0, $s1, FinJuego				#Verificamos si la cabeza colisiono con una pared. De ser asi, salta a FinJuego
+	beq $s0, $s1, FinJuego_Perdida			#Verificamos si la cabeza colisiono con una pared. De ser asi, salta a FinJuego
 	lw $s1, CManzanas				#Cargamos en $t1 el color de las manzanas.
 	beq $s0, $s1, IncrementarPuntuacion		#Verificamos si la cabeza colisiono con una manzana. De ser asi, salta a IncPuntuacion
 	
@@ -413,11 +468,13 @@ AlinearDireccion:
 	mul $v0, $v0, 4		#Finalmente, multiplicamos por 4 para obtener la casilla en cuestion, que cumple con ambas coordenadas
 	add $v0, $v0, $gp	#Ahora,guardamos la direccion deseada, tomando a $gp como referencia
 	jr $ra
-	
+
+#-------------------------------------------------#	
 	
 Colorear:
 	sw $a1, ($a0)		#Colocamos el color en el pixel
 	jr $ra
+#-------------------------------------------------#
 
 IncrementarPuntuacion:
 	
@@ -427,67 +484,65 @@ IncrementarPuntuacion:
 	#chequear metas
 	sw $s1, Puntuacion	#Guardo la nueva puntuacion como puntuacion actual.
 	
-	lw $s0, SColaY		#Cargo en $s0 la coordenada actual X de la cola
-	lw $s1, SColaX		#Cargo en $s1 la coordenada actual Y de la cola
-	lw $s2, DireccionActual		#Cargo en $s2 la orientacion actual de la serpiente
-	move $a0, $s2
+	lw $s0, LSerpiente
+	lw $s1, DireccionActual
+	lw $s2, 8($s0)		#Buscamos la direccion actual de la cola
 	
-	addiu $sp, $sp, -8 		#Prologo
-	sw $fp, 8($sp)
-	sw $ra, 4($sp)
-	addiu $fp , $sp, 8
+	beq $s1, 119 , IncrementarCola_W
+	beq $s1, 115 , IncrementarCola_A
+	beq $s1, 97 , IncrementarCola_S
+	beq $s1, 100 , IncrementarCola_D 
 	
-	jal ObtenerCodigo		#Saltamos a obtener el codigo
-	move $a0, $v0		#Movemos a $a0, el cambio a efectuarse en la coordenada Y
-	move $a1, $v1		#Movemos a $a1, el cambio a efectuarse en la coordenada X
+IncrementarCola_W:
+	lw $t0, ($s2)		#Valor actual de la cola
+	add $t0, $t0, 128
 	
-	lw $ra, 4($sp)			#Epilogo
-	lw $fp, 8($sp)
-	addiu $sp , $sp, 8
+	b IncrementarCola_Fin
 	
-	mul $a0 , $a0, -1	#Cambiamos ambos cambios a realizar por el contrario, ya que la cola estara en la direccion contraria a la trayectoria de la serpiente
-	mul $a1 , $a1, -1
-	add $s0, $s0, $a0	#Sumamos en la coordenada actual Y de la cola, el cambio correspondiente en la coordenada Y
-	add $s1, $s1, $a1	#Sumamos en la coordenada actual X de la cola, el cambio correspondiente en la coordenada X
+IncrementarCola_A:
+	lw $t0, ($s2)		#Valor actual de la cola
+	add $t0, $t0, 4
 	
-	sw $s0, SColaY		#Guardamos la nueva coordenada Y de la cola
-	sw $s1, SColaX		#Guardamos la nueva coordenada X de la cola
-	move $a0, $s0		#Movemos la coord Y a $ao
-	move $a1, $s1		#Movemos la coord X a $a1
+	b IncrementarCola_Fin
 	
-	addiu $sp, $sp, -8	#Prologo
-	sw $fp, 8($sp)
-	sw $ra, 4($sp)
-	addiu $fp , $sp, 8
-	
-	jal AlinearDireccion 	#Saltamos a alinear direccion
-	
-	move $a0, $v0		#Recuperamos la nueva direccion
-	
-	lw $ra, 4($sp)		#Epilogo
-	lw $fp, 8($sp)
-	addiu $sp, $sp , 8
-	
-	lw $a1, SCCola		#Cargamos en $a1, el color de la cola
-	
-	addiu $sp, $sp, -20  	#Prologo
-	sw $fp, 20($sp)
-	sw $ra, 16($sp)
-	sw $a0, 12($sp)
-	sw $a1, 8($sp)
-	sw $a2, 4($sp)
-	addiu $fp , $sp, 20
-	
-	jal Colorear		#Saltamos a colorear
+IncrementarCola_S:
 
-	lw $a2, 4($sp)		#Epilogo
-	lw $a1, 8($sp)	
-	lw $a0, 12($sp)
-	lw $ra, 16($sp)
-	lw $fp, 20($sp)
-	addiu $sp , $sp, 20
+	lw $t0, ($s2)		#Valor actual de la cola
+	add $t0, $t0, -128
 	
-	b ChequearColisiones_fin
+	b IncrementarCola_Fin
+	
+IncrementarCola_D:
+
+	lw $t0, ($s2)		#Valor actual de la cola
+	add $t0, $t0, -4
+	
+IncrementarCola_Fin:
+
+	move $a0, $s0
+	move $a1, $t0
+	
+	addiu $sp, $sp, -12 		#Prologo
+	sw $fp, 12($sp)
+	sw $ra, 8($sp)
+	sw $t0, 4($sp)
+	addiu $fp , $sp, 12
+	
+	jal list_insertar
+	
+	lw $t0, 4($sp)			#Epilogo
+	lw $ra, 8($sp)
+	lw $fp, 12($sp)
+	addiu $sp , $sp, 12
+	
+	move $a0, $t0
+	lw $a1, SCCola
+	
+	jal Colorear
+	
+	b UbicarManzana
+	
+#-------------------------------------------------#
 
 ObtenerCodigo:
 
@@ -497,14 +552,29 @@ ObtenerCodigo:
 	addiu $fp , $sp, 8
 	
 	move $t0, $a0
+	
+ObtenerCodigo_Comparacion:
+
 	beq $t0, 119, ObtenerCodigo_W
 	beq $t0, 115, ObtenerCodigo_S
 	beq $t0, 97, ObtenerCodigo_A
 	beq $t0, 100, ObtenerCodigo_D
+	beq $t0, 112, ObtenerCodigo_P
+	beq $t0, 113, FinJuego_Quit
+	
+ObtenerCodigo_SeguirIgual:
+	lw $t0, DireccionActual
+	b ObtenerCodigo_Comparacion
 	
 	
 ObtenerCodigo_W:		#La serpiente va hacia arriba
-
+	
+	lw $s0 , DireccionActual			#Cargamos en $s0 la direccion actual
+	beq $s0, 115, ObtenerCodigo_SeguirIgual		#Verificamos que la dirActual y el input recibido no sean contrarios, de manera de que no se atraviese a si misma
+	
+	li $s0, 119				#Cargamos en $s0 el codigo ascii/direccion actual
+	sw $s0 , DireccionActual		#Actualizamos la direccion actual
+	
 	li $v0,	-1		#Cambio a ejecutar en la coordenada Y
 	li $v1,	0		#Cambio a ejecutar en la coordenada X
 	
@@ -516,6 +586,12 @@ ObtenerCodigo_W:		#La serpiente va hacia arriba
 	
 ObtenerCodigo_S:		#La serpiente va hacia abajo
 
+	lw $s0 , DireccionActual			#Cargamos en $s0 la direccion actual
+	beq $s0, 119, ObtenerCodigo_SeguirIgual		#Verificamos que la dirActual y el input recibido no sean contrarios, de manera de que no se atraviese a si misma
+
+	li $s0, 115		#Cargamos en $s0 el codigo ascii/direccion actual
+	sw $s0, DireccionActual		#Actualizamos la direccion actual
+	
 	li $v0,	1		#Cambio a ejecutar en la coordenada Y
 	li $v1,	0		#Cambio a ejecutar en la coordenada X
 	
@@ -527,6 +603,12 @@ ObtenerCodigo_S:		#La serpiente va hacia abajo
 	
 ObtenerCodigo_A:		#La serpiente va hacia la izquierda
 
+	lw $s0 , DireccionActual			#Cargamos en $s0 la direccion actual
+	beq $s0, 100, ObtenerCodigo_SeguirIgual		#Verificamos que la dirActual y el input recibido no sean contrarios, de manera de que no se atraviese a si misma
+	
+	li $s0, 97		#Cargamos en $s0 el codigo ascii/direccion actual
+	sw $s0, DireccionActual		#Actualizamos la direccion actual
+	
 	li $v0,	0		#Cambio a ejecutar en la coordenada Y
 	li $v1,	-1		#Cambio a ejecutar en la coordenada X
 
@@ -538,6 +620,12 @@ ObtenerCodigo_A:		#La serpiente va hacia la izquierda
 	
 ObtenerCodigo_D:		#La serpiente va hacia la derecha
 
+	lw $s0 , DireccionActual			#Cargamos en $s0 la direccion actual
+	beq $s0, 97, ObtenerCodigo_SeguirIgual		#Verificamos que la dirActual y el input recibido no sean contrarios, de manera de que no se atraviese a si misma
+	
+	li $s0, 100		#Cargamos en $s0 el codigo ascii/direccion actual
+	sw $s0, DireccionActual		#Actualizamos la direccion actual
+	
 	li $v0,	0		#Cambio a ejecutar en la coordenada Y
 	li $v1,	1		#Cambio a ejecutar en la coordenada X
 
@@ -547,4 +635,25 @@ ObtenerCodigo_D:		#La serpiente va hacia la derecha
 	
 	jr $ra
 	
+ObtenerCodigo_P:
+
+	lw $a0, SVelocidad
+	li $v0, 32
+	syscall
+	
+	lui $a3, 0xffff
+	
+ObtenerCodigo_P_loop:
+	
+	lw $t1, 0($a3)
+	andi $t1, $t1, 0x1
+	beqz $t1, ObtenerCodigo_P_loop
+	
+	lw $t2, 4($a3)
+	bne $t2, 112, ObtenerCodigo_P_loop
+	
+	b ObtenerCodigo_SeguirIgual
+
+
+.include "TadLista.s"	
 	

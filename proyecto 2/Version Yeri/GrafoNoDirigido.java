@@ -103,16 +103,23 @@ public class GrafoNoDirigido implements Grafo {
             if(estaVertice(vi) && estaVertice(vf)){
                 Vertice nuevov1 = obtenerVertice(vi);
                 Vertice nuevov2 = obtenerVertice(vf);
-                Arista nuevaArista = new Arista(peso ,tipo, nuevov1, nuevov2);
-                Aristas.add(nuevaArista);
+				Arista nuevaArista = new Arista(peso ,tipo, nuevov1, nuevov2);
+				Arista nuevaArista2 = new Arista(peso ,tipo, nuevov2, nuevov1);
+				Aristas.add(nuevaArista);
+				Aristas.add(nuevaArista2);
     
                 for(LinkedList<Vertice> v : Grafo){
                     if(v.get(0).obtenerId() == nuevov1.obtenerId()){
                         if(!v.contains(nuevov2)){
                             v.add(nuevov2);
                         }
-                        break;
-                    }
+                        
+					}
+					if(v.get(0).obtenerId() == nuevov2.obtenerId()){
+                        if(!v.contains(nuevov1)){
+                            v.add(nuevov1);
+						}
+					}
                 }
                 return true;
             }
@@ -143,34 +150,35 @@ public class GrafoNoDirigido implements Grafo {
 	grafo
 	*/
 	public boolean eliminarArista(Arista a) {
-		boolean Existe=false;
-		Vertice v1=a.obtenerExtremo1();
-		Vertice v2=a.obtenerExtremo2();
-		for(int i=0;i<Aristas.size();i++) {
-			if(Aristas.get(i).obtenerExtremo1()==a.obtenerExtremo1() && Aristas.get(i).obtenerExtremo2()==a.obtenerExtremo2()) {
-				Aristas.remove(i);
-				Existe=true;
-			}
-		}
-		if(Existe==true) {
-			for(int i=0;i<Grafo.size();i++) {
-				if(Grafo.get(i).get(0).obtenerId()==v1.obtenerId()) {
-					for(int j=0;j<Grafo.get(i).size();j++) {
-						if(Grafo.get(i).get(j).obtenerId()==v2.obtenerId()) {
-							Grafo.get(i).remove(j);
-						}
-					}
-				}
-				if(Grafo.get(i).get(0).obtenerId()==v2.obtenerId()) {
-					for(int j=0;j<Grafo.get(i).size();j++) {
-						if(Grafo.get(i).get(j).obtenerId()==v1.obtenerId()) {
-							Grafo.get(i).remove(j);
-						}
-					}
-				}
-			}
-		}
-		return Existe;
+		int id1 = a.obtenerExtremo1().obtenerId();
+        int id2 = a.obtenerExtremo2().obtenerId();
+        int tipo = a.obtenerTipo();
+        if(estaArista(id1,id2,tipo)){
+
+            for(Arista b : Aristas){
+                if(b.obtenerExtremo1().obtenerId() == id1 && b.obtenerExtremo2().obtenerId() == id2 && b.obtenerTipo() == tipo){
+                    Aristas.remove(b);
+                    for(LinkedList<Vertice> listaActual : Grafo){
+                        if(listaActual.get(0).obtenerId() == id1){
+                            LinkedList<Vertice> aEliminar = new LinkedList<Vertice>();
+
+                            for(Vertice v : listaActual){
+                                if(v.obtenerId() == id2){
+                                    aEliminar.add(v);
+                                }
+                            }
+
+                            for(Vertice c : aEliminar){
+                                listaActual.remove(c);
+
+                            }
+                            return true;
+                        }      
+                    }
+                }
+            }
+        }
+        return false;
 	}
 	/*Devuelve la arista que es pasada como parametro. En caso de que no exista ninguna arista , se lanza la excepci@n NoSuchElementException.
 	*/
@@ -371,7 +379,7 @@ public class GrafoNoDirigido implements Grafo {
 
         try{
             BufferedReader lector = new BufferedReader(new FileReader(archivo));
-            GrafoNoDirigido inducido = (GrafoNoDirigido) clonar();		//Casting necesario, ya que el metodo solo regresa un Grafo
+			GrafoNoDirigido inducido = (GrafoNoDirigido) clonar();		//Casting necesario, ya que el metodo solo regresa un Grafo
             String linea = lector.readLine();
             
             while( linea != null){
@@ -385,7 +393,6 @@ public class GrafoNoDirigido implements Grafo {
 
             for(Arista a : inducido.Aristas){
                 int tipo = a.obtenerTipo();
-
                 if(!inducido.lineas.contains(tipo)){			//Buscamos aquellas lineas que no pertenezcan al grafo inducido y las agregamos a
                     aEliminar.add(a);							//la lista de lineas que vamos a eliminar
                 }

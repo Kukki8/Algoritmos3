@@ -44,7 +44,6 @@ public class PlanearTransbordos{
 
             GrafoNoDirigido grafo = new GrafoNoDirigido();                  // crea el objeto de tipo grafoNodirigido
             grafo.cargarGrafoMetro(args[0]);                                // carga todos los atributos del grafo(mapa)
-        
             GrafoNoDirigido otro = grafo.cargarGrafoInducido(args[1]);      //genera el grafo inducido por las lineas del grafo(mapa con lineas activas)
             BacktrackingND backtrack1 = new BacktrackingND(otro);           //Realiza el backtracking a cada grafo por separado
             BacktrackingND backtrack2 = new BacktrackingND(grafo);
