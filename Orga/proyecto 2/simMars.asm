@@ -1,3 +1,6 @@
+# Descripcion: Implementacon del juego Snake
+# Nombres:Yerimar Manzo 14-10611 Jonathan Bautista 16-10109
+
 .data
 
 #Dimensiones
@@ -26,9 +29,17 @@ DireccionActual: .word 119
 Inicio: .word 0
 
 #Mensajes
+Espacio: .space 5
 
 MPerdida: .asciiz "Usted ha perdido... Su puntuacion fue: "
 MQuit: .asciiz "Gracias por jugar! Su puntuacion fue: "
+MVictoria: .asciiz "Usted ha ganado! Felicitaciones! La maxima puntuacion es: "
+MConsultaN: .asciiz "Por favor, indique el valor de N: "				#Mensaje para consultar N (Altura)
+MConsultaM: .asciiz "Por favor, indique el valor de M: "				#Mensaje para consultar M (Ancho)
+MConsultaS: .asciiz "Por favor, indique el valor de S: "				#Mensaje para consultar S (Refrescamiento)
+MConsultaD: .asciiz "Por favor, indique el valor de D: "				#Mensaje para consultar D (Direccion inicio)
+MConsultaV: .asciiz "Por favor, indique el valor de V: "				#Mensaje para consultar V (Velocidad serpiente)
+
 #Serpiente
 
 SCabezaX: .word 16
@@ -47,9 +58,18 @@ ManzanaY: .word
 main:
 
 ###################################################
-#Seccion lectura cambio de variables por el usuario
-#Inicializacion customizada
+#******************Customizacion******************#
 ###################################################
+	
+Customizacion_Consulta:
+	la $a0, MConsultaN
+	la $a1, Espacio
+	li $a2, 5
+	
+	li $v0, 54
+	syscall
+	
+	
 	
 ###################################################
 #********************Pintando********************#
@@ -61,64 +81,64 @@ main:
 
 PintarIz:
 	li $t0, 0		#Iniciamos el contador
-	lw $t1, N
+	lw $t1, N		#Cargamos la altura en $t1
 PintarIz_loop:
 	move $a0, $t0
 	li $a1, 0		#La coordenada X no cambiara durante el coloreado, permaneciendo en la primera columna
 	jal AlinearDireccion
 	move $a0, $v0
-	lw $a1, CPared
-	jal Colorear
+	lw $a1, CPared		#Cargamos el color de la pared e $a1
+	jal Colorear		#Con la direccion en $a0 y el color en $a1 como argumentos, procedemos a colorear la celda
 	add $t0, $t0, 1
 	
-	bne $t0 , $t1, PintarIz_loop
+	bne $t0 , $t1, PintarIz_loop	#Seguiremos ciclando, hasta que alcancemos el limite de las dimensiones en Y
 	
 	
 PintarDer:
 	li $t0, 0		#Iniciamos el contador
-	lw $t1, N
+	lw $t1, N		#Cargamos la altura en $t1
 PintarDer_loop:
 	move $a0, $t0
-	lw $a1, M
+	lw $a1, M		#Cargamos el ancho, ya que debemos ubicarnos en la ultima columna
 	add $a1, $a1, -1	#Evitamos que se salga del borde
 	jal AlinearDireccion	#La coordenada X coincidira con la ultima column y no cambiara durante el coloreado del borde derecho
 	move $a0, $v0
-	lw $a1, CPared
-	jal Colorear
+	lw $a1, CPared		#Cargamos el color de la pared e $a1
+	jal Colorear		#Con la direccion en $a0 y el color en $a1 como argumentos, procedemos a colorear la celda
 	add $t0, $t0, 1
 	
-	bne $t0, $t1 , PintarDer_loop
+	bne $t0, $t1 , PintarDer_loop		#Seguiremos ciclando, hasta que alcancemos el limite de las dimensiones en Y
 	
 		
 PintarArr:
 	li $t0, 0		#Iniciamos el contador
-	lw $t1, M
+	lw $t1, M		#Cargamos el ancho en $t1
 PintarArr_loop:
 	move $a1,$t0
 	li $a0 , 0		#La coordenada Y no cambiara durante el coloreado, permaneciendo en la primera fila
 	jal AlinearDireccion
 	move $a0, $v0
-	lw $a1, CPared
-	jal Colorear
+	lw $a1, CPared		#Cargamos el color de la pared e $a1
+	jal Colorear		#Con la direccion en $a0 y el color en $a1 como argumentos, procedemos a colorear la celda
 	add $t0, $t0, 1
 	
-	bne $t0, $t1 , PintarArr_loop
+	bne $t0, $t1 , PintarArr_loop		#Seguiremos ciclando, hasta que alcancemos el limite de las dimensiones en X
 	
 	
 PintarAba:
 	li $t0, 0		#Iniciamos el contador
-	lw $t1, M
+	lw $t1, M		#Cargamos el ancho en $t1
 PintarAba_loop:
 	move $a1,$t0
-	lw $a0, N
+	lw $a0, N		#Cargamos la altura, ya que debemos ubicarnos en la ultima fila
 	add $a0, $a0, -1
 	jal AlinearDireccion
 	move $a0, $v0
-	lw $a1, CPared
-	jal Colorear
+	lw $a1, CPared		#Cargamos el color de la pared e $a1
+	jal Colorear		#Con la direccion en $a0 y el color en $a1 como argumentos, procedemos a colorear la celda
 	add $t0, $t0, 1
 	
-	bne $t0, $t1, PintarAba_loop
+	bne $t0, $t1, PintarAba_loop		#Seguiremos ciclando, hasta que alcancemos el limite de las dimensiones en X
 	
 
 #----------------------x-------------------------#
@@ -126,11 +146,11 @@ PintarAba_loop:
 #----------------------x-------------------------#
 
 PintarCabeza:
-	lw $a0, SCabezaY
+	lw $a0, SCabezaY		#Cargamos las coordenadas X y Y de la cabeza, para pasarlas como argumentos
 	lw $a1 ,SCabezaX
-	jal AlinearDireccion
+	jal AlinearDireccion		#Buscamos una direccion alineada con los argumentos guardados
 	move $a0, $v0
-	li $a1, 5
+	li $a1, 5			#Cargamos en $a1 el tamano inicial de la serpiente (5)
 	
 	addiu $sp, $sp, -12  		#Prologo
 	sw $fp, 12($sp)
@@ -147,31 +167,31 @@ PintarCabeza:
 	lw $fp, 12($sp)
 	addiu $sp , $sp, 12
 			
-	lw $a1, SCCabeza
-	jal Colorear
+	lw $a1, SCCabeza		#Cargamos en $a1 el color de la cabeza
+	jal Colorear			#Con la dir en $a0 y el color en $a1 como argumentos, procedemos a colorearla celda
 
 
 PintarMedio:					#Ciclo para pintar seccion del medio (3 caracteres)
 	li $t0, 1
 PintarMedio_loop:
-	lw $a0, SCabezaY
+	lw $a0, SCabezaY		#Cargamos las coordenadas X y Y de la cabeza, para pasarlas como argumentos
 	lw $a1, SCabezaX
-	add $a0, $a0, $t0
-	jal AlinearDireccion
+	add $a0, $a0, $t0		#Aumentaremos la coordenada Y de la cabeza, ya que iremos recorriendo el cuerpo en vertical
+	jal AlinearDireccion		#Buscamos una direccion alineada con los argumentos guardados
 	move $a0, $v0
-	lw $a1, SCCola
-	jal Colorear
+	lw $a1, SCCola				#Cargamos el color de la cola en $a1
+	jal Colorear				#Con la dir en $a0 y el color en $a1 como argumentos, podemos proceder a colorear la celda
 	add $t0, $t0, 1
-	bne $t0, 4, PintarMedio_loop
+	bne $t0, 4, PintarMedio_loop		#Seguimos ciclando hasta que el contador llegue a 4
 	
 	
 PintarCola:
-	lw $a0, SColaY
+	lw $a0, SColaY				#Cargamos las coordenadas X y Y de la cola, para pasarlas como argumentos
 	lw $a1, SColaX
-	jal AlinearDireccion
+	jal AlinearDireccion			#Buscamos una direccion alineada con los argumentos guardados
 	move $a0,$v0
-	lw $a1, SCCola
-	jal Colorear
+	lw $a1, SCCola				#Cargamos el color de la cola en $a1
+	jal Colorear				#Con la dir en $a0 y el color en $a1 como argumentos, podemos proceder a colorear la celda
 
 #----------------------x-------------------------#
 	#Ubicar Manzana en posicion inicial
@@ -192,18 +212,18 @@ UbicarManzana:
 #----------------------x-------------------------#
 	
 PintarManzana:
-	lw $a0, ManzanaX
+	lw $a0, ManzanaX		#Cargamos las coordenadas X y Y de la manzana, para pasarlas como argumentos
 	lw $a1, ManzanaY
 
-	jal AlinearDireccion
+	jal AlinearDireccion		#Buscamos una direccion alineada con los argumentos guardados
 	move $a0, $v0
 	
 	lw $t0, ($a0)			#Chequeamos si colisiona con la serpiente
 	bnez $t0, UbicarManzana		#Si la dir dada es diferente a 0, quiere decir que choca con la serpiente (ya que ya nos aseguramos de que no ocurriera con las paredes)
 					#Por lo tanto, buscamos una nueva direccion.
-	lw $a1, CManzanas
+	lw $a1, CManzanas		#Cargamos en $a1 el color de la manzana
 	
-	jal Colorear
+	jal Colorear			#Con la direccion en $a0 y el color en $a1 como argumentos, procedemos a colorear la celda (manzana)
 	
 	lw $s0, Inicio
 	bnez $s0, ChequearColisiones_fin
@@ -231,27 +251,15 @@ main_game:
 		
 ########COSAS POR HACER#############
 #0)Customizacion de dimensiones	
-#1)Chequear los inputs:
-  #3.1)Pausa (Y)
-  #3.2)Mejorar Quit (Puntuacion (Y)/Musica(?))
-  #3.3)Secuencia de perdida (Y)
-  #3.4)Secuencia de Victoria (?)
-  #3.3)Validez (otros aparte de wasdpd (Y) y que no se atraviese (Y))
-#2)Actualizar datos(Mover/calcular colisiones) (Y)
-#3)Pintar (no oruga)(Y)
-#4)Sumar puntos/Incremento tamano
-   #4.1)Repintar manzana(Y)
-   #4.3)Aumentar tamano (Y) ##PROBAR SLEEP!!
-#5)Tiempo de espera que genera un frame (Timer)(Y)
-#6)Loop (Y)'
-
+  
 #7)Excepciones
 
 #Extra
 #1)Chequear Milestone
 #2)Obstaculos
 #3)Portales
-
+#----------------------x-------------------------#
+		#Funciones de finalizacion 
 #----------------------x-------------------------#
 FinJuego_Perdida:
 	
@@ -263,15 +271,18 @@ FinJuego_Puntuacion:
 	li $v0, 56		#Imprimimos mensaje correspondiente y puntuacion final
 	syscall
 	
-	
 	li $v0, 10		#Llamada a finalizar el programa
 	syscall
 	
 FinJuego_Quit:
 	la $a0, MQuit		#En caso de haber renunciado, cargamos en $a0 la direccion del mensaje de perdida
 	b FinJuego_Puntuacion
-#----------------------x-------------------------#
 
+FinJuego_Victoria:
+	
+	la $a0, MVictoria	#En caso de haber perdido, cargamos en $a0 la direccion del mensaje de perdida
+	b FinJuego_Puntuacion
+	
 #----------------------x-------------------------#
 		#Chequear inputs
 #----------------------x-------------------------#
@@ -283,24 +294,24 @@ ChequearInput:
 	sw $ra, 4($sp)
 	addiu $fp , $sp, 8
 	
-	lui $a0, 0xffff
+	lui $a0, 0xffff		#Nos ubicamos en la direccion del control register
 	lw $t0, 0($a0)
-	andi $t0, $t0, 0x1
+	andi $t0, $t0, 0x1					#Hacemos una mascara, con el fin de saber el valor del ultimo bit del register, quien indicara si esta listo o no
 	beqz $t0, ChequearInput_fin_DireccionActual		#Si $t0 es igual a 0, significa que no hay ningun input nuevo, por lo que saltamos a proceso encargado de continuar la orientacion actual
 	lw $v0, 4($a0)						#Si $t0 es dif de 0, cargamos el nuevo input en $v0
 	move $a0, $v0						#Movemos el nuevo input para pasar como argumento
 		
 ChequearInput_fin:
 	
-	addiu $sp, $sp, -12 		#Prologo
+	addiu $sp, $sp, -12 	#Prologo
 	sw $fp, 12($sp)
 	sw $ra, 8($sp)
 	sw $a0, 4($sp)
 	addiu $fp , $sp, 12
 	
-	jal ObtenerCodigo		#Obtenemos el codigo del input en cuestion
+	jal ObtenerCodigo	#Obtenemos el codigo del input en cuestion
 
-	lw $a0, 4($sp)			#Epilogo
+	lw $a0, 4($sp)		#Epilogo
 	lw $ra, 8($sp)
 	lw $fp, 12($sp)
 	addiu $sp , $sp, 12
@@ -312,8 +323,8 @@ ChequearInput_fin:
 	jr $ra
 	
 ChequearInput_fin_DireccionActual:
-	lw $a0, DireccionActual					#Cargamos en $a0 la direccion actual
-	b ChequearInput_fin					#Procedemos a terminar el chequeo del input
+	lw $a0, DireccionActual		#Cargamos en $a0 la direccion actual
+	b ChequearInput_fin		#Procedemos a terminar el chequeo del input
 	
 #----------------------x-------------------------#
 		#Movimientos
@@ -342,7 +353,7 @@ Mover_accion:
 	sw $ra, 4($sp)
 	addiu $fp , $sp, 8
 	
-	jal AlinearDireccion
+	jal AlinearDireccion	#Buscamos una direccion alineada con los argumentos guardados
 	move $a0, $v0		#Movemos a $a0 nuestra nueva direccion, ya alineada
 	
 	lw $ra, 4($sp)		#Epilogo
@@ -357,7 +368,7 @@ Mover_accion:
 	sw $t1, 4($sp)
 	addiu $fp , $sp, 20
 	
-	jal ChequearColisiones
+	jal ChequearColisiones	#Chequemoas la direccion obtenida, pasandola como argumento, para confirmar el curso de acciones a continuacion
 	
 	lw $t1, 4($sp)		#Epilogo
 	lw $t0, 8($sp)
@@ -373,9 +384,9 @@ Mover_accion:
 	lw $s3, ($s1)		#Cargamos la direccion vieja del primer nodo/cabeza de la serpiente en $s3	
 	sw $a0, ($s1)		#Actualizamos la dir de la cabeza con la direccion nueva
 	
-	lw $a1, SCCabeza
+	lw $a1, SCCabeza	
 	
-	jal Colorear
+	jal Colorear		#Con la direccion en $a0 y el color en $a1 como argumentos, procedemos a colorear la celda
 	
 	add $s2, $s2, -1	#Restamos 1 al contador
 	
@@ -384,12 +395,12 @@ Mover_accion:
 			
 Mover_accion_loop:
 	beq $s2, 1,  Mover_accion_fin	#Cuando termine de actualizar las direcciones del cuerpo, procedera a actualizar a la cola
-	lw $s3, ($s1)		#Cargamos la direccion vieja del nodo actual de la serpiente en $s3	
+	lw $s3, ($s1)			#Cargamos la direccion vieja del nodo actual de la serpiente en $s3	
 	sw $a0, ($s1)
 	
 	lw $a1, SCCola
 	
-	jal Colorear
+	jal Colorear		#Con la direccion en $a0 y el color en $a1 como argumentos, procedemos a colorear la celda
 	move $a0, $s3		#Movemos a $a0 la direccion vieja del noo actual, que sera la nueva del proximo nodo
 	
 	lw $s1, 4($s1)		#Cargamos en $s1 la dir del siguiente nodo
@@ -403,12 +414,12 @@ Mover_accion_fin:
 	
 	lw $a1, SCCola
 	
-	jal Colorear
+	jal Colorear		#Con la direccion en $a0 y el color en $a1 como argumentos, procedemos a colorear la celda (manzana)
 	move $a0, $s3		#Movemos a $a0 la direccion vieja de la cola, que sera ahora el espacio vacio
 	
-	lw $a1, Negro
+	lw $a1, Negro		#Cargamos en $a1 el color a utilizar
 	
-	jal Colorear
+	jal Colorear		#Con la dir en $a0 y el color en $a1 como argumentos, podemos proceder a colorear la celda
 		
 	lw $ra, 4($sp)		#Epilogo
 	lw $fp, 8($sp)
@@ -440,7 +451,7 @@ ChequearColisiones:
 	
 ChequearColisiones_fin:
 
-	lw $s1, 4($sp)			#Epilogo
+	lw $s1, 4($sp)		#Epilogo
 	lw $s0, 8($sp)
 	lw $ra, 12($sp)
 	lw $fp, 16($sp)
@@ -453,14 +464,29 @@ ChequearColisiones_fin:
 #----------------------x-------------------------#
 	
 Frame:
-	lw $a0, SVelocidad
-	li $v0, 32
-	syscall
+	lw $s0, LSerpiente	#Cargo la dir de la lista en $s0
+	lw $s1, 4($s0)		#Cargo el largo de la serpiente en $s1
+	lw $s0, N		#Cargo en $s0 y en $s2 las dimensiones del tablero de juego
+	lw $s2, M
+	add $s0, $s0, -2	#Resto el borde, para solo trabajar con el area de juego
+	add $s2, $s2, -2
+	
+	mul $s0, $s2, $s0			#Si el largo de la serpiente es igual al area de juego, procedemos a la secuencia de victoria. En caso contrario, seguimos.
+	beq $s1 , $s0, FinJuego_Victoria
+	
+	lw $a0, SVelocidad	#Cargamos en #a0 el tiempo de sleep a utilizar en el syscall
+	li $v0, 32		#Indicamos el codigo correspondiente para el syscall
+	syscall			#Hacemos la llamada al sistema para ejecutar el sleep
 	jr $ra
 
-#----------------------x-------------------------#
+#######################x##########################
 		#Funciones de ayuda
+#######################x##########################
+
 #----------------------x-------------------------#
+		#Alineacion
+#----------------------x-------------------------#
+
 AlinearDireccion:
 	lw $v0 , M		#Cargar el ancho de la pantalla en $v0
 	mul $v0, $v0, $a0	#Nos movemos por el tablero, desplazandonos casilla por casilla hasta conseguir la fila deseada (Posicion y)
@@ -469,12 +495,16 @@ AlinearDireccion:
 	add $v0, $v0, $gp	#Ahora,guardamos la direccion deseada, tomando a $gp como referencia
 	jr $ra
 
-#-------------------------------------------------#	
+#----------------------x-------------------------#
+		#Coloreo
+#----------------------x-------------------------#	
 	
 Colorear:
 	sw $a1, ($a0)		#Colocamos el color en el pixel
 	jr $ra
-#-------------------------------------------------#
+#----------------------x-------------------------#
+		#Incremento de puntuacion
+#----------------------x-------------------------#
 
 IncrementarPuntuacion:
 	
@@ -484,65 +514,67 @@ IncrementarPuntuacion:
 	#chequear metas
 	sw $s1, Puntuacion	#Guardo la nueva puntuacion como puntuacion actual.
 	
-	lw $s0, LSerpiente
-	lw $s1, DireccionActual
-	lw $s2, 8($s0)		#Buscamos la direccion actual de la cola
+	lw $s0, LSerpiente		#Cargamos la dir de la lista en $s0
+	lw $s1, DireccionActual		#Cargamos en $s1 la direccion actual
+	lw $s2, 8($s0)			#Buscamos la direccion actual de la cola
 	
-	beq $s1, 119 , IncrementarCola_W
-	beq $s1, 115 , IncrementarCola_A
+	beq $s1, 119 , IncrementarCola_W	#Verificamos la direccion actual de la serpiente para saber cuanto aumentar/disminuir para agregar correctamente
+	beq $s1, 115 , IncrementarCola_A	#el nuevo nodo (aumentar longitud)
 	beq $s1, 97 , IncrementarCola_S
 	beq $s1, 100 , IncrementarCola_D 
 	
 IncrementarCola_W:
 	lw $t0, ($s2)		#Valor actual de la cola
-	add $t0, $t0, 128
+	add $t0, $t0, 128	#Aumentamos/disminuimos lo suficiente como para quedar en la direccion contraria
 	
 	b IncrementarCola_Fin
 	
 IncrementarCola_A:
 	lw $t0, ($s2)		#Valor actual de la cola
-	add $t0, $t0, 4
+	add $t0, $t0, 4		#Aumentamos/disminuimos lo suficiente como para quedar en la direccion contraria
 	
 	b IncrementarCola_Fin
 	
 IncrementarCola_S:
 
 	lw $t0, ($s2)		#Valor actual de la cola
-	add $t0, $t0, -128
+	add $t0, $t0, -128	#Aumentamos/disminuimos lo suficiente como para quedar en la direccion contraria
 	
 	b IncrementarCola_Fin
 	
 IncrementarCola_D:
 
 	lw $t0, ($s2)		#Valor actual de la cola
-	add $t0, $t0, -4
+	add $t0, $t0, -4	#Aumentamos/disminuimos lo suficiente como para quedar en la direccion contraria
 	
 IncrementarCola_Fin:
 
 	move $a0, $s0
 	move $a1, $t0
 	
-	addiu $sp, $sp, -12 		#Prologo
+	addiu $sp, $sp, -12 	#Prologo
 	sw $fp, 12($sp)
 	sw $ra, 8($sp)
 	sw $t0, 4($sp)
 	addiu $fp , $sp, 12
 	
-	jal list_insertar
+	jal list_insertar	#Con la direccion de la lista y el valor del nuevo nodo (direccion) como argumentos, procedemos a insertar el nodo en la lista
 	
-	lw $t0, 4($sp)			#Epilogo
+	lw $t0, 4($sp)		#Epilogo
 	lw $ra, 8($sp)
 	lw $fp, 12($sp)
 	addiu $sp , $sp, 12
 	
-	move $a0, $t0
-	lw $a1, SCCola
-	
-	jal Colorear
-	
+	move $a0, $t0			#Cargamos en $a0 la dir del nuevo nodo
+	lw $a1, SCCola			#Cargams en $a1 el color de la cola para pasar como argumento
+					
+	jal Colorear			#Con la dir en $a0 y el color en $a1 como argumentos, procedemos a colorearla celda
+		
 	b UbicarManzana
 	
-#-------------------------------------------------#
+#----------------------x-------------------------#
+		#Obtencion de codigos
+#----------------------x-------------------------#
 
 ObtenerCodigo:
 
@@ -553,7 +585,7 @@ ObtenerCodigo:
 	
 	move $t0, $a0
 	
-ObtenerCodigo_Comparacion:
+ObtenerCodigo_Comparacion:		#Verificamos el asciiz del input recibido
 
 	beq $t0, 119, ObtenerCodigo_W
 	beq $t0, 115, ObtenerCodigo_S
@@ -562,9 +594,9 @@ ObtenerCodigo_Comparacion:
 	beq $t0, 112, ObtenerCodigo_P
 	beq $t0, 113, FinJuego_Quit
 	
-ObtenerCodigo_SeguirIgual:
-	lw $t0, DireccionActual
-	b ObtenerCodigo_Comparacion
+ObtenerCodigo_SeguirIgual:		#Si no es ninguno de los inputs validos, la serpiente seguira igual, ignorando el input
+	lw $t0, DireccionActual		#Cargaremos en $t0 la dir actual
+	b ObtenerCodigo_Comparacion	#Volveremos a comparar, ahora sabiendo que el codigo sera la misma direccion actual
 	
 	
 ObtenerCodigo_W:		#La serpiente va hacia arriba
@@ -637,22 +669,22 @@ ObtenerCodigo_D:		#La serpiente va hacia la derecha
 	
 ObtenerCodigo_P:
 
-	lw $a0, SVelocidad
-	li $v0, 32
-	syscall
+	lw $a0, SVelocidad	#Cargamos en $a0 la velocidad de actualizacion de nuestro juego
+	li $v0, 32		#Indicamos el codigo correspondiente para el syscall
+	syscall			#Hacemos la llamada al sistema para ejecutar el sleep
 	
-	lui $a3, 0xffff
+	lui $a3, 0xffff		#Nos ubicamos en la direccion del control register
 	
 ObtenerCodigo_P_loop:
 	
 	lw $t1, 0($a3)
-	andi $t1, $t1, 0x1
-	beqz $t1, ObtenerCodigo_P_loop
+	andi $t1, $t1, 0x1			#Hacemos una mascara, con el fin de saber el valor del ultimo bit del register, quien indicara si esta listo o no
+	beqz $t1, ObtenerCodigo_P_loop		#Verificamos si se ha introducido algun nuevo input. De no ser asi, seguimos ciclando, en espera de alguna entrada
 	
-	lw $t2, 4($a3)
-	bne $t2, 112, ObtenerCodigo_P_loop
+	lw $t2, 4($a3)				#Cargamos el nuevo input en $t2		
+	bne $t2, 112, ObtenerCodigo_P_loop	#Si conseguimos un input, verificamos que sea una p, de manera de desactivar la pausa del juego. Si no, seguimos ciclando
 	
-	b ObtenerCodigo_SeguirIgual
+	b ObtenerCodigo_SeguirIgual		#Al obtener una p, vamos al proceso que permite continuar el juego, manteniendo la orientacion actual de la serpiente
 
 
 .include "TadLista.s"	

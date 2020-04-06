@@ -57,8 +57,8 @@ list_crear_loop:
 	beqz $t3, list_crear_fin
 	add $t4, $t4, 128		#Valor del siguiente nodo
 	
-	move $a0, $s0		#Cargamos en $a0 la dir de la lista					##REVISAR##
-	move $a1, $t4		#Cargamos el valor del nodo nuevo como argumento para list_insertar    ##REVISAR##
+	move $a0, $s0		#Cargamos en $a0 la dir de la lista		
+	move $a1, $t4		#Cargamos el valor del nodo nuevo como argumento para list_insertar   
 
 	addiu $sp, $sp, -44    	#Prologo
 	sw $fp, 44($sp)
@@ -192,25 +192,25 @@ list_insertar_final:
 # Parametros: $a0, direccion de la lista 
 # Retorna: $v0 el valor de 0 si se borra la lista bien
 list_destruir:
-#prologo
-	sw $fp, ($sp)##cuarda el vlaor de fp en sp
-	move $fp, $sp# mueve el apuntador fp al de sp
-	addiu $sp, $sp, -4 ## baja el tope de la pila
+
+	sw $fp, ($sp)		#Prologo
+	move $fp, $sp
+	addiu $sp, $sp, -4 
 	move $t3, $a0
-#cuerpo de la funcion
-	li $t1, 0 #carga en $t1 el vlalor de 0
-	sw $t1, ($a0) #hace 0 el nodo de la direccion de la pila
+
+	li $t1, 0 		#carga en $t1 el vlalor de 0
+	sw $t1, ($a0) 		#hace 0 el nodo de la direccion de la pila
 	sw $t1, 4($a0)
 	lw $t2, 8($a0)
 list_destruir_loop:	beqz $t2, Destruir_fin
 	sw $t1, 4($t2)
-	sw $t1, 0($t2)### poco a poco va haciendo 0 cada parte de la lista hast alelgar al ultimo que es 0
+	sw $t1, 0($t2)		# poco a poco va haciendo 0 cada parte de la lista hasta llegar al ultimo que es 0
 	move $t3, $t2
 	sw $t1, 8($t2)
 	lw $t2, 8($t3)
 	b list_destruir_loop
 Destruir_fin:
-	addi $sp, $sp, 4
+	addi $sp, $sp, 4	#Epilogo
 	li, $v0, 0
 	lw $fp, ($sp)
 	jr $ra
