@@ -6,6 +6,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class MejorRuta {
 	
@@ -221,7 +222,7 @@ public class MejorRuta {
 					}
 				}
 				if(actual==VerticeFinal) {
-					
+					return reconstruircaminoD(vengodesde, VerticeInicial, actual, grafo); //si actua les igual al final termianmos y reconstruimos el camino
 				}
 				CaminosCerrados.add(actual); //añade a caminos cerrdos el actual y quita lo quita de los abiertos
 				CaminosAbierto.remove(actual);
@@ -263,7 +264,10 @@ public class MejorRuta {
 			return caminovacio;
 		}
 		//metodo que imprime la ruta con el tiempo(comapara cual de las aristas sirven y cuales no) para el caso de No dirigido
-	public static void Ruta( GrafoNoDirigido grafo, LinkedList<Integer> camino) {
+	public static void Ruta( GrafoNoDirigido grafo, LinkedList<Integer> camino)throws IOException {
+		if(camino==null) {
+			System.out.println("No existe la ruta");
+		}else {
 		double contador=0;
 		int v1Id=0,v2Id=0;
 		String v1nombre,v2nombre; //crea todas las variables que se usaran para la impresion
@@ -271,6 +275,7 @@ public class MejorRuta {
 		Vertice v1=null,v2=null;
 		LinkedList<Arista> todaslasarista=new LinkedList<Arista>();
 		Hashtable<Integer, Integer> visitados = new Hashtable<Integer , Integer>();
+		
 		for(int i=0;i<grafo.Aristas.size();i++) {
 			visitados.put(grafo.Aristas.get(i).obtenerTipo(), 0);
 		}
@@ -376,14 +381,14 @@ public class MejorRuta {
         }	
 		int tiempo;
 		System.out.println("Tiempo toal: "+ (int)contador+ " minutos "); //imprime el tiempo que le toma hacer todo el recorrido
-		
-		
-		
 	
-		
+		}
 	}
 	//metodo que imprime la ruta con el tiempo(comapara cual de las aristas sirven y cuales no) para el caso de No dirigido
-public static void RutaD( GrafoDirigido grafo, LinkedList<Integer> camino) {
+public static void RutaD( GrafoDirigido grafo, LinkedList<Integer> camino) throws IOException{
+	if(camino==null) {
+		System.out.println("No existe una ruta");
+	}else {
 	double contador=0;
 	int v1Id=0,v2Id=0;
 	String v1nombre,v2nombre; //crea todas las variables que se usaran para la impresion
@@ -499,6 +504,7 @@ for(int j=0;j<aristaaeliminar.size();j++) {
 	
 	
 	
+	}
 
 	
 }
@@ -517,6 +523,7 @@ for(int j=0;j<aristaaeliminar.size();j++) {
 		
 		
 		if(tipo.equalsIgnoreCase("n")) {
+			try {
 			GrafoNoDirigido otro = new GrafoNoDirigido();
 			otro.cargarGrafoMetro(args[0]);
     
@@ -527,9 +534,12 @@ for(int j=0;j<aristaaeliminar.size();j++) {
 			camino=A_start(grafo, args[2], args[3]);
        
 			Ruta(grafo, camino);
-     
+		}catch(NoSuchElementException  err){
+			System.out.println("Noexiste una ruta");
+		}
 		}
 		if(tipo.equalsIgnoreCase("d")) {
+			try {
 			GrafoDirigido otro = new GrafoDirigido();
 			otro.cargarGrafoMetro(args[0]);
     
@@ -537,9 +547,12 @@ for(int j=0;j<aristaaeliminar.size();j++) {
 			LinkedList<Integer> camino;
 			int[] caminito;
 			camino=A_startD(grafo, args[2], args[3]);
-       
+			System.out.println(camino);
 			RutaD(grafo, camino);
-     
+			}catch(NoSuchElementException  err){
+				System.out.println("Noexiste una ruta");
+			}
+			
 		}
   
 	}
