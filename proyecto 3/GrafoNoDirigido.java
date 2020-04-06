@@ -131,16 +131,16 @@ public class GrafoNoDirigido implements Grafo {
 
 
 
-	public Vertice obtenerVertice(String name){						//Obtiene el vertice por su nombre(String)
+	public Vertice obtenerVertice(String nombre){						//Obtiene el vertice por su nombre(String)
 
-		if(estaVertice(name)){
+		if(estaVertice(nombre)){
 			for(LinkedList<Vertice> v : Grafo){
-				if(v.get(0).obtenerNombre().equals(name) ){
+				if(v.get(0).obtenerNombre().equals(nombre) ){
 					return v.get(0);
 				}
 			}
 		}else{
-			System.out.println("No existe un vertice en el grafo llamado " + name);
+			System.out.println("No existe un vertice en el grafo llamado " + nombre);
 		}
 		return null;
 

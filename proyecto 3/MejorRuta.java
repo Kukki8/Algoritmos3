@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Map;
@@ -50,12 +48,12 @@ public class MejorRuta {
 	public static LinkedList<Integer> reconstruircamino( int[] predesesores, Vertice VerticeInicial, Vertice actual, GrafoNoDirigido grafo){
 		LinkedList<Integer> camino=new LinkedList<Integer>();
 		int pos;
-		camino.addLast(actual.obtenerId()); // añade el primer id del ulltimo vertice la final de la lista
+		camino.addLast(actual.obtenerId()); // aï¿½ade el primer id del ulltimo vertice la final de la lista
 		int x=actual.obtenerId();
 		while( x!=VerticeInicial.obtenerId()) { //chequea si x ya es el primer vertice
 			pos=DamePosdeVertice(x,grafo); //obtiene la pos del id del veritce en el arreglo de predecesores 
 			x=predesesores[pos]; //iguala x al vertice que esta antes del vertice en esa posicion
-			camino.addFirst(x); // lo añade de primero en la lista
+			camino.addFirst(x); // lo aï¿½ade de primero en la lista
 		}
 		return camino;
 	}
@@ -63,12 +61,12 @@ public class MejorRuta {
 	public static LinkedList<Integer> reconstruircaminoD( int[] predesesores, Vertice VerticeInicial, Vertice actual, GrafoDirigido grafo){
 		LinkedList<Integer> camino=new LinkedList<Integer>();
 		int pos;
-		camino.addLast(actual.obtenerId());// añade el primer id del ulltimo vertice la final de la lista
+		camino.addLast(actual.obtenerId());// aï¿½ade el primer id del ulltimo vertice la final de la lista
 		int x=actual.obtenerId();
 		while( x!=VerticeInicial.obtenerId()) {//chequea si x ya es el primer vertice
 			pos=DamePosdeVerticeD(x,grafo);//obtiene la pos del id del veritce en el arreglo de predecesores 
 			x=predesesores[pos];//iguala x al vertice que esta antes del vertice en esa posicion
-			camino.addFirst(x);// lo añade de primero en la lista
+			camino.addFirst(x);// lo aï¿½ade de primero en la lista
 		}
 		return camino;
 	}
@@ -99,7 +97,7 @@ public class MejorRuta {
 		vengodesde[posVerticeInicial]=VerticeInicial.obtenerId(); //coloca que el Vertice inciial llega desde el mismo para realizar mejor la reconstruccion del camino
 		gscore[posVerticeInicial]=0;//puesto que no existe una arista que llegue en el vertice inicial su valor sera 0
 		fscore[posVerticeInicial]=funcionh(VerticeInicial, VerticeFinal); //coloca el valor de f del vertice inicial el cual solo sera la funcion h
-		CaminosAbierto.add(VerticeInicial); ///añade a camino abierto el vertice inicial
+		CaminosAbierto.add(VerticeInicial); ///aï¿½ade a camino abierto el vertice inicial
 		Vertice actual = null;
 		int posmenor=0;
 		while(CaminosAbierto.size()!=0){
@@ -129,7 +127,7 @@ public class MejorRuta {
 				return reconstruircamino(vengodesde, VerticeInicial, actual, grafo); //si actua les igual al final termianmos y reconstruimos el camino
 				
 			}
-			CaminosCerrados.add(actual); //añade a caminos cerrdos el actual y quita lo quita de los abiertos
+			CaminosCerrados.add(actual); //aï¿½ade a caminos cerrdos el actual y quita lo quita de los abiertos
 			CaminosAbierto.remove(actual);
 			Arista ladoentreestaciones = null;
 			for(int i=0;i<grafo.Grafo.size();i++) {
@@ -195,7 +193,7 @@ public class MejorRuta {
 			vengodesde[posVerticeInicial]=VerticeInicial.obtenerId(); //coloca que el Vertice inciial llega desde el mismo para realizar mejor la reconstruccion del camino
 			gscore[posVerticeInicial]=0;//puesto que no existe una arista que llegue en el vertice inicial su valor sera 0
 			fscore[posVerticeInicial]=funcionh(VerticeInicial, VerticeFinal); //coloca el valor de f del vertice inicial el cual solo sera la funcion h
-			CaminosAbierto.add(VerticeInicial); ///añade a camino abierto el vertice inicial
+			CaminosAbierto.add(VerticeInicial); ///aï¿½ade a camino abierto el vertice inicial
 			Vertice actual = null;
 			int posmenor=0;
 			while(CaminosAbierto.size()!=0){
@@ -224,7 +222,7 @@ public class MejorRuta {
 				if(actual==VerticeFinal) {
 					return reconstruircaminoD(vengodesde, VerticeInicial, actual, grafo); //si actua les igual al final termianmos y reconstruimos el camino
 				}
-				CaminosCerrados.add(actual); //añade a caminos cerrdos el actual y quita lo quita de los abiertos
+				CaminosCerrados.add(actual); //aï¿½ade a caminos cerrdos el actual y quita lo quita de los abiertos
 				CaminosAbierto.remove(actual);
 				Arco ladoentreestaciones = null;
 				for(int i=0;i<grafo.listaVertices.size();i++) {

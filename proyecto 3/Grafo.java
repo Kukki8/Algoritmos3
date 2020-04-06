@@ -51,6 +51,15 @@ public interface Grafo {
 	 * @return Vertice
 	 */
 	public Vertice obtenerVertice(int id);
+
+	/**
+	 * Retorna el v@rtice contenido en el grafo que posee el identificador id. En caso que en el grafo no
+	 * contenga ning@n v@rtice con el identificador id, se lanza la excepci@n 
+	 * @param nombre
+	 * @return Vertice
+	 */
+	public Vertice obtenerVertice(String nombre);
+
 	/**
 	 * Se indica si un v@rtice con el identificador id, se encuentra o no en el grafo. Retorna true en caso de
 	 * que el v@rtice pertenezca al grafo, false en caso contrario.

@@ -8,7 +8,7 @@ public abstract class Lado {
 	 */
 	protected double peso;
 	protected int tipo;
-	 protected Vertice vi;
+	protected Vertice vi;
 	protected Vertice vf;
 	// constructor de la clase Lado
 	public Lado(double peso,int tipo, Vertice v1, Vertice v2) {

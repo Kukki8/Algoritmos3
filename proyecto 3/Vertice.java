@@ -9,7 +9,9 @@ public class Vertice {
 	    private String nombre;
 	    private double coordenadax;
 	    private double coordenaday;
-	    private double peso;
+		private double peso;
+		private double costo;
+		private double estimado;
 	    
 	    //constructor de la clase vertice//
 	    public Vertice(int identificador, String nombre, double x, double y,double peso) {
@@ -18,7 +20,8 @@ public class Vertice {
 	    	this.coordenadax=x;
 	    	this.coordenaday=y;
 	    	this.peso=peso;
-
+			costo = Double.MAX_VALUE;
+			estimado = Double.MAX_VALUE;
 	    	
 	    }
 	    /*
@@ -36,6 +39,23 @@ public class Vertice {
 	    	return peso;
 	    }
 	  
+
+		public double obtenerCosto(){
+			return costo;
+		}
+
+		public double obtenerEstimado(){
+			return estimado;
+		}
+
+		public void asignarCosto(double valor){
+			costo = valor;
+		}
+
+		public void asignarEstimado(double valor){
+			estimado = valor;
+		}
+
 	    /*Obtiene el identificador del v@rtice v.
  		retorna el identificador del vertice
 	  	*/
