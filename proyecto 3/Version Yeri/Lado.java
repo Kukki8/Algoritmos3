@@ -33,7 +33,7 @@ public abstract class Lado {
 
 		return incide;
 	}
-	// retorna el tipo de el lado
+	// retorna el tipo del lado
 	public int obtenerTipo() {
 		return this.tipo;
 	}

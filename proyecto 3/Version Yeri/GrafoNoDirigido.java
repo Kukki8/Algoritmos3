@@ -82,12 +82,14 @@ public class GrafoNoDirigido implements Grafo {
 				Vertice nuevov1 = obtenerVertice(u);
             	Vertice nuevov2 = obtenerVertice(v);
 				Arista nuevaArista=new Arista(peso,tipo,nuevov1,nuevov2);
+				Arista nuevaArista2=new Arista(peso,tipo,nuevov2,nuevov1);
 			Aristas.add(nuevaArista);
+			Aristas.add(nuevaArista2);
 			for(int i=0;i<Grafo.size();i++) {
-				if(Grafo.get(i).get(0)==nuevov1) {
+				if(Grafo.get(i).get(0).obtenerNombre().equals(nuevov1.obtenerNombre())) {
 					Grafo.get(i).add(nuevov2);
 				}
-				if(Grafo.get(i).get(0)==nuevov2) {
+				if(Grafo.get(i).get(0).obtenerNombre().equals(nuevov2.obtenerNombre())) {
 					Grafo.get(i).add(nuevov1);
 				}
 			}
@@ -537,24 +539,20 @@ public class GrafoNoDirigido implements Grafo {
 
 	@Override
 	public LinkedList<Vertice> adyacentes(int id) {
-		LinkedList<Vertice> adyaceentes=new LinkedList<Vertice>();
-		Vertice v=null;
-		for(LinkedList<Vertice> e:Grafo) {
-			if(e.get(0).obtenerId()==id) {
-				v=e.get(0);
-				break;
-			}
-		}
-		for(int i=0;i<Grafo.size();i++) {
-		
-			if(Grafo.get(i).get(0).obtenerId()==v.obtenerId()) {
-				for(int j=1;j<Grafo.get(i).size();j++) {
-					adyaceentes.add(Grafo.get(i).get(j));
-					
+
+		if(estaVertice(id)){
+            LinkedList<Vertice> ady = new LinkedList<Vertice>();
+
+            for(Arista A: Aristas){
+                if(A.obtenerExtremo1().obtenerId() == id){
+                    ady.add(A.obtenerExtremo2());
 				}
-				return adyaceentes;
-			}
-		}
+				if(A.obtenerExtremo2().obtenerId() == id){
+                    ady.add(A.obtenerExtremo1());
+				}
+            }
+            return ady;
+        }
 		throw new NoSuchElementException("Este Vertice no existe en el grafo");
 	}
 
@@ -602,7 +600,7 @@ public class GrafoNoDirigido implements Grafo {
         }
         
         for(Arista a: Aristas){
-            grafoClonado.agregarArista(a.obtenerExtremo1().obtenerNombre(), a.obtenerExtremo2().obtenerNombre(), a.obtenerTipo(), a.obtenerPeso());
+            grafoClonado.agregarArista(a.obtenerExtremo1().obtenerId(), a.obtenerExtremo2().obtenerId(), a.obtenerTipo(), a.obtenerPeso());
         }
         return grafoClonado;
     }

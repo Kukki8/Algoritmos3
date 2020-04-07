@@ -39,19 +39,27 @@ public class Vertice {
 	    	return peso;
 	    }
 	  
-
+	    /*Obtiene el costo del v@rtice v.
+	     retorna el costo del vertice
+	    */
 		public double obtenerCosto(){
 			return costo;
 		}
-
+	    /*Obtiene el estimado del v@rtice v.
+	     retorna el estimado del vertice
+	    */
 		public double obtenerEstimado(){
 			return estimado;
 		}
-
+	    /*Asigna el costo del v@rtice v.
+	     no retorna
+	    */
 		public void asignarCosto(double valor){
 			costo = valor;
 		}
-
+	    /*Asigna el estimado del v@rtice v.
+	     no retorna
+	    */
 		public void asignarEstimado(double valor){
 			estimado = valor;
 		}
